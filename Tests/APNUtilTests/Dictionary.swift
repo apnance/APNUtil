@@ -26,7 +26,7 @@ class DictionaryTests: XCTestCase {
         
         words = TestData.wordsDictionary
         
-    }   
+    }
     
     func testWeightedArray() {
         
