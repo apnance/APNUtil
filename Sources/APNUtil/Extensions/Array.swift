@@ -6,7 +6,8 @@
 //  Copyright © 2017 Nance. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import MobileCoreServices
 
 public protocol Copyable { func copy() -> Copyable }
 
@@ -598,6 +599,59 @@ public extension MutableCollection {
         }
         */
         
+    }
+    
+}
+
+public extension Array where Element: UIImage {
+    
+    // Source:
+    // https://stackoverflow.com/questions/45745432/ios-11-animated-gif-display-in-uiimageview
+    func animatedGif() {
+        let fileProperties: CFDictionary    = [kCGImagePropertyGIFDictionary as String: [kCGImagePropertyGIFLoopCount as String: 0]]  as CFDictionary
+        let frameProperties: CFDictionary   = [kCGImagePropertyGIFDictionary as String: [(kCGImagePropertyGIFDelayTime as String): 1.0]] as CFDictionary
+        
+        let documentsDirectoryURL: URL? = try? FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true)
+        let fileURL: URL? = documentsDirectoryURL?.appendingPathComponent("animated.gif")
+        
+        if let url = fileURL as CFURL? {
+            
+            if let destination = CGImageDestinationCreateWithURL(url, kUTTypeGIF, self.count, nil) {
+                CGImageDestinationSetProperties(destination, fileProperties)
+                for image in self {
+                    
+                    if let cgImage = image.cgImage {
+                        
+                        CGImageDestinationAddImage(destination, cgImage, frameProperties)
+                        
+                    }
+                    
+                }
+                
+                if !CGImageDestinationFinalize(destination) {
+                    
+                    print("Failed to finalize the image destination")
+                    
+                }
+                
+                print("Url = \(String(describing: fileURL))")
+                
+            }
+            
+        }
+        
+    }
+    
+    func animate(in targetImageView: UIImageView,
+                 withRepeatCount repeatCount: Int = 1,
+                 delay: Double = 0.1,
+                 fps: Double = 120) {
+        
+        targetImageView.animationImages         = self
+        targetImageView.image                   = last!
+        targetImageView.animationRepeatCount    = repeatCount
+        targetImageView.animationDuration       = Double(count) / fps
+        targetImageView.startAnimating()
     }
     
 }
