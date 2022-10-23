@@ -10,6 +10,13 @@ import Foundation
 
 public extension Bundle {
     
+    
+    /// Attempts to retrieve the version from `Bundle.main.infoDictionary`.
+    /// - returns: app version or "-?-" unable to retrieve version.
+    static var appVersion: String {
+        Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "-?-"
+    }
+    
     /// Prints all `Bundle.main.infoDictioary` `keys`.
     static func printMainKeys() {
         
@@ -20,7 +27,7 @@ public extension Bundle {
         }
         
     }
-
+    
     /// Prints all `Bundle.main.infoDictioary` `key/value` pairs.
     static func printMainKeyVals() {
         
