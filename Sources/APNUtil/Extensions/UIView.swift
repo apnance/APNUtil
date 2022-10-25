@@ -370,7 +370,7 @@ public extension UIView {
     /// Adds a dashed border `CAShapeLayer` sublayer to the `sublayers` array.
     /// - important: Any existing dashed border(s) is(are) removed upon successive calls to this method
     /// before a new one is added.
-    /// - note: To remove this dashed border call `removeDashedBorder()
+    /// - note: To remove this dashed border call `removeDashedBorder()`
     /// ```
     ///  // Example - Add a dotted line border with dots 5pts in diameter
     ///  // spaced 12 pts.
@@ -393,7 +393,7 @@ public extension UIView {
                                width: frameSize.width, height: frameSize.height)
         
         shapeLayer.bounds = shapeRect
-        shapeLayer.position = CGPoint(x: frameSize.width/2, y: frameSize.height/2)
+        shapeLayer.position = CGPoint(x: frameSize.width / 2, y: frameSize.height / 2)
         shapeLayer.fillColor = UIColor.clear.cgColor
         shapeLayer.strokeColor = color.cgColor
         shapeLayer.lineWidth = width.cgFloat
@@ -418,6 +418,65 @@ public extension UIView {
         
     }
     
+    /// Adds a dashed line `CAShapeLayer` sublayer to the `sublayers` array.
+    /// - important: Any existing dashed line(s) is(are) removed upon successive calls to this method
+    /// before a new one is added.
+    /// - note: To remove this dashed border call `removeDashedLine()`
+    /// ```
+    ///  // Example - Add a dotted horizontal line centered vertically with dots 5pts in diameter
+    ///  // spaced 12 pts.
+    /// someView.addDashedLine(.white,
+    ///                           width: 5,
+    ///                           dashPattern: [0.1,12],
+    ///                           lineCap: .round,
+    ///                           horizonal: true)`
+    /// ```
+    func addDashedLine(_ color: UIColor = .black,
+                       width: Double = 2.0,
+                       dashPattern: [NSNumber] = [10,5],
+                       lineCap: CAShapeLayerLineCap = .butt,
+                       isHorizontal: Bool) {
+        
+        // Clear pre-existing dashed line(s)
+        removeDashedLine()
+        
+        let shapeLayer:CAShapeLayer = CAShapeLayer()
+        let frameSize = self.frame.size
+        let shapeRect = CGRect(x: 0, y: 0,
+                               width: frameSize.width, height: frameSize.height)
+        
+        shapeLayer.bounds = shapeRect
+        shapeLayer.position = CGPoint(x: frameSize.width / 2, y: frameSize.height / 2)
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.strokeColor = color.cgColor
+        shapeLayer.lineWidth = width.cgFloat
+        shapeLayer.lineCap = lineCap
+        shapeLayer.lineDashPattern = dashPattern
+        
+            let linePath = UIBezierPath()
+            
+            if isHorizontal {
+
+                linePath.move(to: CGPoint(x: 0, y: frameSize.height / 2))
+                
+                linePath.addLine(to: CGPoint(x: self.frame.width, y: frameSize.height / 2))
+                
+            } else {
+                
+                linePath.move(to: CGPoint(x: frameSize.width / 2, y: 0))
+                linePath.addLine(to: CGPoint(x: frameSize.width / 2, y: self.frame.height))
+                
+            }
+        
+        shapeLayer.path = linePath.cgPath
+        
+        shapeLayer.name = "apn_addedDashedLineLayer"
+        
+        self.layer.addSublayer(shapeLayer)
+        
+    }
+    
+    
     /// Removes all dashed borders by removing them from `sublayers`.
     /// - note: Dashed borders are given the name "apn_addedDashedBorderLayer", only layers with that
     /// name are removed from `sublayers`
@@ -426,6 +485,19 @@ public extension UIView {
         layer.sublayers?.forEach{
             
             if $0.name == "apn_addedDashedBorderLayer" { layer.sublayers?.remove($0) }
+            
+        }
+        
+    }
+    
+    /// Removes all dashed lines by removing them from `sublayers`.
+    /// - note: Dashed borders are given the name "apn_addedDashedBorderLayer", only layers with that
+    /// name are removed from `sublayers`
+    func removeDashedLine() {
+        
+        layer.sublayers?.forEach{
+            
+            if $0.name == "apn_addedDashedLineLayer" { layer.sublayers?.remove($0) }
             
         }
         
