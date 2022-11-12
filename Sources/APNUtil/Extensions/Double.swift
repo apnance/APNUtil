@@ -67,6 +67,17 @@ public extension Double {
         
     }
     
+    /// Returns a `String` representation of self in the format `99m 12.101s`
+    func timeFormat1a() -> String {
+        
+        if noIntEquivalent() { return "-:-" /*EXIT*/ }
+        
+        let seconds = self.truncatingRemainder(dividingBy: 60).roundTo(3)
+                
+        return "\(Int(self) / 60)m \(seconds)s"
+        
+    }
+    
     /// Returns a `String` representation of self in the format `99:12.345`
     func timeFormat2() -> String {
         
