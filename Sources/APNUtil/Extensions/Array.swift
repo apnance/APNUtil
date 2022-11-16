@@ -111,6 +111,9 @@ public extension Array {
     /// - important: array bounds not checked.
     func sub(start: Int, end: Int) -> Array {
         
+        let start   = Swift.max(0, start)
+        let end     = Swift.max(start, Swift.min(end, self.count - 1))
+        
         return Array(self[start...end])
         
     }
