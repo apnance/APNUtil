@@ -13,6 +13,9 @@ public extension Date {
     /// Returns today's date as `Date`
     static var now: Date { Date() }
     
+    /// Returns the number of seconds in 1 day.
+    static let secondsInDay = (60.0 * 60.0 * 24.0)
+    
     /// Returns a `String` representation of today's `Date`
     ///
     /// e.g. "Monday"
@@ -96,12 +99,17 @@ public extension Date {
     /// - note: returns a negative number if `self` is earlier than argument `Date`.
     func daysFrom(earlierDate earlier: Date) -> Int {
         
-        let earlier = earlier.simple.simpleDate
-        let current = self.simple.simpleDate
-        
-        return Calendar.current.dateComponents([.day], from: earlier, to: current).day!
+        self.daysSinceRef - earlier.daysSinceRef
         
     }
+    
+    /// Returns the integer number of days from `self` to the system’s absolute
+    /// reference `date (00:00:00 UTC on 1 January 2001` as calculated solely by the day
+    /// numbers, ignoring minutes and seconds (i.e. two dates with 1 day apart but less than 24 hours
+    /// apart will still return a difference of 1).
+    ///
+    /// - e.g. the dates 2022-12-15 11:59:59 and 2022-12-16 12:00:00 would return a difference of 1.0 despite being different by only 1 second.
+    var daysSinceRef: Int { Int(self.timeIntervalSinceReferenceDate / Date.secondsInDay) }
     
     /// Returns an array containing `numDays` `Dates` either starting on(`numDays` >= 0`)
     /// or ending on(`numDays < 0`) chronologically ordered consecutive either starting or ending on `self`.
