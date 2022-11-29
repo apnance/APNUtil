@@ -20,3 +20,14 @@ public extension JSONString{
     }
     
 }
+
+public extension JSONString? {
+    
+    /// Returns an instance of type `T` from supplied `JSONstring`.
+    func instance<T: Decodable>() -> T? {
+        
+           CodableArchiver.instanceFrom(jsonString: self ?? "")
+        
+    }
+    
+}
