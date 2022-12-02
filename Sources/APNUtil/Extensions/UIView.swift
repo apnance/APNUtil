@@ -91,18 +91,67 @@ public extension UIView {
 }
 
 // MARK: - Animation
-public typealias AnimationFrame = (startTime: Double, duration: Double, keyFrame: () -> ())
+
+
 public extension UIView {
     
+    typealias AnimationFrame = (startTime: Double, duration: Double, keyFrame: () -> ())
+    
+    /// Facilitates the creation of elaborate `View` keyframe animations by simplifying the interface.  To create
+    /// a 10s animation with multiple frames of differing relative lengths you simply specify the total animation
+    /// duration and pass in an array of key frames with relative lengths.  This method normalizes your relative
+    /// runtimes for you  and runs your animation before calling  your completion handler.(see sample for usage details).
+    ///
+    /// - Parameters:
+    ///   - duration: total animation time in seconds.
+    ///   - delay: time in seconds to wait before beginning animation.
+    ///   - frames: `[AnimationFrame]` the key to streamlining the animation process.
+    ///   (see note below for explanation of `AnimationFrame` syntax.)
+    ///   - completion: handler to be called at the end of animation.
+    ///
+    /// ```
+    ///        // Sample Usage:
+    ///        //
+    ///        // In this example we create a 10s animation with a 2s delay.
+    ///        //
+    ///        // 1. at 0s mainTitle begins to slowly fade over 5s.
+    ///        // 2. at 3s (5s for end of previous frame -1s for start of this frame)
+    ///        //    widgetView begins to materialize over 3s
+    ///        // 3. finally at 7s(end of previous frame + 0s) greebleView begins
+    ///        //    to fade out over the remaining 3s of the animation.
+    ///        //
+    ///        // NOTE 1: the total runtime would be 11s except that frame 2 starts
+    ///        //         1 second before the end of frame 1.
+    ///        //
+    ///        // NOTE 2: it is not necessary to make your relative frame durations equal
+    ///        //         your total animation runtime, here the animation time
+    ///        //         is 10s and the total relative frame durations (allowing
+    ///        //         for negative starttime offset of frame 2) total to 10 simply
+    ///        //         for simplicity of demonstration.
+    ///        //
+    ///        UIView.buildAnimation(withDuration: 10.0,
+    ///        delay: 2.0,
+    ///        withFrames: [(0.0, 5, { self.mainTitle.alpha = 0.0 }),
+    ///                     (-1.0, 3, { self.widgetView.alpha = 1.0 }),
+    ///                     (0.0, 3, { self.greebleView.alpha = 0.0 }), ],
+    ///        completionHandler: { finished _ in /*clean up here*/ })
+    /// ```
+    ///
+    /// - note: `AnimationFrame` has the following structure:
+    /// `startTime` - is a double representing the *relative* length of time since the end of the last frame to begin this frame.
+    /// This number can be negative in which case this frame begins before the last frame ends by the difference
+    /// between the end time of the previous frame and the negative start time of this frame.
+    /// `duration` - specifies *relative* length of time over which this  animation frame will animate.
+    /// `keyFrame` - is a closure containing the new value to animate toward.
     static func buildAnimation(withDuration duration: Double,
                         delay: Double,
                         withFrames frames: [AnimationFrame],
                         completionHandler completion: ((Bool) -> ())?) {
         
-        var totalDuration = 0.0
-        var previousEndTime = 0.0
+        var frames          = frames
         
-        var frames = frames
+        var totalDuration   = 0.0
+        var previousEndTime = 0.0
         
         for (i, frame) in frames.enumerated() {
             
@@ -117,35 +166,26 @@ public extension UIView {
             frames[i].startTime = currentStartTime
             frames[i].duration  = currentDuration
             
-            print("Start Time: \(currentStartTime) - Duration: \(currentDuration)")
-            
         }
-        
-print("Total Relative Durations: \(totalDuration) - Total Runtime: \(duration)")
         
         assert(totalDuration > 0, "Total Duration[\(totalDuration)] == \(totalDuration) but must be > 0")
         
-        animateKeyframes(withDuration: duration,
-                         delay: delay,
-                         options: .calculationModeLinear,
+        animateKeyframes(withDuration:  duration,
+                         delay:         delay,
+                         options:       .calculationModeLinear,
                          animations: {
             
             for frame in frames {
                 
-                let relStart = frame.0 / totalDuration
-                let relDuration = frame.1 / totalDuration
+                let start       = frame.0 / totalDuration
+                let duration    = frame.1 / totalDuration
+                let animations  = frame.2
                 
-                assert(relStart + relDuration <= 1.0)
+                assert(start + duration <= 1.0)
                 
-print("Start: \(relStart) - Duration: \(relDuration) - End: \(relStart + relDuration) - Runtime: \(relDuration * duration)")
-                
-                addKeyframe(withRelativeStartTime: relStart,
-                            relativeDuration: relDuration,
-                            animations: frame.2)
-                
-            }
-            
-        },
+                addKeyframe(withRelativeStartTime:  start,
+                            relativeDuration:       duration,
+                            animations:             animations) } },
                          completion: completion)
         
     }
