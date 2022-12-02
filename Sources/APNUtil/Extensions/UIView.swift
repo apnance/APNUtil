@@ -90,6 +90,69 @@ public extension UIView {
         
 }
 
+// MARK: - Animation
+public typealias AnimationFrame = (startTime: Double, duration: Double, keyFrame: () -> ())
+public extension UIView {
+    
+    static func buildAnimation(withDuration duration: Double,
+                        delay: Double,
+                        withFrames frames: [AnimationFrame],
+                        completionHandler completion: ((Bool) -> ())?) {
+        
+        var totalDuration = 0.0
+        var previousEndTime = 0.0
+        
+        var frames = frames
+        
+        for (i, frame) in frames.enumerated() {
+            
+            let currentDuration     = frame.1
+            let currentStartTime    = previousEndTime + frame.0
+            previousEndTime         = currentStartTime + currentDuration
+            
+            assert(currentDuration >= 0, "Start Time[\(frame.0)] + Duration[\(frame.1)] == \(currentDuration) but must be >= 0")
+            
+            totalDuration = max(currentStartTime + currentDuration, totalDuration)
+            
+            frames[i].startTime = currentStartTime
+            frames[i].duration  = currentDuration
+            
+            print("Start Time: \(currentStartTime) - Duration: \(currentDuration)")
+            
+        }
+        
+print("Total Relative Durations: \(totalDuration) - Total Runtime: \(duration)")
+        
+        assert(totalDuration > 0, "Total Duration[\(totalDuration)] == \(totalDuration) but must be > 0")
+        
+        animateKeyframes(withDuration: duration,
+                         delay: delay,
+                         options: .calculationModeLinear,
+                         animations: {
+            
+            for frame in frames {
+                
+                let relStart = frame.0 / totalDuration
+                let relDuration = frame.1 / totalDuration
+                
+                assert(relStart + relDuration <= 1.0)
+                
+print("Start: \(relStart) - Duration: \(relDuration) - End: \(relStart + relDuration) - Runtime: \(relDuration * duration)")
+                
+                addKeyframe(withRelativeStartTime: relStart,
+                            relativeDuration: relDuration,
+                            animations: frame.2)
+                
+            }
+            
+        },
+                         completion: completion)
+        
+    }
+    
+}
+
+
 // MARK: - Imaging
 public extension UIView {
     
