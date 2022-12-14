@@ -10,7 +10,16 @@ import Foundation
 
 public extension Double {
 
+    /// Converts `self` to Int equivalent.
     var int: Int { Int(self) }
+    
+    /// Used to compare `self` against other for equality allowing for floating point imprecision via the eFactor.
+    func approxEquals(_ other: Double,
+                      withErrorFactor eFactor: Double = 3.0) -> Bool {
+        
+        abs(self - other) < (eFactor * Double.ulpOfOne)
+        
+    }
     
     static var random:Double { return Double(arc4random()) / 0xFFFFFFFF }
     
