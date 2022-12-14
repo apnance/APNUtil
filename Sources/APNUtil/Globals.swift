@@ -10,7 +10,7 @@ import UIKit
 
 /// Returns false if both `o1` and `o2` are `nil` or both are not `nil`.  Returns `true` if one is `nil`
 /// and the other not `nil`
-func either(_ o1: Any?, or o2: Any?) -> Bool {
+public func either(_ o1: Any?, or o2: Any?) -> Bool {
     
     return ((o1 != nil || o2 != nil)
            && !(o1 == nil && o2 == nil))
