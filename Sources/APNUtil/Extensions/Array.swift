@@ -187,6 +187,18 @@ public extension Array {
         
     }
     
+    /// Returns a copy of `self` with `newElement` appended.
+    /// - Parameter newElement: new `Element` to append to copy.
+    /// - Returns: a copy of `Self` with `Element` `el` appended.
+    func appending(_ newElement: Element) -> [Element] {
+        
+        var copy = self
+        copy.append(newElement)
+        
+        return copy
+        
+    }
+    
 }
 
 
