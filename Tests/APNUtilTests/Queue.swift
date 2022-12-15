@@ -20,7 +20,29 @@ import Foundation
 import APNUtil
 
 class QueueTests: XCTestCase {
- 
+    
+    func testSize() {
+        
+        let q = Queue<String>(from: ["Aaron", "Beatrix", "Lee", "Scratch", "Steve", "Winston"])
+        
+        XCTAssert(q.count == 6)
+        q.dequeue()
+        XCTAssert(q.count == 5)
+        q.dequeue()
+        q.dequeue()
+        XCTAssert(q.count == 3)
+        q.dequeue()
+        q.dequeue()
+        XCTAssert(q.count == 1)
+        q.dequeue()
+        XCTAssert(q.count == 0)
+        q.dequeue()
+        XCTAssert(q.count == 0)
+        
+        print("\(#function) Successful!")
+        
+    }
+    
     func testEnDeQueue() {
         
         let q = Queue<Int>()

@@ -11,10 +11,13 @@ import Foundation
 
 // TODO: Clean Up - Move Queue to APNUtil
 public class Queue<Item: Equatable> {
-    private var n: Int          // number of elements on queue
-    private var first: Linked?   // beginning of queue
-    private var last: Linked?    // end of queue
-
+    
+    private var first: Linked?          // beginning of queue
+    private var last: Linked?           // end of queue
+    
+    public private (set) var count: Int // number of elements on queue
+    public var isEmpty: Bool { first == nil; }
+    
     // helper linked list class
     class Linked: Equatable {
         
@@ -42,7 +45,7 @@ public class Queue<Item: Equatable> {
         
         first   = nil;
         last    = nil;
-        n       = 0;
+        count   = 0;
         
         assert(check())
         
@@ -62,8 +65,6 @@ public class Queue<Item: Equatable> {
         
     }
     
-    public func isEmpty() -> Bool { first == nil; }
-    public func size() -> Int { n }
     /// Returns the item least recently added to this queue.
     public func peek() -> Item? { first?.item }
     
@@ -77,10 +78,10 @@ public class Queue<Item: Equatable> {
         
         last = Linked(item: item, next: nil);
         
-        if (isEmpty()) { first = last }
+        if (isEmpty) { first = last }
         else { oldLast?.next = last }
         
-        n += 1
+        count += 1
         
         assert(check())
         
@@ -92,12 +93,12 @@ public class Queue<Item: Equatable> {
         let item = first?.item
         
         first = first?.next;
-        n -= 1;
+        count -= 1;
         
-        if (isEmpty()) {
+        if (isEmpty) {
             
-            n = 0
-            last = nil
+            count   = 0
+            last    = nil
             
         }   // to avoid loitering
         
@@ -121,14 +122,14 @@ public class Queue<Item: Equatable> {
 
     // check internal invariants
     private func check() -> Bool {
-        if (n < 0) {
+        if (count < 0) {
             return false;
         }
-        else if (n == 0) {
+        else if (count == 0) {
             if (first != nil) { return false }
             if (last  != nil) { return false }
         }
-        else if (n == 1) {
+        else if (count == 1) {
             if (first == nil || last == nil) { return false }
             if (first != last)                 { return false }
             if (first?.next != nil)            { return false }
@@ -151,7 +152,7 @@ public class Queue<Item: Equatable> {
                 
             }
             
-            if (numberOfLinkeds != n) { return false /*EXIT*/ }
+            if (numberOfLinkeds != count) { return false /*EXIT*/ }
             
             // check internal consistency of instance variable last
             var lastLinked = first
@@ -165,6 +166,7 @@ public class Queue<Item: Equatable> {
         return true;
     }
 
+    // TODO: Clean Up - Make Queue adopt Sequence? or Iterable?
 // TODO: Clean Up - delete?
 //    /**
 //     * Returns an iterator that iterates over the items in this queue in FIFO order.
