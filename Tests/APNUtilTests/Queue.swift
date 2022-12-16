@@ -21,25 +21,79 @@ import APNUtil
 
 class QueueTests: XCTestCase {
     
-    func testSize() {
+    private let strings = ["Aaron", "Beatrix", "Lee", "Scratch", "Steve", "Winston"]
+    
+    func testEmptyQueue() {
         
-        let q = Queue<String>(from: ["Aaron", "Beatrix", "Lee", "Scratch", "Steve", "Winston"])
+        let emptyQueue = Queue<Int>()
         
-        XCTAssert(q.count == 6)
-        q.dequeue()
-        XCTAssert(q.count == 5)
-        q.dequeue()
-        q.dequeue()
-        XCTAssert(q.count == 3)
-        q.dequeue()
-        q.dequeue()
-        XCTAssert(q.count == 1)
-        q.dequeue()
-        XCTAssert(q.count == 0)
-        q.dequeue()
-        XCTAssert(q.count == 0)
+        for _ in emptyQueue { XCTAssert(false, "Shouldn't be here..") }
+        emptyQueue.forEach { XCTAssertNil($0, "Shouldn't be here..") }
         
-        print("\(#function) Successful!")
+        XCTAssertFalse(emptyQueue.contains(1), "Shouldn't contain 1")
+        XCTAssert(emptyQueue.isEmpty, "should be but isn't empty")
+        
+        XCTAssert(emptyQueue.count == 0)
+        XCTAssert(emptyQueue.peek() == nil)
+        XCTAssert(emptyQueue.dequeue() == nil)
+        
+    }
+    
+    func testIsEmpty() {
+        
+        let full = Queue<String>(from: strings)
+        let empty = Queue<String>()
+        
+        XCTAssertFalse(full.isEmpty, "Names is empty but shouldn't be.")
+        XCTAssert(empty.isEmpty, "Names is empty but shouldn't be.")
+        
+    }
+        
+    func testIteration() {
+        
+        let names = Queue<String>(from: strings)
+        
+        XCTAssert(names.contains(strings[1]),
+                  "names should but does not contain \"\(strings[1])\"")
+        
+        XCTAssert(names.count == strings.count,
+                  "names.count == \(names.count), should ==\(strings.count)")
+                
+        for (i, name) in names.enumerated() {
+            
+            XCTAssert(name == strings[i],
+                      "\"\(name)\" != \"\(strings[i])\"")
+            
+        }
+        
+        XCTAssert(names.count == 6,
+                  "names.count == \(names.count), should == \(strings.count)")
+        
+    }
+    
+    func testCount() {
+        
+        let has6 = Queue<String>(from: strings)
+        
+        XCTAssert(has6.count == 6)
+        has6.dequeue()
+        XCTAssert(has6.count == 5)
+        has6.dequeue()
+        has6.dequeue()
+        XCTAssert(has6.count == 3)
+        has6.dequeue()
+        has6.dequeue()
+        XCTAssert(has6.count == 1)
+        has6.dequeue()
+        XCTAssert(has6.count == 0)
+        XCTAssert(has6.isEmpty)
+        has6.dequeue()
+        XCTAssert(has6.count == 0)
+        XCTAssert(has6.isEmpty)
+        
+        let has0 = Queue<String>()
+        XCTAssert(has0.count == 0, "Count should be 0 but is \(has0.count)")
+        XCTAssert(has0.isEmpty, "Should be but isn't empty")
         
     }
     
@@ -66,8 +120,6 @@ class QueueTests: XCTestCase {
         XCTAssert(q.dequeue() == 5)
         
         XCTAssert(q.dequeue() == nil)
-        
-        print("\(#function) Successful!")
         
     }
     
