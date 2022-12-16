@@ -9,47 +9,15 @@
 
 import Foundation
 
-// TODO: Clean Up - Move Queue to APNUtil
 public class Queue<Item: Equatable> {
     
-    private var first: Linked?          // beginning of queue
-    private var last: Linked?           // end of queue
+    private var first: Linked?          // beginning of Queue
+    private var last: Linked?           // end of Queue
     
-    public private (set) var count: Int // number of elements on queue
+    public private (set) var count = 0  // number of elements on Queue
     public var isEmpty: Bool { first == nil; }
     
-    // helper linked list class
-    class Linked: Equatable {
-        
-        static func == (lhs: Queue<Item>.Linked,
-                        rhs: Queue<Item>.Linked) -> Bool {
-            
-            lhs.item == rhs.item
-            && lhs.next == rhs.next
-            
-        }
-        
-        
-        fileprivate var item: Item
-        fileprivate var next: Linked?
-        
-        init(item: Item, next: Linked?) {
-            
-            self.item = item
-            self.next = next
-        }
-        
-    }
-
-    public init() {
-        
-        first   = nil;
-        last    = nil;
-        count   = 0;
-        
-        assert(check())
-        
-    }
+    public init() { assert(check()) }
     
     /// Initialies a new `Queue` using `from` `Array` as the base with the first `Item`  in `Array` being
     /// the first item in `Queue` and the last `Item` in the `Array` being the last `Item` in the `Queue`
@@ -68,10 +36,10 @@ public class Queue<Item: Equatable> {
     /// Returns the item least recently added to this queue.
     public func peek() -> Item? { first?.item }
     
-    /// Enqueues items in array in the order of the array.
+    /// Enqueues each `Item` in `items` in the order of the `items` array.
     public func enqueue(items: [Item]) { items.forEach { enqueue(item: $0) } }
     
-    
+    /// Places `item` last in `Queue`.
     public func enqueue(item: Item) {
         
         let oldLast = last
@@ -87,7 +55,7 @@ public class Queue<Item: Equatable> {
         
     }
 
-    /// Removes and returns the least recently added item on this `Queue`
+    /// Removes and returns the least recently added item on this `Queue`.
     @discardableResult public func dequeue() -> Item? {
         
         let item = first?.item
@@ -107,20 +75,8 @@ public class Queue<Item: Equatable> {
         return item
         
     }
-
-    // TODO: Clean Up - translate toString as CustomStringConveritble description variable.
-    /**
-     * Returns a string representation of this queue.
-     * @return the sequence of items in FIFO order, separated by spaces
-     */
-//    public String toString() {
-//        StringBuilder s = new StringBuilder();
-//        for (Item item : this)
-//            s.append(item + " ");
-//        return s.toString();
-//    }
-
-    // check internal invariants
+    
+    // Check internal invariants.
     private func check() -> Bool {
         if (count < 0) {
             return false;
@@ -162,51 +118,68 @@ public class Queue<Item: Equatable> {
             if (last != lastLinked) { return false /*EXIT*/ }
             
         }
-
-        return true;
+        
+        return true
+        
     }
-
-    // TODO: Clean Up - Make Queue adopt Sequence? or Iterable?
-// TODO: Clean Up - delete?
-//    /**
-//     * Returns an iterator that iterates over the items in this queue in FIFO order.
-//     * @return an iterator that iterates over the items in this queue in FIFO order
-//     */
-//    public Iterator<Item> iterator()  {
-//        return new LinkedIterator();
-//    }
-//
-//    // an iterator, doesn't implement remove() since it's optional
-//    private class LinkedIterator implements Iterator<Item> {
-//        private Linked current = first;
-//
-//        public boolean hasNext()  { return current != nil;                     }
-//        public void remove()      { throw new UnsupportedOperationException();  }
-//
-//        public Item next() {
-//            if (!hasNext()) throw new NoSuchElementException();
-//            Item item = current.item;
-//            current = current.next;
-//            return item;
-//        }
-//    }
-//
-//
-//    /**
-//     * Unit tests the {@code LinkedQueue} data type.
-//     *
-//     * @param args the command-line arguments
-//     */
-//    public static void main(String[] args) {
-//        LinkedQueue<String> queue = new LinkedQueue<String>();
-//        while (!StdIn.isEmpty()) {
-//            String item = StdIn.readString();
-//            if (!item.equals("-"))
-//                queue.enqueue(item);
-//            else if (!queue.isEmpty())
-//                StdOut.print(queue.dequeue() + " ");
-//        }
-//        StdOut.println("(" + queue.size() + " left on queue)");
-//    }
+    
+    // helper linked list class
+    fileprivate class Linked: Equatable {
+        
+        static func == (lhs: Queue<Item>.Linked,
+                        rhs: Queue<Item>.Linked) -> Bool {
+            
+            lhs.item == rhs.item &&
+            lhs.next == rhs.next
+            
+        }
+        
+        
+        fileprivate var item: Item
+        fileprivate var next: Linked?
+        
+        init(item: Item, next: Linked?) {
+            
+            self.item = item
+            self.next = next
+        }
+        
+    }
+    
 }
 
+extension Queue: Sequence {
+    
+    public typealias Iterator = QueueIterator
+    
+    public var underestimatedCount: Int { count }
+    
+    public func makeIterator() -> QueueIterator { QueueIterator(first: first) }
+    public struct QueueIterator: IteratorProtocol {
+        
+        private var nextLinked: Linked?
+        
+        fileprivate init(first: Linked? ) { nextLinked = first }
+        
+        mutating public func next() -> Item? {
+            
+            let nextItem    = nextLinked?.item
+            nextLinked      = nextLinked?.next
+            
+            return nextItem /*EXIT*/
+            
+        }
+        
+    }
+    
+}
+
+extension Queue: CustomStringConvertible {
+    
+    public var description: String {
+        
+        reduce("") { $0 == "" ? "\($1)" : "\($0), \($1)" }
+        
+    }
+    
+}
