@@ -47,6 +47,65 @@ class StringTests: XCTestCase {
         
     }
     
+    func testShuck() {
+        
+        var text = ""
+        var n = 0
+        var shucked = text.shuck(n)
+        print("\"\(text)\".shuck(\(n))\t->\t\"\(shucked)\"")
+        XCTAssert(shucked == "")
+        
+        n = 1000
+        shucked = text.shuck(n)
+        print("\"\(text)\".shuck(\(n))\t->\t\"\(shucked)\"")
+        XCTAssert(shucked == "")
+        
+        text = "[ABCBA]"
+        
+        shucked = text.shuck()
+        XCTAssert(shucked == "ABCBA")
+        print("\"\(text)\".shuck(\(n))\t->\t\"\(shucked)\"")
+        
+        n = 2
+        shucked = text.shuck(n)
+        print("\"\(text)\".shuck(\(n))\t->\t\"\(shucked)\"")
+        XCTAssert(shucked == "BCB", "shucked should == \"\" but equals \(shucked)")
+        
+        n = text.count
+        shucked = text.shuck(n)
+        print("\"\(text)\".shuck(\(n))\t->\t\"\(shucked)\"")
+        XCTAssert(shucked == "")
+        
+        n = text.count + 10
+        shucked = text.shuck(n)
+        print("\"\(text)\".shuck(\(n))\t->\t\"\(shucked)\"")
+        XCTAssert(shucked == "")
+        
+        text = "BEA"
+        n = 1
+        shucked = text.shuck(n)
+        XCTAssert(shucked == "E")
+        print("\"\(text)\".shuck(\(n))\t->\t\"\(shucked)\"")
+        
+        
+        text = "BEA"
+        n = 2
+        shucked = text.shuck(n)
+        XCTAssert(shucked == "")
+        print("\"\(text)\".shuck(\(n))\t->\t\"\(shucked)\"")
+        
+        text = "BEA"
+        n = 10
+        shucked = text.shuck(n)
+        XCTAssert(shucked == "")
+        print("\"\(text)\".shuck(\(n))\t->\t\"\(shucked)\"")
+        
+        XCTAssert("HuskCornHusk".shuck(4) == "Corn", "\("HuskCornfHusk".shuck(4))")
+        
+        XCTAssert("[shuck me]".shuck() == "shuck me", "\("[shuck me]".shuck())")
+        
+    }
+    
     func testProcessed() {
         
         let test1 = " BlAh BLAH"

@@ -30,10 +30,24 @@ public extension String {
         
     }
     
-    /// Returns a copy of the string with the last character snipped from the right end.
+    /// Returns a copy of the string with the last `n` character(s) snipped from the right end.
     /// 
     /// - note: Default is 1 character snipped.
     func snip(_ n: Int = 1) -> String { String(dropLast(n)) }
+    
+    /// Returns a copy of the string with the first `n` and last `n` character(s) snipped from the right end.
+    ///
+    /// - note: Default is 1 character shucked from first and last of `String`.
+    /// ````
+    /// // ex.
+    ///         let shucked = "[shuck me]".shuck() // returns "shuck me"
+    ///
+    ///         let corny   = "HuskCornHusk".shuck(4) // returns "Corn"
+    func shuck(_ n: Int = 1) -> String {
+        
+        String(dropLast(n).dropFirst(n))
+        
+    }
     
     /// Returns a copy of this string lowercased and stripped of spaces.
     static func lowerNoSpaces(_ word: String) -> String {
