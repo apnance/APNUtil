@@ -8,6 +8,12 @@
 
 import Foundation
 
+public extension String.SubSequence {
+    
+    var string: String { String(self) }
+    
+}
+
 public extension String {
     
     /// Passes itself to the provided closure returning the return value.
