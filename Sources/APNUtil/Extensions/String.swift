@@ -55,6 +55,12 @@ public extension String {
         
     }
     
+    /// Returns true if `self` is non-empty and begins with letter
+    var hasAlphaPrefix: Bool { (first ?? Character(" ")).isLetter }
+
+    /// Returns true if `self` is non-empty and begins with a number
+    var hasNumericPrefix: Bool { (first ?? Character(" ")).isNumber }
+    
     /// Returns a copy of this string lowercased and stripped of spaces.
     static func lowerNoSpaces(_ word: String) -> String {
         

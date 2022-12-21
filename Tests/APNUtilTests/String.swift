@@ -106,6 +106,48 @@ class StringTests: XCTestCase {
         
     }
     
+    func testHasAlphaPrefix() {
+        
+        XCTAssert("a".hasAlphaPrefix)
+        XCTAssert("A".hasAlphaPrefix)
+        XCTAssert("z".hasAlphaPrefix)
+        XCTAssert("Z".hasAlphaPrefix)
+        XCTAssert("b1231".hasAlphaPrefix)
+        XCTAssert("B1231".hasAlphaPrefix)
+        
+        XCTAssertFalse("".hasAlphaPrefix)
+        
+        XCTAssertFalse("123".hasAlphaPrefix)
+        XCTAssertFalse("9".hasAlphaPrefix)
+        XCTAssertFalse("1234".hasAlphaPrefix)
+        
+        XCTAssertFalse("{".hasAlphaPrefix)
+        
+        XCTAssertFalse("🧐".hasAlphaPrefix)
+        
+    }
+    
+    func testHasNumericPrefix() {
+
+        XCTAssertFalse("a".hasNumericPrefix)
+        XCTAssertFalse("A".hasNumericPrefix)
+        XCTAssertFalse("z".hasNumericPrefix)
+        XCTAssertFalse("Z".hasNumericPrefix)
+        XCTAssertFalse("b1231".hasNumericPrefix)
+        XCTAssertFalse("B1231".hasNumericPrefix)
+        
+        XCTAssertFalse("".hasNumericPrefix)
+        
+        XCTAssert("123".hasNumericPrefix)
+        XCTAssert("9".hasNumericPrefix)
+        XCTAssert("1234".hasNumericPrefix)
+        
+        XCTAssertFalse("{".hasNumericPrefix)
+        
+        XCTAssertFalse("🧐".hasNumericPrefix)
+        
+    }
+    
     func testProcessed() {
         
         let test1 = " BlAh BLAH"
