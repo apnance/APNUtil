@@ -4,7 +4,7 @@
 //
 //  Origin: https://algs4.cs.princeton.edu/code/edu/princeton/cs/algs4/LinkedQueue.java.html
 //  Copyright 2002-2022, Robert Sedgewick and Kevin Wayne.
-//  Translated into Swift by Aaron Nance on 12/12/22.
+//  Swift translation by Aaron Nance on 12/12/22.
 //
 
 import Foundation
@@ -19,7 +19,7 @@ public class Queue<Item: Equatable> {
     
     public init() { assert(check()) }
     
-    /// Initialies a new `Queue` using `from` `Array` as the base with the first `Item`  in `Array` being
+    /// Initializes a new `Queue` using `from` `Array` as the base with the first `Item`  in `Array` being
     /// the first item in `Queue` and the last `Item` in the `Array` being the last `Item` in the `Queue`
     public convenience init(from: [Item]) {
         
@@ -33,7 +33,7 @@ public class Queue<Item: Equatable> {
         
     }
     
-    /// Returns the item least recently added to this queue.
+    /// Returns the `Item` least recently enqueued.
     public func peek() -> Item? { first?.item }
     
     /// Enqueues each `Item` in `items` in the order of the `items` array.
@@ -54,7 +54,7 @@ public class Queue<Item: Equatable> {
         assert(check())
         
     }
-
+    
     /// Removes and returns the least recently added item on this `Queue`.
     @discardableResult public func dequeue() -> Item? {
         
@@ -133,7 +133,6 @@ public class Queue<Item: Equatable> {
             lhs.next == rhs.next
             
         }
-        
         
         fileprivate var item: Item
         fileprivate var next: Linked?
