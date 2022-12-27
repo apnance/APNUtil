@@ -8,6 +8,36 @@
 
 import Foundation
 
+/// Mutually exclusive or check for nil
+///
+/// - returns: false if both `o1` and `o2` are `nil` or both are not `nil`.  Returns `true` if one is `nil`
+/// and the other not `nil`
+///
+/// - note: read as "either this or that are not nil?"
+public func either(_ o1: Any?, or o2: Any?) -> Bool {
+    
+    // nil, nil
+    if (o1.isNil && o2.isNil) { return false /*EXIT*/ }
+    
+    // not-nil, not-nil
+    else if (o1.isNotNil && o2.isNotNil) { return false /*EXIT*/ }
+    
+    // nil, not-nil || not-nil, nil
+    else { return true /*EXIT*/ }
+    
+}
+
+/// Neither optionals contains a value(both nil).
+///
+/// - returns:true iff both `o1` and `o2` are `nil`
+///
+/// - note: read as "neither this nor that contain values?"
+public func neither(_ o1: Any?, nor o2: Any?) -> Bool {
+    
+    return (o1 == nil && o2 == nil)
+    
+}
+
 /// Returns boolean indicating whether both arguments are both nil or both not nil.
 ///
 /// Returns false only when one argument is nil and the other not nil.
