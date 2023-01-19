@@ -65,7 +65,7 @@ public class Queue<Item: Equatable> {
     /// Steps through `items` enqueueing any that are not currently in the `Queue`.
     public func enqueueUnique(items: [Item]) {
         
-        for item in items { enqueueNew(item: item) }
+        for item in items { enqueueUnique(item: item) }
         
     }
     
