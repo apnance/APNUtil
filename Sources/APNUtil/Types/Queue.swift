@@ -56,9 +56,16 @@ public class Queue<Item: Equatable> {
     }
     
     /// Enqueues`item` if it is not currently in the `Queue`
-    public func enqueueNew(item: Item) {
+    public func enqueueUnique(item: Item) {
         
         if !contains(item) { enqueue(item: item) }
+        
+    }
+
+    /// Steps through `items` enqueueing any that are not currently in the `Queue`.
+    public func enqueueUnique(items: [Item]) {
+        
+        for item in items { enqueueNew(item: item) }
         
     }
     
