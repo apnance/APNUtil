@@ -55,6 +55,13 @@ public class Queue<Item: Equatable> {
         
     }
     
+    /// Enqueues`item` if it is not currently in the `Queue`
+    public func enqueueNew(item: Item) {
+        
+        if !contains(item) { enqueue(item: item) }
+        
+    }
+    
     /// Removes and returns the least recently added item on this `Queue`.
     @discardableResult public func dequeue() -> Item? {
         
