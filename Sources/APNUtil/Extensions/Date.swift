@@ -38,7 +38,9 @@ public extension Date {
     var isPast: Bool { daysFrom(earlierDate: Date.now) < 0 }
     
     /// Returns a  `Bool` indicating if `self` is the same day/month/year as `Date()`
-    var isToday: Bool { daysFrom(earlierDate: Date.now) == 0 }
+//    var isToday: Bool { daysFrom(earlierDate: Date.now) == 0 }
+    var isToday: Bool { simple == Date().simple }
+
     
     /// Returns a  `Bool` indicating if `self` is a different day in the future.
     /// - note: ignores time aspecte of `Date`
