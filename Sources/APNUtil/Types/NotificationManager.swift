@@ -128,26 +128,14 @@ public class NotificationManager {
         
         notificationContent.badge   = NSNumber(value: badgeNumber)
         
-        // TODO: Clean Up - Add support for attachments
-        // Attachment?
-        //if let url = Bundle.main.url(forResource: "ms_icon_0",
-        //                                withExtension: "png") {
-        //    if let attachment = try? UNNotificationAttachment(identifier: "ms_icon_0",
-        //                                                        url: url,
-        //                                                        options: nil) {
-        //        notificationContent.attachments = [attachment]
-        //    }
-        //
-        //}
-        
         // Set Day/Time
-        var dateComponents      = DateComponents()
-        dateComponents.calendar = Calendar.current
+        var dateComponents          = DateComponents()
+        dateComponents.calendar     = Calendar.current
         
         if testMode {
             
             let date                = Date()
-            let calendar    	    = Calendar.current
+            let calendar            = Calendar.current
             let delay               = 7
             
             dateComponents.hour     = calendar.component(.hour, from: date)
