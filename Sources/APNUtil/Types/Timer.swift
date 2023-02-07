@@ -31,7 +31,7 @@ public class APNTimer {
     
     public var timer: Timer?
     
-    public init(name: String,
+    @discardableResult public init(name: String,
                 repeatInterval: Double? = nil,
                 repeatAction: intervalRepeatAction? = nil) {
 
@@ -91,6 +91,22 @@ public class APNTimer {
     public func stopAndPrint(prefix: String?) {
         
         self.stop(); printElapsed(prefix: prefix)
+        
+    }
+    
+    /// Returns success flag, true if there was a timer with name == `named`, false otherwise
+    @discardableResult public static func stopTimer(named: String) -> Bool {
+        
+        if let timer = runningTimers[named] {
+            
+            timer.stop()
+            return true /*EXIT*/
+            
+        } else {
+            
+            return false
+            
+        }
         
     }
     
