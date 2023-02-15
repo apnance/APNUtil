@@ -168,4 +168,11 @@ public extension Date {
     /// Returns dates for the next week beginning with `self` in chronological order.
     func weekStarting() -> [Date] { consecutives(7) }
     
+    /// Returns a copy of `self` sans time components.
+    func sansTime() -> Date {
+        
+        Calendar.current.date(from: Calendar.current.dateComponents([.year, .month, .day], from: self))!
+        
+    }
+    
 }
