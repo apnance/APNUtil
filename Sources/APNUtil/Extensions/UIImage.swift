@@ -69,7 +69,7 @@ public extension UIImage {
         
     }
     
-    /// Returns a copy of this image scales by `scaleFactor`.
+    /// Returns a copy of this image scaled by `scaleFactor`.
     /// - important: `scaleFactor` must be greater than zero.
     func scaledBy(_ scaleFactor: Double) -> UIImage {
         
