@@ -10,13 +10,41 @@ import UIKit
 
 public extension UIImage {
     
-    /// Attempts to initialize an Image looking for the image in the specified subPath of the document directory.
+    /// Attempts to initialize a `UIImage` looking for the image in the specified subPath of the document directory.
     convenience init?(withSubPath: String) {
         
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
         let path = FileManager.cleanFilePath("\(paths[0])/\(withSubPath)")
         
         self.init(contentsOfFile: path)
+        
+    }
+    
+    /// Attempts to initialize a `UIImage`  with the given `width` and `height` using the provided `PixelData` array for pixel colors.
+    convenience init?(pixels: [PixelData], width: Int, height: Int) {
+        
+        guard width > 0 && height > 0, pixels.count == width * height else { fatalError() /*EXIT*/ }
+        
+        var data = pixels
+        
+        guard let providerRef = CGDataProvider(data: Data(bytes: &data,
+                                                          count: data.count * MemoryLayout<PixelData>.size) as CFData)
+        else { fatalError() /*EXIT*/ }
+        
+        guard let cgim = CGImage(width: width,
+                                 height: height,
+                                 bitsPerComponent: 8,
+                                 bitsPerPixel: 32,
+                                 bytesPerRow: width * MemoryLayout<PixelData>.size,
+                                 space: CGColorSpaceCreateDeviceRGB(),
+                                 bitmapInfo: CGBitmapInfo(rawValue: CGImageAlphaInfo.premultipliedFirst.rawValue),
+                                 provider: providerRef,
+                                 decode: nil,
+                                 shouldInterpolate: false,
+                                 intent: .defaultIntent)
+        else { fatalError() /*EXIT*/ }
+        
+        self.init(cgImage: cgim)
         
     }
     
@@ -31,11 +59,11 @@ public extension UIImage {
             
             try FileManager.createSubDir(subDir)
             
-            let filePath = FileManager.cleanFilePath("\(paths[0])/\(subDir)\(fileName)")
+            let filePath    = FileManager.cleanFilePath("\(paths[0])/\(subDir)\(fileName)")
+            let fileURL     = URL(fileURLWithPath: filePath)
             
-            let fileURL = URL(fileURLWithPath: filePath)
-            
-            try pngData()?.write(to: fileURL, options: .atomic)
+            try pngData()?.write(to: fileURL,
+                                 options: .atomic)
             
         } catch {
             
@@ -190,6 +218,191 @@ public extension UIImage {
         
         return  UIImage(cgImage: cgImage!)
         
+    }
+    
+}
+
+// MARK: - Effects
+public extension UIImage {
+    
+    
+    /// Converts UIImage into a simulated LCD screen effect.
+    ///
+    /// Renders a UIImage in a magnified LCD screen effect.  The effect is achieved
+    /// by converting each pixel in a 4x4 representation of that pixel, with top and left
+    /// clear "seam" between "lcd pixels." The effect is achieved by converting each
+    /// pixel from the source UIImage into a 4x4 series of new pixels with  a top row of
+    /// transparent pixels, a left column of transparent/clear pixels(C) and then a
+    /// 3-pixel wide row of the red component value, a 3 pixel row of green component
+    /// value(G), and a three pixel row of blue component value.
+    ///
+    /// ````
+    /// Each pixel in the image is converted to the this format:
+    ///
+    ///                         C C C C
+    ///                         C R R R
+    ///                         C G G G
+    ///                         C B B B
+    ///
+    /// C = clear/transperent, R = Red, G = Green value, B = Blue value
+    ///
+    /// For example, a red pixel with ARGB value (A: 255, R: 220, G: 0, B: 0) would be converted to:
+    ///
+    ///  Original Pixel                       Converted 4x4 "LCD Pixel"
+    /// -------------------------------------------------------------------------------
+    ///                         (0,0,0,0)  (0,0,0,0)      (0,0,0,0)      (0,0,0,0)
+    ///  (255,220,0,0)     ->   (0,0,0,0)  (255,220,0,0)  (255,220,0,0)  (255,220,0,0)
+    ///                         (0,0,0,0)  (0,0,0,0)      (0,0,0,0)      (0,0,0,0)
+    ///                         (0,0,0,0)  (0,0,0,0)      (0,0,0,0)      (0,0,0,0)
+    ///
+    /// ````
+    func pixelatedLCD() -> UIImage? {
+        
+        let height      = Int(self.size.height)
+        let width       = Int(self.size.width)
+        let newHeight   = height * 4
+        let newWidth    = width  * 4
+        
+        guard let originalPixels = pixelData() // Unaltered image
+        else { return nil /*FAILED*/ }
+        
+        let clearPixelData = PixelData(a: 0, r: 0, g: 0, b: 0)
+        var newPixels = Array<PixelData>(repeating: clearPixelData,
+                                         count: newHeight * newWidth)
+        
+        for row in 0..<height {
+            
+            for col in 0..<width {
+                
+                let pixelLoc        = (row * width * 4) + (col * 4)
+                var newPixelIndex   = (row * newWidth * 4) + (col * 4)
+                
+                // Avoid array overflow by skipping last few lines.
+                if (newPixelIndex + (3 * newWidth)) > newPixels.lastUsableIndex { continue /*CONTINUE*/ }
+                
+                let alpha   = originalPixels[pixelLoc]
+                let red     = PixelData(a: alpha, r: originalPixels[pixelLoc + 1], g: 0, b: 0)
+                let green   = PixelData(a: alpha, r: 0, g: originalPixels[pixelLoc + 2], b: 0)
+                let blue    = PixelData(a: alpha, r: 0, g: 0, b: originalPixels[pixelLoc + 3])
+                
+                // Top Clear
+                // newPixels[newPixelIndex]      = clearPixelData
+                // newPixels[newPixelIndex + 1 ] = clearPixelData
+                // newPixels[newPixelIndex + 2 ] = clearPixelData
+                // newPixels[newPixelIndex + 3 ] = clearPixelData
+                
+                // Red Pixel
+                newPixelIndex += newWidth
+                
+                // newPixels[newPixelIndex]   = clearPixelData
+                newPixels[newPixelIndex + 1 ] = red
+                newPixels[newPixelIndex + 2 ] = red
+                newPixels[newPixelIndex + 3 ] = red
+                
+                // Green Pixel
+                newPixelIndex += newWidth
+                // newPixels[newPixelIndex]   = clearPixelData
+                newPixels[newPixelIndex + 1 ] = green
+                newPixels[newPixelIndex + 2 ] = green
+                newPixels[newPixelIndex + 3 ] = green
+                
+                // Blue Pixel
+                newPixelIndex += newWidth
+                
+                // newPixels[newPixelIndex]   = clearPixelData
+                newPixels[newPixelIndex + 1 ] = blue
+                newPixels[newPixelIndex + 2 ] = blue
+                newPixels[newPixelIndex + 3 ] = blue
+                
+            }
+            
+        }
+        
+        return UIImage(pixels: newPixels, width: newWidth, height: newHeight)
+        
+    }
+    
+    // - MARK: PixelData
+    // Source:
+    // https://www.itcodar.com/ios/pixel-array-to-uiimage-in-swift.html#:~:text=Generate%20Image%20from%20Pixel%20Array%20%28fast%29%20The%20most,pixel%20data%20as%20array%20from%20UIImage%2FCGImage%20in%20swift
+    
+    /// 32-bit  pixel component values.
+    struct PixelData: CustomStringConvertible {
+        
+        var a: UInt8
+        var r: UInt8
+        var g: UInt8
+        var b: UInt8
+        
+        /// Note: Alpha compent defaults to opaque(255) if unspecified.
+        init(a: UInt8 = 255, r: UInt8, g: UInt8, b: UInt8) {
+            
+            self.a = a
+            self.r = r
+            self.g = g
+            self.b = b
+            
+        }
+        
+        public var description: String { "A:\(a) R:\(r) G:\(g) B:\(b)"}
+        
+    }
+    
+    /// Returns the 8-bit pixel information of `self` as an array of `size.width * size.height` count.
+    func pixelData() -> [UInt8]? {
+        
+        let size        = self.size
+        let dataSize    = size.width * size.height * 4
+        var pixelData   = [UInt8](repeating: 0, count: Int(dataSize))
+        let colorSpace  = CGColorSpaceCreateDeviceRGB()
+        
+        let context     = CGContext(data: &pixelData,           // Render data into pixelData array
+                                    width: Int(size.width),
+                                    height: Int(size.height),
+                                    bitsPerComponent: 8,
+                                    bytesPerRow: 4 * Int(size.width),
+                                    space: colorSpace,
+                                    bitmapInfo: CGImageAlphaInfo.premultipliedFirst.rawValue)
+        
+        let cgImage     = self.cgImage!
+        
+        context?.draw(cgImage, in: CGRect(x: 0, y: 0,
+                                          width: size.width, height: size.height))
+        
+        return pixelData
+        
+    }
+    
+}
+
+// - MARK: Diagnostics
+public extension UIImage {
+    
+    /// `UIImage` diagnostic function that prints out ARGB values of the pixels in `self`
+    func printARGB() {
+        
+        guard let pixels = pixelData() // Unaltered image
+        else { return /*FAILED*/ }
+        
+        let height      = Int(self.size.height)
+        let width       = Int(self.size.width)
+        
+        for row in 0..<height {
+            
+            for col in 0..<width {
+                
+                let pixelLoc = (row * width * 4) + (col * 4)
+                
+                print("""
+                A:\(pixels[pixelLoc]) \
+                R:\(pixels[pixelLoc + 1]) \
+                G:\(pixels[pixelLoc + 2]) \
+                B:\(pixels[pixelLoc + 3])
+                """)
+                
+            }
+            
+        }
         
     }
     
