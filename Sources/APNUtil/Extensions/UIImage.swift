@@ -178,5 +178,19 @@ public extension UIImage {
         return normalizedImage
         
     }
+
+    /// Creates a UIImage of solid `color` having frame `withFrame`
+    static func solid(_ color: UIColor, withFrame frame: CGRect) -> UIImage {
+        
+        /// Creates a CIImage of solid color but *infinite size*
+        let ciImage = CIImage(color: CIColor(color: color))
+        
+        /// Create CGImage in order to specify the size of the image.
+        let cgImage = CIContext().createCGImage(ciImage, from: frame)
+                
+        return  UIImage(cgImage: cgImage!)
+        
+        
+    }
     
 }
