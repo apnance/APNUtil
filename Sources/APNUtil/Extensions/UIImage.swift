@@ -267,7 +267,7 @@ public extension UIImage {
         else { return nil /*FAILED*/ }
         
         let clearPixelData = PixelData(a: 0, r: 0, g: 0, b: 0)
-        var newPixels = Array<PixelData>(repeating: clearPixelData,
+        var newPixels = Array<PixelData>(repeating: clearPixelData, // defaults are clear/transparent
                                          count: newHeight * newWidth)
         
         for row in 0..<height {
@@ -286,30 +286,26 @@ public extension UIImage {
                 let blue    = PixelData(a: alpha, r: 0, g: 0, b: originalPixels[pixelLoc + 3])
                 
                 // Top Clear
-                // newPixels[newPixelIndex]      = clearPixelData
-                // newPixels[newPixelIndex + 1 ] = clearPixelData
-                // newPixels[newPixelIndex + 2 ] = clearPixelData
-                // newPixels[newPixelIndex + 3 ] = clearPixelData
+                // first row all columns are clear - use default(clear) values
                 
                 // Red Pixel
-                newPixelIndex += newWidth
-                
-                // newPixels[newPixelIndex]   = clearPixelData
+                newPixelIndex += newWidth // Next Row
+                // first column is clear - use default
                 newPixels[newPixelIndex + 1 ] = red
                 newPixels[newPixelIndex + 2 ] = red
                 newPixels[newPixelIndex + 3 ] = red
                 
                 // Green Pixel
-                newPixelIndex += newWidth
-                // newPixels[newPixelIndex]   = clearPixelData
+                newPixelIndex += newWidth // Next Row
+                // first column is clear - use default
                 newPixels[newPixelIndex + 1 ] = green
                 newPixels[newPixelIndex + 2 ] = green
                 newPixels[newPixelIndex + 3 ] = green
                 
                 // Blue Pixel
-                newPixelIndex += newWidth
+                newPixelIndex += newWidth // Next Row
                 
-                // newPixels[newPixelIndex]   = clearPixelData
+                // first column is clear - use default
                 newPixels[newPixelIndex + 1 ] = blue
                 newPixels[newPixelIndex + 2 ] = blue
                 newPixels[newPixelIndex + 3 ] = blue
