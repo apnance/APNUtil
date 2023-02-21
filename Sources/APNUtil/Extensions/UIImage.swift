@@ -256,12 +256,74 @@ public extension UIImage {
     ///                         (0,0,0,0)  (0,0,0,0)      (0,0,0,0)      (0,0,0,0)
     ///
     /// ````
-    func pixelatedLCD() -> UIImage? {
+//    func pixelatedLCD() -> UIImage? {
+//
+//        let height      = Int(self.size.height)
+//        let width       = Int(self.size.width)
+//        let newHeight   = height * 4
+//        let newWidth    = width  * 4
+//
+//        guard let originalPixels = pixelData() // Unaltered image
+//        else { return nil /*FAILED*/ }
+//
+//        let clearPixelData = PixelData(a: 0, r: 0, g: 0, b: 0)
+//        var newPixels = Array<PixelData>(repeating: clearPixelData, // defaults are clear/transparent
+//                                         count: newHeight * newWidth)
+//
+//        for row in 0..<height {
+//
+//            for col in 0..<width {
+//
+//                let pixelLoc        = (row * width * 4) + (col * 4)
+//                var newPixelIndex   = (row * newWidth * 4) + (col * 4)
+//
+//                // Avoid array overflow by skipping last few lines.
+//                if (newPixelIndex + (3 * newWidth)) > newPixels.lastUsableIndex { continue /*CONTINUE*/ }
+//
+//                let alpha   = originalPixels[pixelLoc]
+//                let red     = PixelData(a: alpha, r: originalPixels[pixelLoc + 1], g: 0, b: 0)
+//                let green   = PixelData(a: alpha, r: 0, g: originalPixels[pixelLoc + 2], b: 0)
+//                let blue    = PixelData(a: alpha, r: 0, g: 0, b: originalPixels[pixelLoc + 3])
+//
+//                // Top Clear
+//                // first row all columns are clear - use default(clear) values
+//
+//                // Red Pixel
+//                newPixelIndex += newWidth // Next Row
+//                // first column is clear - use default
+//                newPixels[newPixelIndex + 1 ] = red
+//                newPixels[newPixelIndex + 2 ] = red
+//                newPixels[newPixelIndex + 3 ] = red
+//
+//                // Green Pixel
+//                newPixelIndex += newWidth // Next Row
+//                // first column is clear - use default
+//                newPixels[newPixelIndex + 1 ] = green
+//                newPixels[newPixelIndex + 2 ] = green
+//                newPixels[newPixelIndex + 3 ] = green
+//
+//                // Blue Pixel
+//                newPixelIndex += newWidth // Next Row
+//
+//                // first column is clear - use default
+//                newPixels[newPixelIndex + 1 ] = blue
+//                newPixels[newPixelIndex + 2 ] = blue
+//                newPixels[newPixelIndex + 3 ] = blue
+//
+//            }
+//
+//        }
+//
+//        return UIImage(pixels: newPixels, width: newWidth, height: newHeight)
+//
+//    }
+    
+    func pixelatedLCD(_ pixelHeight: Int = 2) -> UIImage? {
         
         let height      = Int(self.size.height)
         let width       = Int(self.size.width)
-        let newHeight   = height * 4
-        let newWidth    = width  * 4
+        let newHeight   = height * 7
+        let newWidth    = width  * 7
         
         guard let originalPixels = pixelData() // Unaltered image
         else { return nil /*FAILED*/ }
@@ -275,7 +337,7 @@ public extension UIImage {
             for col in 0..<width {
                 
                 let pixelLoc        = (row * width * 4) + (col * 4)
-                var newPixelIndex   = (row * newWidth * 4) + (col * 4)
+                var newPixelIndex   = (row * newWidth * 7) + (col * 7)
                 
                 // Avoid array overflow by skipping last few lines.
                 if (newPixelIndex + (3 * newWidth)) > newPixels.lastUsableIndex { continue /*CONTINUE*/ }
@@ -294,6 +356,17 @@ public extension UIImage {
                 newPixels[newPixelIndex + 1 ] = red
                 newPixels[newPixelIndex + 2 ] = red
                 newPixels[newPixelIndex + 3 ] = red
+                newPixels[newPixelIndex + 4 ] = red
+                newPixels[newPixelIndex + 5 ] = red
+                newPixels[newPixelIndex + 6 ] = red
+                
+                newPixelIndex += newWidth // Next Row
+                newPixels[newPixelIndex + 1 ] = red
+                newPixels[newPixelIndex + 2 ] = red
+                newPixels[newPixelIndex + 3 ] = red
+                newPixels[newPixelIndex + 4 ] = red
+                newPixels[newPixelIndex + 5 ] = red
+                newPixels[newPixelIndex + 6 ] = red
                 
                 // Green Pixel
                 newPixelIndex += newWidth // Next Row
@@ -301,14 +374,35 @@ public extension UIImage {
                 newPixels[newPixelIndex + 1 ] = green
                 newPixels[newPixelIndex + 2 ] = green
                 newPixels[newPixelIndex + 3 ] = green
+                newPixels[newPixelIndex + 4 ] = green
+                newPixels[newPixelIndex + 5 ] = green
+                newPixels[newPixelIndex + 6 ] = green
+                
+                newPixelIndex += newWidth // Next Row
+                newPixels[newPixelIndex + 1 ] = green
+                newPixels[newPixelIndex + 2 ] = green
+                newPixels[newPixelIndex + 3 ] = green
+                newPixels[newPixelIndex + 4 ] = green
+                newPixels[newPixelIndex + 5 ] = green
+                newPixels[newPixelIndex + 6 ] = green
                 
                 // Blue Pixel
                 newPixelIndex += newWidth // Next Row
-                
                 // first column is clear - use default
                 newPixels[newPixelIndex + 1 ] = blue
                 newPixels[newPixelIndex + 2 ] = blue
                 newPixels[newPixelIndex + 3 ] = blue
+                newPixels[newPixelIndex + 4 ] = blue
+                newPixels[newPixelIndex + 5 ] = blue
+                newPixels[newPixelIndex + 6 ] = blue
+                
+                newPixelIndex += newWidth // Next Row
+                newPixels[newPixelIndex + 1 ] = blue
+                newPixels[newPixelIndex + 2 ] = blue
+                newPixels[newPixelIndex + 3 ] = blue
+                newPixels[newPixelIndex + 4 ] = blue
+                newPixels[newPixelIndex + 5 ] = blue
+                newPixels[newPixelIndex + 6 ] = blue
                 
             }
             
