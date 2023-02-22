@@ -184,6 +184,30 @@ public extension UIImage {
         
     }
     
+    func filter(brightness: CGFloat, saturation: CGFloat, vibrance: CGFloat) -> UIImage {
+        
+        let context    = CIContext(options: [.outputPremultiplied : true,
+                                             .workingColorSpace: CGColorSpaceCreateDeviceRGB()])
+        
+        var ciImage: CIImage = CIImage(cgImage: self.cgImage!)
+        
+        ciImage = CIFilter(name: "CIVibrance",
+                           parameters: [kCIInputImageKey: ciImage,
+                                      "inputAmount" : vibrance])!.outputImage!
+            
+        ciImage = CIFilter(name: "CIColorControls",
+                           parameters: [kCIInputImageKey: ciImage,
+                                   kCIInputBrightnessKey: Float(brightness),
+                                   kCIInputSaturationKey: Float(saturation)])!.outputImage!
+        
+        let cgImage = context.createCGImage(ciImage,
+                                            from: ciImage.extent)!
+        
+        return UIImage(cgImage: cgImage)
+        
+    }
+
+    
     /// Fixes improper orientation of UIImage.
     /// - note: Useful for fixing images taken with camera.
     func fixOrientation() -> UIImage {
@@ -256,74 +280,26 @@ public extension UIImage {
     ///                         (0,0,0,0)  (0,0,0,0)      (0,0,0,0)      (0,0,0,0)
     ///
     /// ````
-//    func pixelatedLCD() -> UIImage? {
-//
-//        let height      = Int(self.size.height)
-//        let width       = Int(self.size.width)
-//        let newHeight   = height * 4
-//        let newWidth    = width  * 4
-//
-//        guard let originalPixels = pixelData() // Unaltered image
-//        else { return nil /*FAILED*/ }
-//
-//        let clearPixelData = PixelData(a: 0, r: 0, g: 0, b: 0)
-//        var newPixels = Array<PixelData>(repeating: clearPixelData, // defaults are clear/transparent
-//                                         count: newHeight * newWidth)
-//
-//        for row in 0..<height {
-//
-//            for col in 0..<width {
-//
-//                let pixelLoc        = (row * width * 4) + (col * 4)
-//                var newPixelIndex   = (row * newWidth * 4) + (col * 4)
-//
-//                // Avoid array overflow by skipping last few lines.
-//                if (newPixelIndex + (3 * newWidth)) > newPixels.lastUsableIndex { continue /*CONTINUE*/ }
-//
-//                let alpha   = originalPixels[pixelLoc]
-//                let red     = PixelData(a: alpha, r: originalPixels[pixelLoc + 1], g: 0, b: 0)
-//                let green   = PixelData(a: alpha, r: 0, g: originalPixels[pixelLoc + 2], b: 0)
-//                let blue    = PixelData(a: alpha, r: 0, g: 0, b: originalPixels[pixelLoc + 3])
-//
-//                // Top Clear
-//                // first row all columns are clear - use default(clear) values
-//
-//                // Red Pixel
-//                newPixelIndex += newWidth // Next Row
-//                // first column is clear - use default
-//                newPixels[newPixelIndex + 1 ] = red
-//                newPixels[newPixelIndex + 2 ] = red
-//                newPixels[newPixelIndex + 3 ] = red
-//
-//                // Green Pixel
-//                newPixelIndex += newWidth // Next Row
-//                // first column is clear - use default
-//                newPixels[newPixelIndex + 1 ] = green
-//                newPixels[newPixelIndex + 2 ] = green
-//                newPixels[newPixelIndex + 3 ] = green
-//
-//                // Blue Pixel
-//                newPixelIndex += newWidth // Next Row
-//
-//                // first column is clear - use default
-//                newPixels[newPixelIndex + 1 ] = blue
-//                newPixels[newPixelIndex + 2 ] = blue
-//                newPixels[newPixelIndex + 3 ] = blue
-//
-//            }
-//
-//        }
-//
-//        return UIImage(pixels: newPixels, width: newWidth, height: newHeight)
-//
-//    }
-    
-    func pixelatedLCD(_ pixelHeight: Int = 2) -> UIImage? {
+    ///
+    /// - Parameter resolution: Specifies the number of pixels to render each
+    /// sub-pixel(e.g. red) in both height and width. Specifying 1 results in each source
+    /// pixel being upscaled to 4x4, with a clear row on top and clear column on left
+    /// and each component RGB being 1 pixel tall by 3 pixels wide. Setting resolution
+    /// to 3 upscales each pixel to 10x10, with 1 pixel clear row on top, 1px clear
+    /// column on left and each sub-pixel being 3 pixels tall by 9 pixels wide.
+    ///
+    /// - note: resolution must be >= 1 but should be kept as low as acceptable to optimize performance.
+    /// - Returns: optional UIImage
+    func pixelatedLCD(_ resolution: Int = 3) -> UIImage? {
+        
+        assert(resolution > 0, "resolution value should be greater than 1 but kept as small as possible for performance reasons")
+        
+        let dimension = 1 + resolution * 3
         
         let height      = Int(self.size.height)
         let width       = Int(self.size.width)
-        let newHeight   = height * 7
-        let newWidth    = width  * 7
+        let newHeight   = height * dimension
+        let newWidth    = width  * dimension
         
         guard let originalPixels = pixelData() // Unaltered image
         else { return nil /*FAILED*/ }
@@ -337,12 +313,14 @@ public extension UIImage {
             for col in 0..<width {
                 
                 let pixelLoc        = (row * width * 4) + (col * 4)
-                var newPixelIndex   = (row * newWidth * 7) + (col * 7)
+                var newPixelIndex   = (row * newWidth * dimension) + (col * dimension)
                 
                 // Avoid array overflow by skipping last few lines.
                 if (newPixelIndex + (3 * newWidth)) > newPixels.lastUsableIndex { continue /*CONTINUE*/ }
                 
                 let alpha   = originalPixels[pixelLoc]
+                if alpha == 0 { continue /*SKIP transparent pixels*/ }
+                
                 let red     = PixelData(a: alpha, r: originalPixels[pixelLoc + 1], g: 0, b: 0)
                 let green   = PixelData(a: alpha, r: 0, g: originalPixels[pixelLoc + 2], b: 0)
                 let blue    = PixelData(a: alpha, r: 0, g: 0, b: originalPixels[pixelLoc + 3])
@@ -351,58 +329,55 @@ public extension UIImage {
                 // first row all columns are clear - use default(clear) values
                 
                 // Red Pixel
-                newPixelIndex += newWidth // Next Row
-                // first column is clear - use default
-                newPixels[newPixelIndex + 1 ] = red
-                newPixels[newPixelIndex + 2 ] = red
-                newPixels[newPixelIndex + 3 ] = red
-                newPixels[newPixelIndex + 4 ] = red
-                newPixels[newPixelIndex + 5 ] = red
-                newPixels[newPixelIndex + 6 ] = red
-                
-                newPixelIndex += newWidth // Next Row
-                newPixels[newPixelIndex + 1 ] = red
-                newPixels[newPixelIndex + 2 ] = red
-                newPixels[newPixelIndex + 3 ] = red
-                newPixels[newPixelIndex + 4 ] = red
-                newPixels[newPixelIndex + 5 ] = red
-                newPixels[newPixelIndex + 6 ] = red
+                if originalPixels[pixelLoc + 1] > 0 {
+                    
+                    for _ in 0..<resolution {
+                        
+                        newPixelIndex += newWidth // Next Row
+                        
+                        for i in 1..<dimension { // start at second column - first column is transparent
+                            
+                            newPixels[newPixelIndex + i ] = red
+                            
+                        }
+                        
+                    }
+                    
+                } else { newPixelIndex += newWidth * resolution }
                 
                 // Green Pixel
-                newPixelIndex += newWidth // Next Row
-                // first column is clear - use default
-                newPixels[newPixelIndex + 1 ] = green
-                newPixels[newPixelIndex + 2 ] = green
-                newPixels[newPixelIndex + 3 ] = green
-                newPixels[newPixelIndex + 4 ] = green
-                newPixels[newPixelIndex + 5 ] = green
-                newPixels[newPixelIndex + 6 ] = green
-                
-                newPixelIndex += newWidth // Next Row
-                newPixels[newPixelIndex + 1 ] = green
-                newPixels[newPixelIndex + 2 ] = green
-                newPixels[newPixelIndex + 3 ] = green
-                newPixels[newPixelIndex + 4 ] = green
-                newPixels[newPixelIndex + 5 ] = green
-                newPixels[newPixelIndex + 6 ] = green
+                if originalPixels[pixelLoc + 2] > 0 {
+                    
+                    for _ in 0..<resolution {
+                        
+                        newPixelIndex += newWidth // Next Row
+                        
+                        for i in 1..<dimension {
+                            
+                            newPixels[newPixelIndex + i ] = green
+                            
+                        }
+                        
+                    }
+                    
+                } else { newPixelIndex += newWidth * resolution }
                 
                 // Blue Pixel
-                newPixelIndex += newWidth // Next Row
-                // first column is clear - use default
-                newPixels[newPixelIndex + 1 ] = blue
-                newPixels[newPixelIndex + 2 ] = blue
-                newPixels[newPixelIndex + 3 ] = blue
-                newPixels[newPixelIndex + 4 ] = blue
-                newPixels[newPixelIndex + 5 ] = blue
-                newPixels[newPixelIndex + 6 ] = blue
-                
-                newPixelIndex += newWidth // Next Row
-                newPixels[newPixelIndex + 1 ] = blue
-                newPixels[newPixelIndex + 2 ] = blue
-                newPixels[newPixelIndex + 3 ] = blue
-                newPixels[newPixelIndex + 4 ] = blue
-                newPixels[newPixelIndex + 5 ] = blue
-                newPixels[newPixelIndex + 6 ] = blue
+                if originalPixels[pixelLoc + 3] > 0 {
+                    
+                    for _ in 0..<resolution {
+                        
+                        newPixelIndex += newWidth // Next Row
+                        
+                        for i in 1..<dimension {
+                            
+                            newPixels[newPixelIndex + i ] = blue
+                            
+                        }
+                        
+                    }
+                    
+                } else { newPixelIndex += newWidth * resolution }
                 
             }
             
@@ -411,6 +386,7 @@ public extension UIImage {
         return UIImage(pixels: newPixels, width: newWidth, height: newHeight)
         
     }
+    
     
     // - MARK: PixelData
     // Source:
