@@ -288,9 +288,14 @@ public extension UIImage {
     /// to 3 upscales each pixel to 10x10, with 1 pixel clear row on top, 1px clear
     /// column on left and each sub-pixel being 3 pixels tall by 9 pixels wide.
     ///
+    /// - Parameter interstitialColor: Specify  a color to fill the "blank"
+    /// spaces between pixels. The default `.clear` works well when the
+    /// pixelatedLCD image superimposed over a black background.
+    ///
     /// - note: resolution must be >= 1 but should be kept as low as acceptable to optimize performance.
+    ///
     /// - Returns: optional UIImage
-    func pixelatedLCD(_ resolution: Int = 3) -> UIImage? {
+    func pixelatedLCD(_ resolution: Int = 3, interstitialColor: UIColor = .clear) -> UIImage? {
         
         assert(resolution > 0, "resolution value should be greater than 1 but kept as small as possible for performance reasons")
         
@@ -308,6 +313,8 @@ public extension UIImage {
         var newPixels = Array<PixelData>(repeating: clearPixelData, // defaults are clear/transparent
                                          count: newHeight * newWidth)
         
+        let interstitial = PixelData(fromColor: interstitialColor)
+        
         for row in 0..<height {
             
             for col in 0..<width {
@@ -321,63 +328,75 @@ public extension UIImage {
                 let alpha   = originalPixels[pixelLoc]
                 if alpha == 0 { continue /*SKIP transparent pixels*/ }
                 
-                let red     = PixelData(a: alpha, r: originalPixels[pixelLoc + 1], g: 0, b: 0)
-                let green   = PixelData(a: alpha, r: 0, g: originalPixels[pixelLoc + 2], b: 0)
-                let blue    = PixelData(a: alpha, r: 0, g: 0, b: originalPixels[pixelLoc + 3])
+                var red     = PixelData(a: alpha, r: originalPixels[pixelLoc + 1], g: 0, b: 0)
+                var green   = PixelData(a: alpha, r: 0, g: originalPixels[pixelLoc + 2], b: 0)
+                var blue    = PixelData(a: alpha, r: 0, g: 0, b: originalPixels[pixelLoc + 3])
                 
-                // Top Clear
-                // first row all columns are clear - use default(clear) values
+                if red.r > 0 || green.g > 0 || blue.b > 0 {
+                    
+                    red     = red.r     > 0 ? red      : interstitial
+                    green   = green.g   > 0 ? green    : interstitial
+                    blue    = blue.b    > 0 ? blue     : interstitial
+                    
+                }
                 
-                // Red Pixel
+                // Top use interstitial color
                 if originalPixels[pixelLoc + 1] > 0 {
                     
-                    for _ in 0..<resolution {
+                    for i in 0..<dimension {
                         
-                        newPixelIndex += newWidth // Next Row
-                        
-                        for i in 1..<dimension { // start at second column - first column is transparent
-                            
-                            newPixels[newPixelIndex + i ] = red
-                            
-                        }
+                        newPixels[newPixelIndex + i ] = interstitial
                         
                     }
                     
-                } else { newPixelIndex += newWidth * resolution }
+                }
+                
+                
+                // Red Pixel
+                for _ in 0..<resolution {
+                    
+                    newPixelIndex += newWidth // Next Row
+                    
+                    newPixels[newPixelIndex] = interstitial // first column => interstitial color
+                    
+                    for i in 1..<dimension { // second column on
+                        
+                        newPixels[newPixelIndex + i ] = red
+                        
+                    }
+                    
+                }
                 
                 // Green Pixel
-                if originalPixels[pixelLoc + 2] > 0 {
+                for _ in 0..<resolution {
                     
-                    for _ in 0..<resolution {
+                    newPixelIndex += newWidth // Next Row
+                    
+                    newPixels[newPixelIndex] = interstitial // first column => interstitial color
+                    
+                    for i in 1..<dimension { // second column on
                         
-                        newPixelIndex += newWidth // Next Row
-                        
-                        for i in 1..<dimension {
-                            
-                            newPixels[newPixelIndex + i ] = green
-                            
-                        }
+                        newPixels[newPixelIndex + i ] = green
                         
                     }
                     
-                } else { newPixelIndex += newWidth * resolution }
+                }
                 
                 // Blue Pixel
-                if originalPixels[pixelLoc + 3] > 0 {
+                for _ in 0..<resolution {
                     
-                    for _ in 0..<resolution {
+                    newPixelIndex += newWidth // Next Row
+                    
+                    newPixels[newPixelIndex] = interstitial // first column => interstitial color
+                    
+                    for i in 1..<dimension { // second column on
                         
-                        newPixelIndex += newWidth // Next Row
-                        
-                        for i in 1..<dimension {
-                            
-                            newPixels[newPixelIndex + i ] = blue
-                            
-                        }
+                        newPixels[newPixelIndex + i ] = blue
                         
                     }
                     
-                } else { newPixelIndex += newWidth * resolution }
+                }
+                
                 
             }
             
@@ -407,6 +426,17 @@ public extension UIImage {
             self.r = r
             self.g = g
             self.b = b
+            
+        }
+        
+        init(fromColor color: UIColor) {
+            
+            let rgba = color.rgba * 255
+            self.init(a: UInt8(rgba.a),
+                      r: UInt8(rgba.r),
+                      g: UInt8(rgba.g),
+                      b: UInt8(rgba.b))
+            
             
         }
         
