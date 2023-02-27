@@ -657,6 +657,7 @@ public extension Array where Element: UIImage {
         
     }
     
+    /// - note: set repeat count to 0 for infinite repeat.
     func animate(in targetImageView: UIImageView,
                  withRepeatCount repeatCount: Int = 1,
                  delay: Double = 0.1,
