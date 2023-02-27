@@ -125,9 +125,9 @@ public extension UIColor {
     // MARK: Initializers
     convenience init(rgba: RGBA) {
         
-        self.init(red:rgba.r,
+        self.init(red:   rgba.r,
                   green: rgba.g,
-                  blue: rgba.b,
+                  blue:  rgba.b,
                   alpha: rgba.a)
         
     }
