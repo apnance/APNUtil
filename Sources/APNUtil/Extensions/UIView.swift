@@ -88,6 +88,9 @@ public extension UIView {
     /// Removes ALL subview from the `UIView`
     func removeAllSubviews() { for view in subviews { view.removeFromSuperview() } }
         
+    /// Toggles hidden value
+    func toggleHidden() { self.isHidden = !self.isHidden }
+    
 }
 
 // MARK: - Animation
