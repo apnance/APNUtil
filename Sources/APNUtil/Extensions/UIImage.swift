@@ -129,6 +129,13 @@ public extension UIImage {
         
     }
     
+    /// Encodes `self` as an HTML-email inlinable base 64 string.
+    func encodedAsBase64String() -> String {
+        
+        pngData()!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
+        
+    }
+    
 }
 
 // MARK: - Filters
