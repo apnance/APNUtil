@@ -174,10 +174,10 @@ public extension String {
     /// e.g
     /// ```
     ///     // ex.
-    ///     fromBase26String("A") == "0"
-    ///     fromBase26String("Z") == "25"
-    ///     fromBase26String("AA") == "26"
-    ///     fromBase26String("AAB") == "703"
+    ///     "A".base26StringToInt   == 0
+    ///     "Z".base26StringToInt   == 25
+    ///     "AA".base26StringToInt  == 26
+    ///     "AAB".base26StringToInt == 703
     /// ```
     ///
     /// - note: see Int.base26String for converting back to Int
