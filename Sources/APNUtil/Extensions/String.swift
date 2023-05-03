@@ -242,3 +242,101 @@ public extension String {
     
 }
 
+// - MARK: Silly
+public extension String {
+//    private func shift(_ char: Character, by: Int) -> Character {
+//
+//        var asciiVal    = Int(char.asciiValue!) + by
+//        let low         = Int(Character(" ").asciiValue!)
+//        let high        = Int(Character("~").asciiValue!)
+//
+//        if asciiVal > high {        // wrap after high character
+//
+//            asciiVal = (low - 1) + (asciiVal - high)
+//
+//        } else if asciiVal < low {  // Wrap after low character
+//
+//            asciiVal = (high + 1) - (low - asciiVal)
+//
+//        }
+//
+//        assert(asciiVal >= low && asciiVal <= high,
+//               "ASCII Value out of rante(\(low),\(high))")
+//
+//        let shiftedUni  = UnicodeScalar(UInt8(asciiVal))
+//
+//        return Character(shiftedUni)
+//
+//    }
+//
+//    func shift(by: Int) -> String {
+//
+//        String(map{ shift($0, by: by) })
+//
+//    }
+//
+//    func shift(by: Int) -> String {
+//
+//    String(map{ shift($0, by: by) })
+//
+//    }
+    
+    
+    func shift(by: Int) -> String {
+        
+        assert(by >= -45 && by <= 45)
+        
+        var shifted = ""
+        let low     = Int(Character(" ").asciiValue!)
+        let high    = Int(Character("~").asciiValue!)
+        
+        for char in self {
+            
+            var asciiVal    = Int(char.asciiValue!) + by
+            
+            if asciiVal > high {        // wrap after high character
+                
+                asciiVal = (low - 1) + (asciiVal - high)
+                
+            } else if asciiVal < low {  // Wrap after low character
+                
+                asciiVal = (high + 1) - (low - asciiVal)
+                
+            }
+            
+            assert(asciiVal >= low && asciiVal <= high,
+                   "ASCII Value out of rante(\(low),\(high))")
+            
+            let shiftedUni  = UnicodeScalar(UInt8(asciiVal))
+            
+            shifted.append(Character(shiftedUni))
+            
+        }
+        
+        return shifted
+        
+    }
+
+    var obfuscated: String {
+        
+        let shiftBy = (5...45).random()
+        let key     = "A".shift(by: shiftBy)
+        var silly   = shift(by: shiftBy)
+        
+        silly += key
+        
+        return silly
+        
+    }
+    
+    var unobfuscated: String {
+        
+        var serious = self
+        let key     = Character(String(serious.removeLast()))
+        let shiftBy = Int(Character("A").asciiValue!) - Int(key.asciiValue!)
+        
+        return serious.shift(by: shiftBy)
+        
+    }
+    
+}

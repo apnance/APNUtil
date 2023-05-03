@@ -329,4 +329,46 @@ class StringTests: XCTestCase {
         
     }
     
+    func testSilly() {
+        
+        let iterations  = 1000
+        let originals   = ["http://www.expedia.com?test=1234567890&",
+                            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789- ._~:/?#[]@!$&'()*+,;="]
+        
+        for original in originals {
+            
+            // Test Shift
+            for shiftBy in 0...45 {
+            
+                let shifted     = original.shift(by: shiftBy)
+                let unshifted   = shifted.shift(by: -shiftBy)
+                
+                if shiftBy != 0 { XCTAssert(shifted != original) }
+                
+                XCTAssert(unshifted == original)
+                
+            }
+            
+            print("\n-----------------------------")
+            
+            for i in 1...iterations {
+                
+                let obfuscated   = original.obfuscated
+                let unobfuscated = obfuscated.unobfuscated
+                
+                XCTAssert(obfuscated != unobfuscated,
+                          "Obfuscated:\(obfuscated)\nequals\nOriginal:\(unobfuscated)\n but should not!")
+                
+                XCTAssert(unobfuscated == original,
+                          "Obfuscated:\(obfuscated)\ndoes not equal\nOriginal:\(original)\n but should!")
+                
+                print("#\(i)\nORIGINAL:\t\t\(original)\nObfuscated:\t\t\(obfuscated)\nUnobfuscated:\t\(unobfuscated)\n")
+                
+            }
+            
+            print("\n-----------------------------\n")
+            
+        }
+    }
+    
 }
