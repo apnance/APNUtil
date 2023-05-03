@@ -242,45 +242,8 @@ public extension String {
     
 }
 
-// - MARK: Silly
+// - MARK: Obfuscate
 public extension String {
-//    private func shift(_ char: Character, by: Int) -> Character {
-//
-//        var asciiVal    = Int(char.asciiValue!) + by
-//        let low         = Int(Character(" ").asciiValue!)
-//        let high        = Int(Character("~").asciiValue!)
-//
-//        if asciiVal > high {        // wrap after high character
-//
-//            asciiVal = (low - 1) + (asciiVal - high)
-//
-//        } else if asciiVal < low {  // Wrap after low character
-//
-//            asciiVal = (high + 1) - (low - asciiVal)
-//
-//        }
-//
-//        assert(asciiVal >= low && asciiVal <= high,
-//               "ASCII Value out of rante(\(low),\(high))")
-//
-//        let shiftedUni  = UnicodeScalar(UInt8(asciiVal))
-//
-//        return Character(shiftedUni)
-//
-//    }
-//
-//    func shift(by: Int) -> String {
-//
-//        String(map{ shift($0, by: by) })
-//
-//    }
-//
-//    func shift(by: Int) -> String {
-//
-//    String(map{ shift($0, by: by) })
-//
-//    }
-    
     
     func shift(by: Int) -> String {
         
