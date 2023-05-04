@@ -57,18 +57,24 @@ public extension String {
     
     /// Returns true if `self` is non-empty and begins with letter
     var hasAlphaPrefix: Bool { (first ?? Character(" ")).isLetter }
-
+    
     /// Returns true if `self` is non-empty and begins with a number
     var hasNumericPrefix: Bool { (first ?? Character(" ")).isNumber }
+    
+    /// Returns true if `self` starts with  "http"
+    ///
+    /// - note: comparison is case insensitive  thus returns true for "http",
+    /// "HTTP", "hTtP", etc.
+    /// - note: comparison is only for prefix of "http" thus "https" and all its
+    ///  case variations would return  true as well.
+    var hasHTTPPrefix: Bool { self.lowercased().hasPrefix("http") }
     
     /// Returns a copy of this string lowercased and stripped of spaces.
     static func lowerNoSpaces(_ word: String) -> String {
         
-        var copy = word
-        
-        copy = copy.replacingOccurrences(of: " ", with: "")
-
-        copy = copy.lowercased()
+        var copy    = word
+        copy        = copy.replacingOccurrences(of: " ", with: "")
+        copy        = copy.lowercased()
         
         return copy
         
