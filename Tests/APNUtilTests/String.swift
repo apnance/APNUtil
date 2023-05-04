@@ -329,11 +329,16 @@ class StringTests: XCTestCase {
         
     }
     
-    func testSilly() {
+    func testObfuscate() {
         
         let iterations  = 1000
-        let originals   = ["http://www.expedia.com?test=1234567890&",
-                            "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789- ._~:/?#[]@!$&'()*+,;="]
+        let originals   = ["ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789- ._~:/?#[]@!$&'()*+,;=%",
+                           """
+                            https://stackoverflow.com/questions/1547899/which-characters\
+                            -make-a-url-invalid#:~:text=In%20general%20URIs%20as%20defined\
+                            %20by%20RFC%203986,where%20in%20the%20URI%20these%20characters\
+                            %20may%20occur.
+                            """]
         
         for original in originals {
             
@@ -357,12 +362,12 @@ class StringTests: XCTestCase {
                 let unobfuscated = obfuscated.unobfuscated
                 
                 XCTAssert(obfuscated != unobfuscated,
-                          "Obfuscated:\(obfuscated)\nequals\nOriginal:\(unobfuscated)\n but should not!")
+                          "OBFUSCATED:\(obfuscated)\nequals\nORIGINAL:\(unobfuscated)\n but should not!")
                 
                 XCTAssert(unobfuscated == original,
-                          "Obfuscated:\(obfuscated)\ndoes not equal\nOriginal:\(original)\n but should!")
+                          "OBFUSCATED:\(obfuscated)\ndoes not equal\nORIGINAL:\(original)\n but should!")
                 
-                print("#\(i)\nORIGINAL:\t\t\(original)\nObfuscated:\t\t\(obfuscated)\nUnobfuscated:\t\(unobfuscated)\n")
+                print("#\(i)\nORIGINAL:\t\t\(original)\nOBFUSCATED:\t\t\(obfuscated)\nUNOBFUSCATED:\t\(unobfuscated)\n")
                 
             }
             
