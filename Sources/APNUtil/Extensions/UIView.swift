@@ -411,7 +411,10 @@ public extension UIView {
         
     }
     
-    func constrainIn(_ container: UIView!) -> Void {
+    
+    /// Adds this `UIView` to `container`'s subviews and sets it's four edge constraints equal to `container`'s
+    /// - Parameter container: container UIView in which to embed this view.
+    func constrainIn(_ container: UIView!) {
         
         self.translatesAutoresizingMaskIntoConstraints = false;
         self.frame = container.frame;
