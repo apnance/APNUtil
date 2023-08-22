@@ -71,6 +71,12 @@ import UIKit
         
         layer.cornerRadius = dim / 2
         
+        addTarget(self,
+                  action: #selector(addHaptic),
+                  for: .touchUpInside)
+        
     }
+    
+    @objc func addHaptic() { haptic(withStyle: .light) }
     
 }
