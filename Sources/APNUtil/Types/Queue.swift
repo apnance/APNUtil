@@ -161,6 +161,31 @@ public class Queue<Item: Equatable> {
     
 }
 
+extension Queue {
+    
+    /// Enqueues `item` then calls `dequeu()` if `count > withMaxCount`
+    /// - Parameters:
+    ///   - item: `Item` to `enqueu()`
+    ///   - maxCount: maximum number of `Item`s to be enqueued (see important note).
+    /// - Returns: result `Item` from `dequeue()` if post-enqueu count exceeds
+    /// `withMaxCount`; returns nil otherwise.
+    ///
+    /// - important: **If you wish to restrict the max count, use `enqueue(item: withMaxCount:)` method exclusively**.
+    /// This method makes no check that the post-dequeu() `count <= maxCount`.
+    /// 
+    /// - note: This method is useful for limiting the maximum count of your `Queue`.
+    @discardableResult public func enqueue(item: Item, withMaxCount maxCount: Int) -> Item? {
+        
+        enqueue(item: item)
+        
+        if count > maxCount { return dequeue() /*EXIT*/ }
+        
+        return nil /*EXIT*/
+        
+    }
+    
+}
+
 extension Queue: Sequence {
     
     public typealias Iterator = QueueIterator
