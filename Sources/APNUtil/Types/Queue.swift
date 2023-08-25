@@ -172,7 +172,7 @@ extension Queue {
     ///
     /// - important: **If you wish to restrict the max count, use `enqueue(item: withMaxCount:)` method exclusively**.
     /// This method makes no check that the post-dequeu() `count <= maxCount`.
-    /// 
+    ///
     /// - note: This method is useful for limiting the maximum count of your `Queue`.
     @discardableResult public func enqueue(item: Item, withMaxCount maxCount: Int) -> Item? {
         
