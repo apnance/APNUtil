@@ -141,7 +141,7 @@ public struct Alert {
         if (alertController != nil) { return /*EXIT*/ }
         
         guard let presentingVC = getCurrentViewController()
-        else { print("alert: Unable to get current view controller\nThis message could not be alerted:\(message)"); return /*EXIT*/ }
+        else { print("ALERT: Unable to get current view controller\nThis message could not be alerted:\(message)"); return /*EXIT*/ }
         
         alertController = UIAlertController(title: title,
                                             message: message,
