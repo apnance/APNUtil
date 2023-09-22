@@ -13,9 +13,18 @@ import UIKit
 public class Utils {
     
     // MARK: - Thread
+    /// Aynchronously runs `updates` on main thread.
     public static func performUIUpdatesOnMain(updates: @escaping () -> ()) {
         
         DispatchQueue.main.async { updates() }
+        
+    }
+    
+    /// Asynchronously runs closure on main thread after specified `delay`.
+    public func delay(_ delay: Double, closure: @escaping () -> ()) {
+        
+        let deadline = DispatchTime.now() + delay
+        DispatchQueue.main.asyncAfter(deadline: deadline, execute: closure)
         
     }
     
