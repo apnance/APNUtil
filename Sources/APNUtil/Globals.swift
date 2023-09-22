@@ -8,6 +8,15 @@
 
 import UIKit
 
+// - MARK: Misc
+/// Triggers a haptic response with default style of .light
+public func haptic(withStyle style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
+    
+    UIImpactFeedbackGenerator(style: style).impactOccurred()
+    
+}
+
+// - MARK: Printing
 /// Sends the message to loud(_:) if the boolean is true.
 @discardableResult public func loudIf(_ shouldPrint: Bool,
                                       msg: String) -> Bool {
@@ -15,13 +24,6 @@ import UIKit
     if shouldPrint { loud(msg) }
     
     return shouldPrint
-    
-}
-
-/// Triggers a haptic response with default style of .light
-public func haptic(withStyle style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
-    
-    UIImpactFeedbackGenerator(style: style).impactOccurred()
     
 }
 
