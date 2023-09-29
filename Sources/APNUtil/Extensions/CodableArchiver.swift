@@ -102,7 +102,7 @@ public extension CodableArchiver {
             
         } catch {
             
-            NSLog("\(#function):\nError trying to unarchive file:\n\(error)")
+            Utils.log("\(#function):\nError trying to unarchive file:\n\(error)")
             
         }
         
@@ -121,7 +121,7 @@ public extension CodableArchiver {
             
         } else {
             
-            NSLog("Unable to decode Data as JSON.")
+            Utils.log("Unable to decode Data as JSON.")
             
         }
         

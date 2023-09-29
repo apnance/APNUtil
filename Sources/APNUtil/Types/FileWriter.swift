@@ -25,7 +25,7 @@ public class FileWriter {
                         atomically: false,
                         encoding: .utf8)
         
-        NSLog("FileWriter: file written to: '\(filePath)'")
+        Utils.log("FileWriter: file written to: '\(filePath)'")
         
     }
     

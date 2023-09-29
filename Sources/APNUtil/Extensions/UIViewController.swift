@@ -61,7 +61,7 @@ public extension UIViewController {
             
         } else {
             
-            NSLog("MFMailComposeViewController cannot send mail.")
+            Utils.log("MFMailComposeViewController cannot send mail.")
             
         }
         

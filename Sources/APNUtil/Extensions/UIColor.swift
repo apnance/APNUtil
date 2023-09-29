@@ -76,7 +76,7 @@ public extension UIColor {
     var pointOneAlpha: UIColor { withAlphaComponent(0.1) }
     
     /// Returns the `UIColor` with its alpha value set to 0.1
-    var tenthAlpha: UIColor { NSLog("tenthAlpha has been deprecated, use pointOneAlpha instead."); return pointOneAlpha }
+    var tenthAlpha: UIColor { Utils.log("tenthAlpha has been deprecated, use pointOneAlpha instead."); return pointOneAlpha }
     
     /// Returns a darker(incr < 0) or lighter( incr > 0) version of the UIColor.
     ///

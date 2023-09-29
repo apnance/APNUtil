@@ -142,7 +142,7 @@ public class NotificationManager {
             dateComponents.minute   = calendar.component(.minute, from: date)
             dateComponents.second   = calendar.component(.second, from: date) + delay
             
-            NSLog("""
+            Utils.log("""
                     
                     
                     Displaying test notification in \(delay)s.
@@ -158,7 +158,7 @@ public class NotificationManager {
             dateComponents.minute   = minute
             dateComponents.second   = second
             
-            NSLog("""
+            Utils.log("""
                     
                     
                     Notification Set For:\n\tDay: \(day) - \

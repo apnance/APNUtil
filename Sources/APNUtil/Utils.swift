@@ -12,6 +12,16 @@ import UIKit
 // MARK: - Class
 public class Utils {
     
+    public static var shouldLog = true {
+        didSet { NSLog("Logging Supressed : Set Utils.shouldLog true to re-enable NSLogging statements") }
+    }
+    
+    public static func log(_ msg: String) {
+        
+        if shouldLog { NSLog(msg) }
+        
+    }
+    
     // MARK: - Thread
     /// Aynchronously runs `updates` on main thread.
     public static func performUIUpdatesOnMain(updates: @escaping () -> ()) {
