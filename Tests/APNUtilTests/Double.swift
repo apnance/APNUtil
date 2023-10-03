@@ -40,4 +40,100 @@ class DoubleTests: XCTestCase {
         
     }
     
+    func testDecimalOnly() {
+        
+        var decimal  = 123.456789
+        
+        var places = 1
+        var expected = 4
+        XCTAssert(decimal.decimal(to:places) == expected,
+                  "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+        
+        for i in 1...10 {
+            
+            decimal += Double(i) * 2
+            
+            for _ in 0...50 {
+                
+                places = 2
+                expected = 45
+                XCTAssert(decimal.decimal(to:places) == expected,
+                          "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+                
+                places = 3
+                expected = 456
+                XCTAssert(decimal.decimal(to:places) == expected,
+                          "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+                
+                places = 4
+                expected = 4567
+                XCTAssert(decimal.decimal(to:places) == expected,
+                          "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+                
+                places = 5
+                expected = 45678
+                XCTAssert(decimal.decimal(to:places) == expected,
+                          "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+                
+                places = 6
+                expected = 456789
+                XCTAssert(decimal.decimal(to:places) == expected,
+                          "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+                
+                places = 8
+                expected = 45678900
+                XCTAssert(decimal.decimal(to:places) == expected,
+                          "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+                
+                places = 10
+                expected = 4567890000
+                XCTAssert(decimal.decimal(to:places) == expected,
+                          "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+                places = 12
+                expected = 456789000000
+                XCTAssert(decimal.decimal(to:places) == expected,
+                          "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+                
+            }
+            
+        }
+        
+        decimal     = 0.1
+        
+        places      = 1
+        expected    = 1
+        XCTAssert(decimal.decimal(to:places) == expected,
+                  "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+        
+        for i in 1...10 {
+            
+            decimal += Double(i * 2)
+            for _ in 0...20 {
+                
+                
+                places = 2
+                expected = 10
+                XCTAssert(decimal.decimal(to:places) == expected,
+                          "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+                
+                places = 3
+                expected = 100
+                XCTAssert(decimal.decimal(to:places) == expected,
+                          "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+                
+                places = 10
+                expected = 1000000000
+                XCTAssert(decimal.decimal(to:places) == expected,
+                          "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+                places = 12
+                expected = 100000000000
+                XCTAssert(decimal.decimal(to:places) == expected,
+                          "Expected: \(expected) - Actual: \(decimal.decimal(to:places))")
+                
+            }
+            
+        }
+        
+    }
+    
 }

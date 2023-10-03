@@ -57,6 +57,19 @@ public extension Double {
         
     }
     
+    /// Returns just the decimal portion of the `Double` as an `Int` to `precision` # of decimal places
+    func decimal(to decimalPlaces: Int) -> Int {
+        
+        var dec = self - Double(Int(self))
+        
+        dec += pow(0.1, Double(decimalPlaces + 2))
+        
+        return Int(dec * pow(10, Double(decimalPlaces)))
+        
+        
+    }
+    
+    
     /// Returns `CGFloat` representation of self.
     var cgFloat: CGFloat { CGFloat(self) }
     
