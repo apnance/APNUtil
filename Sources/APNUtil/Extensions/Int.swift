@@ -254,12 +254,12 @@ public extension Int {
 public extension Int {
     
     /// Returns a base 26 string representation of this `Int`
-    /// ```
+    /// ```swift
     ///     // e.g.
     ///     0.base26Strint  == "A"
     ///     26.base26String == "AA"
     ///     702.base26String == "AAA"
-    ///```
+    /// ```
     ///
     /// - note: see String.base26StringToInt for converting back to Int
     var base26String: String {

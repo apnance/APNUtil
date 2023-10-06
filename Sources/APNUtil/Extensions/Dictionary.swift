@@ -52,10 +52,11 @@ public extension Dictionary where Value : Numeric {
 
     /// Adds the the values of items sharing same key, otherwise inserts new items into self.
     ///
-    /// ````
+    /// ```swift
     /// var d1 = ["a": 1, "b": 2, "c:" 3]
     /// let d2 = ["a": 4, "c": -3, "d": 10]
     /// d1.add(d2) // d1 now == ["a": 5, "b":2, "c": 0, "d": 10]
+    /// ```
     mutating func add(_ from: [Key : Value]) {
         
         for (key, value) in from {
@@ -251,7 +252,7 @@ public extension Dictionary where Key == String {
     /// - parameter applying: a closure that takes a string and returns a string.  this closure is called on each
     /// `Key` in the `[Key:String]` `Dictionary`  replacing old `Key`-s with newly generated ones.
     ///
-    /// ```
+    /// ```swift
     /// // ex.
     /// var colors = [ "RED" : 1, "YeLlOw" : 2, "BLue" : 3 ])
     ///

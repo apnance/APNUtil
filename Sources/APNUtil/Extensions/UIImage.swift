@@ -267,7 +267,7 @@ public extension UIImage {
     /// 3-pixel wide row of the red component value, a 3 pixel row of green component
     /// value(G), and a three pixel row of blue component value.
     ///
-    /// ````
+    /// ```
     /// Each pixel in the image is converted to the this format:
     ///
     ///                         C C C C
@@ -286,7 +286,7 @@ public extension UIImage {
     ///                         (0,0,0,0)  (0,0,0,0)      (0,0,0,0)      (0,0,0,0)
     ///                         (0,0,0,0)  (0,0,0,0)      (0,0,0,0)      (0,0,0,0)
     ///
-    /// ````
+    /// ```
     ///
     /// - Parameter resolution: Specifies the number of pixels to render each
     /// sub-pixel(e.g. red) in both height and width. Specifying 1 results in each source

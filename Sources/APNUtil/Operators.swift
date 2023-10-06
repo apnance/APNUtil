@@ -37,7 +37,7 @@ public func .?. (rhs: Int, lhs: Int) -> Int {
 infix operator <+ : AssignmentPrecedence
 
 /// Integral concatenation operator, concatenates `rhs` onto `lhs`
-/// ```
+/// ```swift
 /// var val = 1
 /// val <+ 2        // val == 12
 /// val <+ 999      // val == 12999

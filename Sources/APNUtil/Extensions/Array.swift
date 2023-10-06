@@ -40,22 +40,22 @@ public extension Array {
     
     /// Returns the index of the center Element(count / 2) or -1 if array is empty.
     /// - note: if the array contains an even number of Elements the center is calculated to be the node just right of the center.
-    /// ````
+    /// ```swift
     ///     // e.g.
     ///     ["A","B","C","D"].centerIndex == 2  // Points to "C"
     ///     ["A","B","C"].centerIndex == 1      // Points to "B"
-    /// ````
+    /// ```
     var centerIndex: Int { isEmpty ? -1 : count / 2 }
 
     /// Returns the `Element` with `index == centerIndex` or `nil` if `centerIndex` < 0
     var centerElement: Element? { centerIndex >= 0  ? self[centerIndex] : nil }
 
     /// Same as `centerIndex` except it considers the center of even numbered arrays to be the Element to left of center.
-    /// ````
+    /// ```swift
     ///     // e.g.
     ///     ["A","B","C","D"].centerLeftIndex == 1  // Points to "B"
     ///     ["A","B","C"].centerLeftIndex == 1      // Points to "B"
-    /// ````
+    /// ```
     var centerLeftIndex: Int { isEmpty ? -1 : lastUsableIndex / 2}
     
     /// Returns the `Element` with `index == centerLeftIndex` or `nil` if `centerLeftIndex` < 0
@@ -164,7 +164,7 @@ public extension Array {
     }
     
     /// Returns a copy of self with left half mirrored to right half.
-    /// ```
+    /// ```swift
     ///     //Ex.
     ///     [1,2,3,4].mirror()      // returns [1,2,2,1]
     ///     [1,2,3,4,5].mirror()    // returns [1,2,3,4,5]
@@ -544,7 +544,7 @@ public extension Array where Element : Hashable {
     /// - parameter applying: a closure that takes a string and returns a string.  this closure is called
     /// on each `Element` in the `Array` replacing old values with newly generated values.
     ///
-    /// ```
+    /// ```swift
     /// // ex.
     /// var colors = Set<String>(["RED","YeLlOw","BLue"])
     ///
@@ -573,12 +573,13 @@ public extension Array where Element : AdditiveArithmetic {
     /// Adds each Elements in to array to the Element in self of same index.
     /// - Note: arrays must be same length
     /// ex.
-    /// ````
+    /// ```swift
     /// var ar1 = [1,3,100]
     /// let ar2 = [0,4,2]
     /// ar1.addEach(ar2)
     ///
     /// ar1 == [1,7,102] // true
+    /// ```
     mutating func addElements(_ from: Array<Element>) {
         
         assert(self.count == from.count)

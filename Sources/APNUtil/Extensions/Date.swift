@@ -120,7 +120,7 @@ public extension Date {
     ///     - numDays: the number of chronological `Date`s.  Negative values result in a block of Dates
     ///     ending with `self`, positive values result in a block starting with `self`
     ///
-    /// ```
+    /// ```swift
     /// // e.g.
     /// let today = Date()
     ///

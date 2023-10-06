@@ -112,7 +112,7 @@ public extension UIView {
     ///   (see note below for explanation of `AnimationFrame` syntax.)
     ///   - completion: handler to be called at the end of animation.
     ///
-    /// ```
+    /// ```swift
     ///        // Sample Usage:
     ///        //
     ///        // In this example we create a 10s animation with a 2s delay.
@@ -494,7 +494,7 @@ public extension UIView {
     /// - important: Any existing dashed border(s) is(are) removed upon successive calls to this method
     /// before a new one is added.
     /// - note: To remove this dashed border call `removeDashedBorder()`
-    /// ```
+    /// ```swift
     ///  // Example - Add a dotted line border with dots 5pts in diameter
     ///  // spaced 12 pts.
     /// someView.addDashedBorder(.white,
@@ -545,14 +545,14 @@ public extension UIView {
     /// - important: Any existing dashed line(s) is(are) removed upon successive calls to this method
     /// before a new one is added.
     /// - note: To remove this dashed border call `removeDashedLine()`
-    /// ```
+    /// ```swift
     ///  // Example - Add a dotted horizontal line centered vertically with dots 5pts in diameter
     ///  // spaced 12 pts.
     /// someView.addDashedLine(.white,
-    ///                           width: 5,
-    ///                           dashPattern: [0.1,12],
-    ///                           lineCap: .round,
-    ///                           horizonal: true)`
+    ///                        width: 5,
+    ///                        dashPattern: [0.1,12],
+    ///                        lineCap: .round,
+    ///                        horizonal: true)`
     /// ```
     func addDashedLine(_ color: UIColor = .black,
                        width: Double = 2.0,

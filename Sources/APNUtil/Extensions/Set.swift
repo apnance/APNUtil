@@ -27,7 +27,7 @@ public extension Set where Element: Hashable {
     ///  This closure is called on each `Element` in the `Set` replacing old values with newly
     ///  generated values.
     ///
-    /// ```
+    /// ```swift
     /// // ex.
     /// var colors = Set<String>(["RED","YeLlOw","BLue"])
     ///

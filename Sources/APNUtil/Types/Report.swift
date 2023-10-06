@@ -17,7 +17,7 @@ public struct Report {
     /// - important: the width of the columns is dictated by the width (i.e. character count) of each header
     /// element.
     ///
-    /// ```
+    /// ```swift
     /// //Example:
     /// headers  = ["Column1", "  Col2", "  Last Column"]
     /// data     = [[1,2,3],
@@ -129,7 +129,7 @@ public struct Report {
     /// - important: the width of the columns is dictated by the width (i.e. character count) of the widest
     /// string in each column, including header columns.
     ///
-    /// ```
+    /// ```swift
     /// //Example:
     /// headers  = ["Column1", "  Col2", "  Last Column"]
     /// data     = [[1,2,3],
