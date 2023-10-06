@@ -231,4 +231,27 @@ class DateTests: XCTestCase {
         
     }
     
+    func testShiftedBy() {
+        
+        var first       = "05-24-73".simpleDate
+        var actual      = first.shiftedBy(-2).simple
+        var expected    = "05-22-73"
+        XCTAssert(actual == expected, "Actual: \(actual) != Expected: \(expected)")
+        
+        actual          = first.shiftedBy(+2).simple
+        expected        = "05-26-73"
+        XCTAssert(actual == expected, "Actual: \(actual) != Expected: \(expected)")
+        
+        first           = "01-01-23".simpleDate
+        actual          = first.shiftedBy(-365).simple
+        expected        = "01-01-22"
+        XCTAssert(actual == expected, "Actual: \(actual) != Expected: \(expected)")
+        
+        first           = "01-01-22".simpleDate
+        actual          = first.shiftedBy(+365).simple
+        expected        = "01-01-23"
+        XCTAssert(actual == expected, "Actual: \(actual) != Expected: \(expected)")
+        
+    }
+    
 }

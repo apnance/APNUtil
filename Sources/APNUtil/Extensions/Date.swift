@@ -175,4 +175,22 @@ public extension Date {
         
     }
     
+    
+    /// Creates a date shifted by `days` number of days from current `Date`.
+    /// - Parameter days: `Int` number of days(+/-) from today.
+    /// - Returns: a `Date` value shifted `days` number of days from current `Date`.
+    ///
+    /// ```swift
+    ///     // e.g.
+    ///     let tomorrow = Date().shiftedBy(+1)
+    ///     let today = Date().shiftedBy(0)
+    ///     let yesterday = Date().shiftedBy(-1)
+    ///     let aWeekAgo = Date().shiftedBy(-7)
+    /// ```
+    func shiftedBy(_ days: Int) -> Date {
+        
+        Calendar.current.date(byAdding: .day, value: days, to: self)!
+        
+    }
+    
 }
