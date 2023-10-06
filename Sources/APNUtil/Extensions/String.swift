@@ -44,6 +44,8 @@ public extension String {
     /// Returns a copy of the string with the first `n` and last `n` character(s) snipped from the right end.
     ///
     /// - note: Default is 1 character shucked from first and last of `String`.
+    ///
+    /// # Example #
     /// ```swift
     /// // ex.
     ///         let shucked = "[shuck me]".shuck() // returns "shuck me"
@@ -179,6 +181,8 @@ public extension String {
     
     /// Converts a base 26 String representation of a number into Int
     /// e.g
+    /// 
+    /// # Example #
     /// ```swift
     ///     // ex.
     ///     "A".base26StringToInt   == 0

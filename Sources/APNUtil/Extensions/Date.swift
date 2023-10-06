@@ -120,6 +120,7 @@ public extension Date {
     ///     - numDays: the number of chronological `Date`s.  Negative values result in a block of Dates
     ///     ending with `self`, positive values result in a block starting with `self`
     ///
+    /// # Example #
     /// ```swift
     /// // e.g.
     /// let today = Date()
@@ -180,6 +181,7 @@ public extension Date {
     /// - Parameter days: `Int` number of days(+/-) from today.
     /// - Returns: a `Date` value shifted `days` number of days from current `Date`.
     ///
+    /// # Example #
     /// ```swift
     ///     // e.g.
     ///     let tomorrow = Date().shiftedBy(+1)

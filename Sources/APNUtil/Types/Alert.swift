@@ -12,6 +12,7 @@ public typealias AlertText = (title: String, message: String)
 
 /// A wrapper class for easily creating Alerts of various types.
 ///
+/// # Example #
 /// ```swift
 /// // Sample Use - Creates an alert with an 'OK' button with a callback fxn
 ///    let okHandler = { (action: UIAlertAction) -> () in self.showSettings(flag: 0) }

@@ -46,6 +46,8 @@ public extension ClosedRange where Bound == Int {
     }
     
     /// Returns the highest value in the `ClosedRange` that is not zero.
+    /// 
+    /// # Example #
     /// ```swift
     /// // e.g.
     /// let upper1 = (-100...0).upperBoundNonZero   // upper equals -1

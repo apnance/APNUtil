@@ -112,6 +112,7 @@ public extension UIView {
     ///   (see note below for explanation of `AnimationFrame` syntax.)
     ///   - completion: handler to be called at the end of animation.
     ///
+    /// # Example #
     /// ```swift
     ///        // Sample Usage:
     ///        //
@@ -493,7 +494,10 @@ public extension UIView {
     /// Adds a dashed border `CAShapeLayer` sublayer to the `sublayers` array.
     /// - important: Any existing dashed border(s) is(are) removed upon successive calls to this method
     /// before a new one is added.
+    ///
     /// - note: To remove this dashed border call `removeDashedBorder()`
+    ///
+    /// # Example #
     /// ```swift
     ///  // Example - Add a dotted line border with dots 5pts in diameter
     ///  // spaced 12 pts.
@@ -545,6 +549,8 @@ public extension UIView {
     /// - important: Any existing dashed line(s) is(are) removed upon successive calls to this method
     /// before a new one is added.
     /// - note: To remove this dashed border call `removeDashedLine()`
+    /// 
+    /// # Example #
     /// ```swift
     ///  // Example - Add a dotted horizontal line centered vertically with dots 5pts in diameter
     ///  // spaced 12 pts.

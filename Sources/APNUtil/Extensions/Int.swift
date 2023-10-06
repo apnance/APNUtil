@@ -254,6 +254,8 @@ public extension Int {
 public extension Int {
     
     /// Returns a base 26 string representation of this `Int`
+    /// 
+    /// # Example #
     /// ```swift
     ///     // e.g.
     ///     0.base26Strint  == "A"
