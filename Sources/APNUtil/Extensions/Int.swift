@@ -132,6 +132,9 @@ public extension Int {
         
     }
     
+    var isEven: Bool { self % 2 == 0 }
+    var isOdd: Bool { !isEven }
+    
     var ordinal: String {
         
         if self.isTeen {

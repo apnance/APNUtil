@@ -19,6 +19,31 @@ class IntTests: XCTestCase {
         
     }
     
+    func testIsEven() {
+        
+        let odds    = [-2001, -12345, -3, -1, 1, 3, 5,1234567]
+        let evens   = [-2002, -123456, -2, 0, 2, 16, 32,123456]
+        
+        odds.forEach{ XCTAssertFalse($0.isEven, "\($0) is even!") }
+        odds.forEach{ XCTAssert(($0 + 1).isEven, "\($0) is even!") }
+        evens.forEach{ XCTAssert($0.isEven,     "\($0) is *not* even!") }
+        evens.forEach{ XCTAssertFalse(($0 + 1).isEven, "\($0) is *not* even!") }
+    }
+    
+    func testIsOdd() {
+        
+        let odds    = [-2001, -12345, -3, -1, 1, 3, 5,1234567]
+        let evens   = [-2002, -123456, -2, 0, 2, 16, 32,123456]
+        
+        odds.forEach{ XCTAssert($0.isOdd, "\($0) is odd!") }
+        odds.forEach{ XCTAssertFalse(($0 + 1).isOdd, "\($0) is *not* odd!") }
+        evens.forEach{ XCTAssertFalse($0.isOdd, "\($0) is *not* odd!") }
+        evens.forEach{ XCTAssert(($0 + 1).isOdd, "\($0) is odd!") }
+        
+    }
+    
+    
+    
     func testIsPrime() {
         
         let primes = [2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97]
