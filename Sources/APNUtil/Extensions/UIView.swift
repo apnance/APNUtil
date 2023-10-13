@@ -119,7 +119,7 @@ public extension UIView {
     ///        // In this example we create a 10s animation with a 2s delay.
     ///        //
     ///        // 1. at 0s mainTitle begins to slowly fade over 5s.
-    ///        // 2. at 3s (5s for end of previous frame -1s for start of this frame)
+    ///        // 2. at 4s (5s for end of previous frame -1s for start of this frame)
     ///        //    widgetView begins to materialize over 3s
     ///        // 3. finally at 7s(end of previous frame + 0s) greebleView begins
     ///        //    to fade out over the remaining 3s of the animation.
