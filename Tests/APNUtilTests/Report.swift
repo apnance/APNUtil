@@ -23,16 +23,17 @@ class ReportTests: XCTestCase {
         var lines   = report1.split(separator: "\n",
                                     omittingEmptySubsequences: false)
         
-        XCTAssert( lines[0] == "======" )
+        XCTAssert( lines[0] == "========" )
         XCTAssert( lines[1] == "" )
         XCTAssert( lines[2] == " A B C" )
-        XCTAssert( lines[3] == "------" )
-        XCTAssert( lines[4] == " 1 2 3" )
-        XCTAssert( lines[5] == " 4 5 6" )
-        XCTAssert( lines[6] == "000000" )
-        XCTAssert( lines[7] == "" )
+        XCTAssert( lines[3] == "" )
+        XCTAssert( lines[4] == "--------")
+        XCTAssert( lines[5] == " 1 2 3" )
+        XCTAssert( lines[6] == " 4 5 6" )
+        XCTAssert( lines[7] == "000000" )
+        XCTAssert( lines[8] == "" )
         // Footnote from lines 8-13
-        XCTAssert( lines[14] == "======" )
+        XCTAssert( lines[15] == "========" )
         
         // 2
         let title       = "Famous People"
@@ -48,15 +49,16 @@ class ReportTests: XCTestCase {
         lines       = report2.split(separator: "\n",
                                     omittingEmptySubsequences: false)
         
-        XCTAssert( lines[0] == "=========================")
+        XCTAssert( lines[0] == "===========================")
         XCTAssert( lines[1] == "Famous People" )
         XCTAssert( lines[2] == "" )
         XCTAssert( lines[3] == "  Name   Age  Occupation " )
-        XCTAssert( lines[4] == "-------------------------" )
-        XCTAssert( lines[5] == "  Aaron   50   Engineer  " )
-        XCTAssert( lines[6] == " Beatrix  10   Engineer  " )
-        XCTAssert( lines[7] == "   Lee    47   Financial " )
-        XCTAssert( lines[8] == "=========================" )
+        XCTAssert( lines[4] == "" )
+        XCTAssert( lines[5] == "---------------------------" )
+        XCTAssert( lines[6] == "  Aaron   50   Engineer  " )
+        XCTAssert( lines[7] == " Beatrix  10   Engineer  " )
+        XCTAssert( lines[8] == "   Lee    47   Financial " )
+        XCTAssert( lines[9] == "===========================" )
         
         print("""
                 
@@ -82,15 +84,14 @@ class ReportTests: XCTestCase {
         var lines   = report1.split(separator: "\n",
                                     omittingEmptySubsequences: false)
         
-        XCTAssert( lines[0] == "================")
+        XCTAssert( lines[0] == "==================")
         XCTAssert( lines[1] == "")
         XCTAssert( lines[2] == "  A    B     C  ")
-        XCTAssert( lines[6] == "  100  200  1000")
-        XCTAssert( lines[3] == "----------------")
+        XCTAssert( lines[3] == "------------------")
         XCTAssert( lines[4] == "    1    2     3")
         XCTAssert( lines[5] == "    4    5     6")
         XCTAssert( lines[6] == "  100  200  1000")
-        XCTAssert( lines[7] == "================")
+        XCTAssert( lines[7] == "==================")
         
         // 2
         let title       = "Famous People"
@@ -106,15 +107,15 @@ class ReportTests: XCTestCase {
         lines       = report2.split(separator: "\n",
                                     omittingEmptySubsequences: false)
         
-        XCTAssert( lines[0] == "===============================")
+        XCTAssert( lines[0] == "=================================")
         XCTAssert( lines[1] == "Famous People" )
         XCTAssert( lines[2] == "" )
         XCTAssert( lines[3] == "   Name     Age    Occupation  " )
-        XCTAssert( lines[4] == "-------------------------------" )
+        XCTAssert( lines[4] == "---------------------------------" )
         XCTAssert( lines[5] == "   Aaron     50     Engineer   ")
         XCTAssert( lines[6] == "  Beatrix    10     Engineer   " )
         XCTAssert( lines[7] == "    Lee      47     Financial  " )
-        XCTAssert( lines[8] == "===============================" )
+        XCTAssert( lines[8] == "=================================" )
         
         print("""
                 
