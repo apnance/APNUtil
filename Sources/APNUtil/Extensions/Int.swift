@@ -124,6 +124,17 @@ public extension Int {
         
     }
     
+    
+    /// Creates a new int by concatenating the provided Int onto `self`
+    /// - Parameter int2: `Integer` to concatenate onto `self`
+    /// - Returns: Integer
+    /// - e.g. 12.concatonated(15) == 1215
+    func concatonated(_ i2: Int) -> Int? {
+        
+        Int(description + i2.description)
+        
+    }
+    
 }
 
 // MARK: - Ordinals
