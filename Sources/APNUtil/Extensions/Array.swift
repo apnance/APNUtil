@@ -509,6 +509,52 @@ public extension Array where Element: Equatable {
         
     }
     
+    /// Takes an `Array` of `Equatable` and returns an `Array` of all
+    /// possible arrangements of those `Equatable`s *including duplicates*.
+    /// - Parameter nums: `Array` of `Equatable`
+    /// - Returns: `Array` of `Equatable`
+    /// - Note: this function returns duplicative results.  For deduped results call `permuteDe()` instead.
+    ///
+    /// - Important: see Complexity
+    /// - Complexity: O(*n*^2), where *n* is the length of the array.
+    func permuted() -> [[Element]] {
+        
+        if count == 1 { return [self] /*EXIT*/ }
+        
+        var permuted        = [[Element]]()
+        
+        for i in 0..<count {
+            
+            var elements    = self
+            let first       = elements.remove(at: i)
+            let perms       = elements.permuted()
+            
+            for perm in perms {
+                
+                permuted.append([first] + perm)
+                
+            }
+            
+        }
+        
+        return permuted
+        
+    }
+    
+    /// Takes an `Array` of `Equatable` and returns a *deduped* `Array`
+    /// of all possible arrangements of those `Equatable`s
+    /// - Parameter nums: `Array` of `Equatable`
+    /// - Returns: Deduped `Array` of `Equatable`
+    ///
+    /// - Important: see Complexity
+    /// - Complexity: O(*n*^2), where *n* is the length of the array.
+    func permuteDeduped() -> [[Element]] {
+        
+        if count == dedupe().count { return permuted() }
+        else { return permuted().dedupe() }
+        
+    }
+    
 }
 
 // MARK: - Array<Hashable>

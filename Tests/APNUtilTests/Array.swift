@@ -288,6 +288,81 @@ class ArrayTests: XCTestCase {
         
     }
     
+    
+    private func testPermute<Element:Equatable>(_ permuted: [[Element]],
+                                                shouldContain: [[Element]]?,
+                                                expectedCount: Int) {
+        if let shouldContain = shouldContain {
+        
+            for sc in shouldContain {
+                
+                XCTAssert(permuted.contains(sc), "Expected permuation(\(sc)) not found.")
+                
+            }
+            
+        }
+        
+        XCTAssert(permuted.count == expectedCount,
+                  "Incorrect permuted count.  Expected: \(expectedCount) - Actual: \(permuted.count)")
+
+        
+    }
+    
+    func testPermute() {
+        
+        testPermute([1,2].permuted(),
+                    shouldContain: [[1,2],[2,1]],
+                    expectedCount: 2)
+        
+        testPermute([9,9].permuted(),
+                    shouldContain: [[9,9]],
+                    expectedCount: 2)
+        
+        testPermute([1,2,4].permuted(),
+                    shouldContain: [[1,2,4], [1,4,2], [2,1,4],
+                                    [2,4,1], [4,1,2], [4,2,1]],
+                    expectedCount: 6)
+        
+        testPermute(["A","B","A"].permuted(),
+                    shouldContain: [["A","B","A"],
+                                    ["A","A","B"],
+                                    ["B","A","A"]],
+                    expectedCount: 6)
+        
+        for i in 1...7 {
+            
+            testPermute(Array(repeating: 0, count: i).permuted(),
+                        shouldContain: nil,
+                        expectedCount: i.factorial())
+            
+        }
+        
+        
+    }
+    
+    func testPermuteDeduped() {
+        
+        testPermute([1,2].permuteDeduped(),
+                    shouldContain: [[1,2],[2,1]],
+                    expectedCount: 2)
+        
+        testPermute([9,9].permuteDeduped(),
+                    shouldContain: [[9,9]],
+                    expectedCount: 1)
+        
+        testPermute([1,2,4].permuteDeduped(),
+                    shouldContain: [[1,2,4], [1,4,2], [2,1,4],
+                                    [2,4,1], [4,1,2], [4,2,1]],
+                    expectedCount: 6)
+        
+        testPermute(["A","B","A"].permuteDeduped(),
+                    shouldContain: [["A","B","A"],
+                                    ["A","A","B"],
+                                    ["B","A","A"]],
+                    expectedCount: 3)
+        
+    }
+    
     func testPadSelfRandomly() {
         
         class TestClass: CustomStringConvertible, Copyable {
