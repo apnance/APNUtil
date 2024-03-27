@@ -266,5 +266,17 @@ class IntTests: XCTestCase {
         assert(130.ordinal == "th")
     }
     
+    func testFactorial() {
+        
+        XCTAssert(1.factorial() == 1)
+        XCTAssert(2.factorial() == 2)
+        XCTAssert(3.factorial() == 6)
+        XCTAssert(4.factorial() == 24)
+        XCTAssert(5.factorial() == 120)
+        XCTAssert(6.factorial() == 720)
+        XCTAssert(7.factorial() == 5040)
+        
+    }
+    
 }
 

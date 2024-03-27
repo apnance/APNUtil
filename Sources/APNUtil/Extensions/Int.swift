@@ -118,6 +118,12 @@ public extension Int {
         
     }
     
+    func factorial() -> Int {
+        
+        self <= 1 ? 1 : self * (self - 1).factorial()
+        
+    }
+    
 }
 
 // MARK: - Ordinals
