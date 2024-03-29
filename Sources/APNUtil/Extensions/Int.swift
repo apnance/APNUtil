@@ -135,6 +135,30 @@ public extension Int {
         
     }
     
+    
+    /// Tests if `self` is between `first` and `second` Int
+    /// - Parameters:
+    ///   - first: first inclusive bound
+    ///   - second: second inclusive bound
+    /// - Returns: Bool indicating whether `self` is between `first` and `second`
+    ///
+    /// ````
+    /// // e.g.
+    /// 1.isBetween(1,10)               // true
+    /// 1.isBetween(10,1)               // true
+    /// 1.isBetween(-1,1)               // true
+    /// 1.isBetween(Int.min,Int.max)    // true
+    ///
+    /// 1.isBetween(0,0)                // false
+    /// 250.isBetween(0,-1              // false
+    func isBetween(_ first: Int, _ second: Int) -> Bool {
+        
+        if second < first { return isBetween(second, first) }
+        
+        return first <= self && self <= second
+        
+    }
+    
 }
 
 // MARK: - Ordinals

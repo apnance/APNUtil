@@ -11,6 +11,33 @@ import APNUtil
 
 class IntTests: XCTestCase {
 
+    func testIsBetween() {
+        
+        XCTAssert(1.isBetween(1, 10))
+        XCTAssert(2.isBetween(1, 10))
+        XCTAssert(3.isBetween(1, 10))
+        XCTAssert(4.isBetween(1, 10))
+        XCTAssert(5.isBetween(1, 10))
+        XCTAssert(6.isBetween(1, 10))
+        XCTAssert(7.isBetween(1, 10))
+        XCTAssert(8.isBetween(1, 10))
+        XCTAssert(9.isBetween(1, 10))
+        XCTAssert(10.isBetween(1, 10))
+        
+        XCTAssert(1.isBetween(0, 1))
+        XCTAssert(1.isBetween(10, 1))
+        XCTAssert(1.isBetween(-1000, 15333))
+        XCTAssert(1.isBetween(Int.min, Int.max))
+        XCTAssert(1.isBetween(0, Int.max))
+        
+        XCTAssert(!250.isBetween(Int.min, 0))
+        XCTAssert(!1.isBetween(Int.max, 2))
+        XCTAssert(!1.isBetween(0, 0))
+        XCTAssert(!0.isBetween(2, 2))
+        
+    }
+    
+    
     func testDouble() {
         
         XCTAssert(1.double == 1.0)
@@ -275,6 +302,16 @@ class IntTests: XCTestCase {
         XCTAssert(5.factorial() == 120)
         XCTAssert(6.factorial() == 720)
         XCTAssert(7.factorial() == 5040)
+        
+    }
+    
+    func testConcatonated() {
+        
+        XCTAssert(1.concatonated(2) == 12)
+        XCTAssert(1.concatonated(0) == 10)
+        XCTAssert(0.concatonated(1) == 1)
+        XCTAssert(0.concatonated(29) == 29)
+        XCTAssert(1234.concatonated(56789) == 123456789)
         
     }
     
