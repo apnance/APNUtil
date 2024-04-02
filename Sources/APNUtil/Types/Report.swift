@@ -40,7 +40,8 @@ public struct Report {
                                  U: CustomStringConvertible> (_ rows: [[T]],
                                                               headers: [U],
                                                               title: String = "",
-                                                              dataPadType: String.PaddingType = .left) -> String {
+                                                              dataPadType: String.PaddingType = .left,
+                                                              showSeparators: Bool = true) -> String {
         
         let title       = title.isEmpty ?  "" : "\(title)\n"
         var header      = ""
@@ -55,8 +56,6 @@ public struct Report {
             
             assert(headers.count == rows[0].count,
                    "Header count(\(headers.count)) and data count(\(rows[0].count)) must be equal but are not.")
-            
-            header = "\n"
             
             for columnHead in headers {
                 
@@ -112,14 +111,16 @@ public struct Report {
             
         }
         
+        let outerSep = showSeparators ? "\(separator("="))\n" : ""
+        
         return  """
-                \(separator("="))
+                \(outerSep)\
                 \(title)\
-                \(header)
+                \(header)\
                 \(separator())
                 \(data.trimmingCharacters(in: .newlines))\
                 \(footnote)
-                \(separator("="))
+                \(outerSep)
                 """
         
     }
@@ -153,7 +154,8 @@ public struct Report {
                                           U: CustomStringConvertible> (_ rows: [[T]],
                                                                        headers: [U],
                                                                        title: String = "",
-                                                                       dataPadType: String.PaddingType = .left) -> String {
+                                                                       dataPadType: String.PaddingType = .left,
+                                                                       showSeparators: Bool = true) -> String {
         
         let title       = title.isEmpty ?  "" : "\(title)\n"
         var header      = ""
@@ -196,8 +198,6 @@ public struct Report {
             assert(headers.count == rows[0].count,
                    "Header count(\(headers.count)) and data count(\(rows[0].count)) must be equal but are not.")
             
-            header = "\n"
-            
             for (i, columnHead) in headers.enumerated() {
                 
                 let text = columnHead.description.centerPadded(toLength: colWidths[i])
@@ -239,13 +239,15 @@ public struct Report {
             
         }
         
+        let outerSep = showSeparators ? "\(separator("="))\n" : ""
+        
         return  """
-                \(separator("="))
+                \(outerSep)\
                 \(title)\
                 \(header)\
                 \(separator())
                 \(data.trimmingCharacters(in: .newlines))
-                \(separator("="))
+                \(outerSep)
                 """
         
     }
