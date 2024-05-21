@@ -17,6 +17,14 @@ public extension Bundle {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "-?-"
     }
     
+    /// Attempts to retrieve the build number from `Bundle.main.infoDictionary`.
+    /// - returns: app build number or "-?-" unable to retrieve version.
+    static var appBuild: String {
+        Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "-?-"
+    }
+    
+    
+    
     /// Prints all `Bundle.main.infoDictioary` `keys`.
     static func printMainKeys() {
         
