@@ -38,6 +38,25 @@ public extension Array {
         
     }
     
+    
+    /// Attempts to return the last `k` `Element`s from `self`.
+    /// - Parameter k: number of `Element`s to return from the end of `self`.
+    /// - Returns: Array of `Element`
+    ///
+    /// - Note:  Returns and empty array if `k` *or* `self.count` < 1
+    func last(_ k: Int) -> [Element] {
+        
+        guard count > 0,
+                k > 0
+        else { return [] /*EXIT*/ }
+        
+        let startIndex  = Swift.max(0, count - k)
+        let endIndex    = lastUsableIndex
+        
+        return Array(self[startIndex...endIndex])
+            
+    }
+    
     /// Returns the index of the center Element(count / 2) or -1 if array is empty.
     /// - note: if the array contains an even number of Elements the center is calculated to be the node just right of the center.
     ///
