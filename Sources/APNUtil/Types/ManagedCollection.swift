@@ -178,10 +178,14 @@ public class ManagedCollection<Entry>: Codable where Entry: Managable {
     /// - returns: a discaradable `Bool` indicating whether or not the `Entry` was found/deleted.
     @discardableResult public func delete(_ entry: Entry) -> Bool {
         
-        assert(false, "This method is untested as of 11.22.19. Please test and remove this assert")
         if let key = entry.managedID {
             
-            return managed.removeValue(forKey: key) != nil /*EXIT*/
+            if managed.removeValue(forKey: key) != nil {
+                
+                save()
+                return true /*EXIT*/
+                
+            }
             
         }
         
