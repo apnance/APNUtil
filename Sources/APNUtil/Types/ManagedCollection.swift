@@ -243,11 +243,9 @@ public class ManagedCollection<Entry>: Codable where Entry: Managable {
         
     }
     
-    
     // MARK: - Archival
     /// Factory method for loading an instance of `ManagedCollection` from archive.  If no archive
-    /// exists a new
-    /// `ManagedCollection<Entry>` is returned instead.
+    /// exists a new `ManagedCollection<Entry>` is returned instead.
     public static func load(file: String,
                             inSubDir dir: String ) -> ManagedCollection<Entry> {
         
