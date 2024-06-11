@@ -220,4 +220,18 @@ class ManagedCollection: XCTestCase {
         
     }
     
+    func testDeleteAll() {
+        
+        var expectedCount   = 7
+        var actualCount     = managed.count
+        XCTAssert(expectedCount == actualCount, "Expected: \(expectedCount) - Actual: \(actualCount)")
+        
+        managed.deleteAll()
+        
+        expectedCount   = 0
+        actualCount     = managed.count
+        XCTAssert(expectedCount == actualCount, "Expected: \(expectedCount) - Actual: \(actualCount)")
+        
+    }
+    
 }

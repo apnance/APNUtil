@@ -193,6 +193,15 @@ public class ManagedCollection<Entry>: Codable where Entry: Managable {
         
     }
     
+    /// Deletes all `Entry`s from `managed`.
+    @discardableResult public func deleteAll() {
+        
+        managed.removeAll()
+                
+        save()
+        
+    }
+    
     /// Returns the `Entry` associated with the specified  `ManagedID`
     public func entryFor(_ id: ManagedID) -> Entry? {
         
