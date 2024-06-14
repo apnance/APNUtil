@@ -271,6 +271,36 @@ public extension Array where Element : CustomStringConvertible {
     
     func printSimple() { forEach{ print($0) } }
     
+    
+    /// Returns a string representation of `self` as an oxford-comma separated list with "or" conjunction as appropriate.
+    func asCommaSeperatedString(_ conjunction: String = "or", _ wrapper: String = "'") -> String {
+        
+        let strArray = self.map{$0.description}
+        
+        switch strArray.count {
+                
+            case 0: return ""
+                
+            case 1: return "\(wrapper)\(strArray[0])\(wrapper)"
+                
+            case 2: return "\(wrapper)\(strArray[0])\(wrapper) \(conjunction) \(wrapper)\(strArray[1])\(wrapper)"
+                
+            default:
+                
+                var output = ""
+                
+                for (i, string) in strArray.enumerated() {
+                    
+                    output += (i != strArray.lastUsableIndex)  ? "\(wrapper)\(string)\(wrapper), " : "\(conjunction) \(wrapper)\(string)\(wrapper)"
+                    
+                }
+                
+                return output
+                
+        }
+        
+    }
+    
 }
 
 
