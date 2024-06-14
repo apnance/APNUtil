@@ -273,7 +273,8 @@ public extension Array where Element : CustomStringConvertible {
     
     
     /// Returns a string representation of `self` as an oxford-comma separated list with "or" conjunction as appropriate.
-    func asCommaSeperatedString(_ conjunction: String = "or", _ wrapper: String = "'") -> String {
+    func asCommaSeperatedString(conjunction: String = "or", 
+                                wrapper: String = "'") -> String {
         
         let strArray = self.map{$0.description}
         
