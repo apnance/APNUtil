@@ -193,11 +193,19 @@ public class ManagedCollection<Entry>: Codable where Entry: Managable {
         
     }
     
-    /// Deletes all `Entry`s from `managed`.
-    @discardableResult public func deleteAll() {
+    /// Reverts to empty starting state ready to be re-used.
+    ///
+    /// - note: this deletes all entries and resets the id counter.
+    @discardableResult public func reset() {
         
+        // Delete
         managed.removeAll()
-                
+        
+        // Reset
+        lastAssignedID  = 0
+        currentID       = lastAssignedID
+        
+        // Save
         save()
         
     }

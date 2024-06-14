@@ -226,7 +226,7 @@ class ManagedCollection: XCTestCase {
         var actualCount     = managed.count
         XCTAssert(expectedCount == actualCount, "Expected: \(expectedCount) - Actual: \(actualCount)")
         
-        managed.deleteAll()
+        managed.reset()
         
         expectedCount   = 0
         actualCount     = managed.count
