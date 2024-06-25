@@ -226,6 +226,32 @@ public extension Array {
     
 }
 
+// MARK: - Array<CustomStringConvertible>
+public extension Array where Element == CustomStringConvertible {
+    
+    /// Concatenates the elements of `self` delimited by `delimiter`.
+    /// - Parameter delimiter: `String` to use to delimit concatenated `Element`s of `self`
+    /// - Returns: A string comprised of the `Elements` of `self` concatenated
+    /// with `delemiter` separating each `Element`'s description.
+    func asDelimitedString(_ delimiter: String) -> String {
+        
+        var delimited = ""
+        
+        for (i, element) in self.enumerated() {
+            
+            delimited += element.description
+            
+            if i < self.lastUsableIndex {
+                delimited += delimiter
+            }
+            
+        }
+        
+        return delimited
+        
+    }
+    
+}
 
 // MARK: - Array<Int>
 public extension Array where Element == Int {

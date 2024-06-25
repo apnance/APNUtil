@@ -735,6 +735,36 @@ class ArrayTests: XCTestCase {
         
     }
         
+    // MARK: - Array<CustomStringConvertible>
+    func testAsDelimitedString() {
+        
+        var expected    = ""
+        var actual      = ([CustomStringConvertible]()).asDelimitedString("@")
+        XCTAssert( expected == actual, "Expected: \(expected) - Actual: \(actual)")
+        
+        expected        = "1"
+        actual          = [1].asDelimitedString("@")
+        XCTAssert( expected == actual, "Expected: \(expected) - Actual: \(actual)")
+        
+        expected        = "1@2@3@4"
+        actual          = [1,2,3,4].asDelimitedString("@")
+        XCTAssert( expected == actual, "Expected: \(expected) - Actual: \(actual)")
+        
+        expected        = "1:2:3:4"
+        actual          = [1,2,3,4].asDelimitedString(":")
+        XCTAssert( expected == actual, "Expected: \(expected) - Actual: \(actual)")
+        
+        expected        = "1.1:2.2:3.3:4.4"
+        actual          = [1.1,2.2,3.3,4.4].asDelimitedString(":")
+        XCTAssert( expected == actual, "Expected: \(expected) - Actual: \(actual)")
+        
+        expected        = "A->Be->Lee"
+        actual          = ["A", "Be", "Lee"].asDelimitedString("->")
+        XCTAssert( expected == actual, "Expected: \(expected) - Actual: \(actual)")
+        
+        
+    }
+    
     // MARK: - Array<Int>
     func testPercent() {
         let testArray = [1,2,3]
