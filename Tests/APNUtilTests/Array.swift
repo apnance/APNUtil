@@ -810,7 +810,82 @@ class ArrayTests: XCTestCase {
         XCTAssert(p3 == nil)
         
     }
- 
+    
+    func testAsInt() {
+        
+        var array           = [1,2,3,4]
+        var expected: Int?  = 1234
+        var actual: Int?    = array.asInt()!
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+        array           = [0,2,3,4]
+        expected        = 234
+        actual          = array.asInt()
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+        array           = [1,0,2,3,4]
+        expected        = 10234
+        actual          = array.asInt()
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+        array           = [0,0,0,3,04]
+        expected        = 34
+        actual          = array.asInt()
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+        array           = [1,0,0,0,0,3,04]
+        expected        = 1000034
+        actual          = array.asInt()
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+        array           = [1,0,0,0,0,0,0]
+        expected        = 1000000
+        actual          = array.asInt()
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+        array           = [-1,0,2,3,4]
+        expected        = nil
+        actual          = array.asInt()
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+        // Large Numbers - No Overflow
+        array           = [1234567,89101112,13,14]
+        expected        = 1234567891011121314
+        actual          = array.asInt()
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+        // Large Numbers - Overflow
+        array           = [Int.max, Int.max,Int.max]
+        expected        = nil
+        actual          = array.asInt()
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+        array           = Array.init(repeating: 9, count: 100)
+        expected        = nil
+        actual          = array.asInt()
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+        // Single Element Array
+        array           = [1234567]
+        expected        = 1234567
+        actual          = array.asInt()
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+        // Empty Array
+        array           = [Int]()
+        expected        = nil
+        actual          = array.asInt()
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+        // Negatives
+        array           = Array.init(repeating: -9, count: 5)
+        expected        = nil
+        actual          = array.asInt()
+        XCTAssert(expected == actual, "Expected: \(String(describing: expected)) - Actual: \(String(describing: actual))")
+        
+    }
+    
+    
     // MARK: - Array<AdditiveArithmetic>
     func testAddElements() {
         

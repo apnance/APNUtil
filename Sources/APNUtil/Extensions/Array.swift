@@ -273,6 +273,43 @@ public extension Array where Element == Int {
         return percent
         
     }
+    
+    /// Concatenates the elements of `self` into a integer.
+    /// - Returns: Integer formed by concatenating the individual Int elements
+    /// of self in left to right order.
+    ///
+    /// - important: Negative numbers in `self` return nil.
+    /// - important: Arrays that would result in Int overflow return nil.
+    /// ```
+    ///     //e.g.
+    ///     [1,2,3,4].asInt() == 1234
+    /// ```
+    func asInt() -> Int? {
+        
+        if self.count == 0 { return nil /*EXIT : Empty Array*/ }
+        
+        var intValue = 0
+        
+        for i in self {
+            
+            if i < 0 { return nil /*EXIT : Negative*/ }
+            
+            if i == Int.max { return nil /*EXIT : Overflow*/ }
+            
+            let tens = i.tens * 10 // Next Tens-Place
+            
+            if (Int.max / tens) < intValue { return nil /*EXIT : Overflow*/ }
+            
+            intValue *= tens // Add a Tens-Place
+            
+            intValue += i    // Concatenate Element
+            
+        }
+        
+        return intValue
+        
+    }
+    
 }
 
 // MARK: - Array<String>
