@@ -426,7 +426,7 @@ final class GapFinderTests: XCTestCase {
         actual      = GapFinder.compactDescribeGaps(in: array, usingRange: range)
         expected    =   """
                             Gaps:
-                            [  1  ]  ← 1 →  [  1  ]
+                            [  1  ]
                             
                             """
         XCTAssert(expected == actual, "Expected:\n\(expected)\n---\nActual:\n\(actual)")
