@@ -132,7 +132,7 @@ public struct GapFinder {
             
             output += gap.description
             
-            if next < range.upperBound {
+            if next < range.upperBound + 1 {
                 
                 output += centered(next, isTop: true)
                 
