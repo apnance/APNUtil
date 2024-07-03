@@ -46,6 +46,62 @@ class IntTests: XCTestCase {
         
     }
     
+    func testTens() {
+        
+        var num = 1
+        var expected = 1
+        var actual = num.tens
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        num = 0
+        expected = 1
+        actual = num.tens
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        num = 99
+        expected = 10
+        actual = num.tens
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        num = 101
+        expected = 100
+        actual = num.tens
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        num = 9999
+        expected = 1000
+        actual = num.tens
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        // Negatives
+        num = -1
+        expected = 1
+        actual = num.tens
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        num = -0
+        expected = 1
+        actual = num.tens
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        num = -99
+        expected = 10
+        actual = num.tens
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        num = -101
+        expected = 100
+        actual = num.tens
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        num = -9999
+        expected = 1000
+        actual = num.tens
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        
+    }
+    
     func testIsEven() {
         
         let odds    = [-2001, -12345, -3, -1, 1, 3, 5,1234567]

@@ -30,6 +30,25 @@ public extension Int {
         
     }
     
+    
+    /// Returns the number of tens places as a multiple of 10.
+    ///
+    /// ```
+    ///     // e.g.
+    ///        0.size       == 1
+    ///        1.size       == 1
+    ///        -1.size      == 1
+    ///        23.size      == 10
+    ///        9999.size    == 1000
+    ///        -9999.size   == 1000
+    /// ```
+    /// - note: source: ChatGPT
+    var tens: Int {
+        
+        Int("1" + repeatElement("0", count: String(self.magnitude).count - 1))!
+        
+    }
+    
     /// Returns the Int value as an [Int] array of its constituent digits.  Functionality is similar in concept to
     /// string splitting methods.
     ///
@@ -128,7 +147,8 @@ public extension Int {
     /// Creates a new int by concatenating the provided Int onto `self`
     /// - Parameter int2: `Integer` to concatenate onto `self`
     /// - Returns: Integer
-    /// - e.g. 12.concatonated(15) == 1215
+    /// - e.g. 12.concatenated(15) == 1215
+    /// - note: yes it's a typo..
     func concatonated(_ i2: Int) -> Int? {
         
         Int(description + i2.description)
