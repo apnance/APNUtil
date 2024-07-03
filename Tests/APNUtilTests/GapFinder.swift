@@ -10,14 +10,186 @@ import APNUtil
 
 final class GapFinderTests: XCTestCase {
     
-    func testDescribeGaps() {
+    func testDescribeGaps1() {
+        
+        var array       = [1,2,4,5]
+        var range       = 1...3
+        
+        var actual      = GapFinder.describeGaps(in: array, usingRange: range)
+        var expected    = """
+                            ┌───┐
+                            │ 1 │
+                            │ ⇣ │
+                            │ 2 │
+                            └───┘
+                              3  \n\
+                              ⇣  \n\
+                              3  \n\
+                            
+                            """
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
+        
+        array       = [1]
+        range       = 1...4
+        
+        actual      = GapFinder.describeGaps(in: array, usingRange: range)
+        expected    = """
+                            ┌───┐
+                            │ 1 │
+                            └───┘
+                              2  \n\
+                              ⇣  \n\
+                              4  \n\
+                            
+                            """
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
+                
+        array       = [3]
+        range       = 1...5
+        
+        actual      = GapFinder.describeGaps(in: array, usingRange: range)
+        expected    = """
+                              1  \n\
+                              ⇣  \n\
+                              2  \n\
+                            ┌───┐
+                            │ 3 │
+                            └───┘
+                              4  \n\
+                              ⇣  \n\
+                              5  \n\
+                            
+                            """
+        
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
+                
+        array       = [3,4]
+        range       = 1...5
+        
+        actual      = GapFinder.describeGaps(in: array, usingRange: range)
+        expected    = """
+                              1  \n\
+                              ⇣  \n\
+                              2  \n\
+                            ┌───┐
+                            │ 3 │
+                            │ ⇣ │
+                            │ 4 │
+                            └───┘
+                              5  \n\
+                              ⇣  \n\
+                              5  \n\
+                            
+                            """
+        
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
+        
+        array       = [3,4]
+        range       = 1...4
+        
+        actual      = GapFinder.describeGaps(in: array, usingRange: range)
+        expected    = """
+                              1  \n\
+                              ⇣  \n\
+                              2  \n\
+                            ┌───┐
+                            │ 3 │
+                            │ ⇣ │
+                            │ 4 │
+                            └───┘\n
+                            """
+        
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
+        
+        array       = [3,4]
+        range       = 1...3
+        
+        actual      = GapFinder.describeGaps(in: array, usingRange: range)
+        expected    = """
+                              1  \n\
+                              ⇣  \n\
+                              2  \n\
+                            ┌───┐
+                            │ 3 │
+                            └───┘\n
+                            """
+        
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
+        
+        array       = [1,2,4,5]
+        range       = 1...5
+        
+        actual      = GapFinder.describeGaps(in: array, usingRange: range)
+        expected    = """
+                            ┌───┐
+                            │ 1 │
+                            │ ⇣ │
+                            │ 2 │
+                            └───┘
+                              3  \n\
+                              ⇣  \n\
+                              3  \n\
+                            ┌───┐
+                            │ 4 │
+                            │ ⇣ │
+                            │ 5 │
+                            └───┘\n
+                            """
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
+        
+        array       = [1,4,5]
+        range       = 1...5
+        actual      = GapFinder.describeGaps(in: array, usingRange: range)
+        expected    =   """
+                        ┌───┐
+                        │ 1 │
+                        └───┘
+                          2  \n\
+                          ⇣  \n\
+                          3  \n\
+                        ┌───┐
+                        │ 4 │
+                        │ ⇣ │
+                        │ 5 │
+                        └───┘\n
+                        """
+        XCTAssert(expected == actual, "Expected:\n\(expected)\n---\nActual:\n\(actual)")
+        
+        array       = [1,2,3,4,5]
+        range       = 1...4
+        
+        actual      = GapFinder.describeGaps(in: array, usingRange: range)
+        expected    = ""
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
+        
+        array       = [1,4,5]
+        range       = 1...5
+        actual      = GapFinder.describeGaps(in: array, usingRange: range)
+        expected    =   """
+                        ┌───┐
+                        │ 1 │
+                        └───┘
+                          2  \n\
+                          ⇣  \n\
+                          3  \n\
+                        ┌───┐
+                        │ 4 │
+                        │ ⇣ │
+                        │ 5 │
+                        └───┘\n
+                        """
+        XCTAssert(expected == actual, "Expected:\n\(expected)\n---\nActual:\n\(actual)")
+        
+    }
+    
+    func testDescribeGaps2() {
         
         var array       = [1,2,3,4,5]
         var range       = 1...4
         
         var actual      = GapFinder.describeGaps(in: array, usingRange: range)
         var expected    = ""
-        XCTAssert(expected == actual, "Expected:\(expected) - Actual: \(actual)")
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array       = [1,4,5]
         range       = 1...5
@@ -210,7 +382,7 @@ final class GapFinderTests: XCTestCase {
         
         var actual      = GapFinder.compactDescribeGaps(in: array, usingRange: range)
         var expected    = ""
-        XCTAssert(expected == actual, "Expected:\(expected) - Actual: \(actual)")
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array       = [1,4,5]
         range       = 1...5
@@ -305,56 +477,56 @@ final class GapFinderTests: XCTestCase {
         var actual      = GapFinder.find(in: array,
                                          usingRange: range)
         
-        XCTAssert(expected == actual, "Expected:\(expected) - Actual: \(actual)")
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array = [1,4,5]
         range = 1...4
         expected = [Gap(2, 3)]
         actual = GapFinder.find(in: array,
                                 usingRange: range)
-        XCTAssert(expected == actual, "Expected:\(expected) - Actual: \(actual)")
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array = [1,2,3]
         range = 0...3
         expected = [Gap(0, 0)]
         actual = GapFinder.find(in: array,
                                 usingRange: range)
-        XCTAssert(expected == actual, "Expected:\(expected) - Actual: \(actual)")
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array = [1,2,3]
         range = 1...2
         expected = emptyGapArray
         actual = GapFinder.find(in: array,
                                 usingRange: range)
-        XCTAssert(expected == actual, "Expected:\(expected) - Actual: \(actual)")
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array = [1,2,3]
         range = 1...3
         expected = emptyGapArray
         actual = GapFinder.find(in: array,
                                 usingRange: range)
-        XCTAssert(expected == actual, "Expected:\(expected) - Actual: \(actual)")
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array = [1,2,3]
         range = 4...20
         expected = [Gap(4, 20)]
         actual = GapFinder.find(in: array,
                                 usingRange: range)
-        XCTAssert(expected == actual, "Expected:\(expected) - Actual: \(actual)")
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array = [1,2,3]
         range = 1...20
         expected = [Gap(4, 20)]
         actual = GapFinder.find(in: array,
                                 usingRange: range)
-        XCTAssert(expected == actual, "Expected:\(expected) - Actual: \(actual)")
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array = [1,2,3]
         range = -10...0
         expected = [Gap(-10, 0)]
         actual = GapFinder.find(in: array,
                                 usingRange: range)
-        XCTAssert(expected == actual, "Expected:\(expected) - Actual: \(actual)")
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array = [5,6,10,11,12,13,14,20,21,22]
         range = 1...30
@@ -364,7 +536,7 @@ final class GapFinderTests: XCTestCase {
                     Gap(23,30)]
         actual = GapFinder.find(in: array,
                                 usingRange: range)
-        XCTAssert(expected == actual, "Expected:\(expected) - Actual: \(actual)")
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array = [5,6,10,11,12,13,14,20,21,22]
         range = -5...30
@@ -374,7 +546,7 @@ final class GapFinderTests: XCTestCase {
                     Gap(23,30)]
         actual = GapFinder.find(in: array,
                                 usingRange: range)
-        XCTAssert(expected == actual, "Expected:\(expected) - Actual: \(actual)")
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
     }
 }
@@ -390,24 +562,24 @@ final class GapTests: XCTestCase {
         XCTAssert(gap1 == gap2, "Expected \(gap1) == \(gap2)")
         
         XCTAssert(gap1.size == gap2.size)
-        XCTAssert(gap1.size == expectedGapSize1, "Expected: \(expectedGapSize1) - Actual: \(gap1.size)")
-        XCTAssert(gap2.size == expectedGapSize2, "Expected: \(expectedGapSize2) - Actual: \(gap2.size)")
+        XCTAssert(gap1.size == expectedGapSize1, "Expected: \(expectedGapSize1) - Actual:\n\(gap1.size)")
+        XCTAssert(gap2.size == expectedGapSize2, "Expected: \(expectedGapSize2) - Actual:\n\(gap2.size)")
         
         gap1 = Gap(1, 2)
         gap2 = Gap(1, 5)
         expectedGapSize1 = 2
         expectedGapSize2 = 5
         XCTAssert(gap1 != gap2, "Expected \(gap1) != \(gap2)")
-        XCTAssert(gap1.size == expectedGapSize1, "Expected: \(expectedGapSize1) - Actual: \(gap1.size)")
-        XCTAssert(gap2.size == expectedGapSize2, "Expected: \(expectedGapSize2) - Actual: \(gap2.size)")
+        XCTAssert(gap1.size == expectedGapSize1, "Expected: \(expectedGapSize1) - Actual:\n\(gap1.size)")
+        XCTAssert(gap2.size == expectedGapSize2, "Expected: \(expectedGapSize2) - Actual:\n\(gap2.size)")
         
         gap1 = Gap(-2, 2)
         gap2 = Gap(-2, 5)
         expectedGapSize1 = 5
         expectedGapSize2 = 8
         XCTAssert(gap1 != gap2, "Expected \(gap1) != \(gap2)")
-        XCTAssert(gap1.size == expectedGapSize1, "Expected: \(expectedGapSize1) - Actual: \(gap1.size)")
-        XCTAssert(gap2.size == expectedGapSize2, "Expected: \(expectedGapSize2) - Actual: \(gap2.size)")
+        XCTAssert(gap1.size == expectedGapSize1, "Expected: \(expectedGapSize1) - Actual:\n\(gap1.size)")
+        XCTAssert(gap2.size == expectedGapSize2, "Expected: \(expectedGapSize2) - Actual:\n\(gap2.size)")
         
     }
     
