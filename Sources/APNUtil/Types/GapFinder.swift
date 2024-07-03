@@ -62,11 +62,16 @@ public struct GapFinder {
     }
     
     /// Creates a visual representation of missing elements in sequence.
+    /// - note: this version of a `describe()` method,  shows both gaps 
+    /// *and* non-gaps. Gaps are depicted as ranges without borders, existing
+    /// non-gaps are shown as bordered ranges.
     public static func describeGaps(in toCheck: [Int],
-                         usingRange range: ClosedRange<Int>) -> String {
+                                    usingRange range: ClosedRange<Int>) -> String {
         
         let gaps = find(in: toCheck,
                         usingRange: range)
+        
+        if gaps.count == 0 { return "" /*EXIT*/ }
         
         var output      = ""
         let paddWidth   = paddWidth - 2
@@ -143,7 +148,7 @@ public struct GapFinder {
         }
         
         // Edge Case: last number
-        let lastPuzzNum = range.upperBound - 1
+        let lastPuzzNum = range.upperBound
         if gaps.last!.endIndex < lastPuzzNum {
         
             output   += centered(lastPuzzNum, isTop: false)
@@ -160,8 +165,10 @@ public struct GapFinder {
     
     /// Creates a more horizontal `String` representation of all missing elements
     ///  compared to `describeGaps(in:)`
+    /// - note: this version of a `describe()` method, shows only gaps and not
+    /// existing non-gap elements.
     public static func compactDescribeGaps(in toCheck: [Int],
-                             usingRange range: ClosedRange<Int>) -> String {
+                                           usingRange range: ClosedRange<Int>) -> String {
         
         var output = ""
         
