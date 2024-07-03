@@ -10,6 +10,29 @@ import APNUtil
 
 final class GapFinderTests: XCTestCase {
     
+    func testBuggyDescribeGaps() {
+        
+        var array       = [1,2,4,5]
+        var range       = 1...5
+        
+        var actual      = GapFinder.describeGaps(in: array, usingRange: range)
+        var expected    = """
+                            ┌───┐
+                            │ 1 │
+                            │ ⇣ │
+                            │ 2 │
+                            └───┘
+                              3  \n\
+                            ┌───┐
+                            │ 4 │
+                            │ ⇣ │
+                            │ 5 │
+                            └───┘\n
+                            """
+        XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
+        
+    }
+    
     func testDescribeGaps1() {
         
         var array       = [1,2,4,5]
@@ -22,8 +45,6 @@ final class GapFinderTests: XCTestCase {
                             │ ⇣ │
                             │ 2 │
                             └───┘
-                              3  \n\
-                              ⇣  \n\
                               3  \n\
                             
                             """
@@ -77,8 +98,6 @@ final class GapFinderTests: XCTestCase {
                             │ 4 │
                             └───┘
                               5  \n\
-                              ⇣  \n\
-                              5  \n\
                             
                             """
         
@@ -126,8 +145,6 @@ final class GapFinderTests: XCTestCase {
                             │ ⇣ │
                             │ 2 │
                             └───┘
-                              3  \n\
-                              ⇣  \n\
                               3  \n\
                             ┌───┐
                             │ 4 │
@@ -231,8 +248,6 @@ final class GapFinderTests: XCTestCase {
         range       = 1...4
         actual      = GapFinder.describeGaps(in: array, usingRange: range)
         expected    =   """
-                          1  \n\
-                          ⇣  \n\
                           1  \n\
                         ┌───┐
                         │ 2 │
