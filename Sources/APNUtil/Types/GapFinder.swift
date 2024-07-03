@@ -261,7 +261,7 @@ extension Gap: CustomStringConvertible {
             
         }
         
-        if size == 0  {
+        if size == 1  {
             
             output += centerPad(startIndex)
             
