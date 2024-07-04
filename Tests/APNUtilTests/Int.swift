@@ -361,13 +361,13 @@ class IntTests: XCTestCase {
         
     }
     
-    func testConcatonated() {
+    func testConcatenated() {
         
-        XCTAssert(1.concatonated(2) == 12)
-        XCTAssert(1.concatonated(0) == 10)
-        XCTAssert(0.concatonated(1) == 1)
-        XCTAssert(0.concatonated(29) == 29)
-        XCTAssert(1234.concatonated(56789) == 123456789)
+        XCTAssert(1.concatenated(2) == 12)
+        XCTAssert(1.concatenated(0) == 10)
+        XCTAssert(0.concatenated(1) == 1)
+        XCTAssert(0.concatenated(29) == 29)
+        XCTAssert(1234.concatenated(56789) == 123456789)
         
     }
     

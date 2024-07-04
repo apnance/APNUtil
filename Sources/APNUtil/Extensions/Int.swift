@@ -148,8 +148,7 @@ public extension Int {
     /// - Parameter int2: `Integer` to concatenate onto `self`
     /// - Returns: Integer
     /// - e.g. 12.concatenated(15) == 1215
-    /// - note: yes it's a typo..
-    func concatonated(_ i2: Int) -> Int? {
+    func concatenated(_ i2: Int) -> Int? {
         
         Int(description + i2.description)
         
