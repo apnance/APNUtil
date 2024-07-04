@@ -57,6 +57,20 @@ public extension String {
         String(dropLast(n).dropFirst(n))
         
     }
+
+    
+    /// - Returns: Returns a copy of `self` with all leading/trailing and duplicate spaces removed.
+    ///
+    /// ```
+    ///     // e.g.
+    ///     "    Tidy     Me!   ".tidy() == "Tidy Me!"
+    func tidy() -> String {
+        
+        trim().replacingOccurrences(of: " +",
+                                    with: " ",
+                                    options: .regularExpression)
+        
+    }
     
     /// Returns true if `self` is non-empty and begins with letter
     var hasAlphaPrefix: Bool { (first ?? Character(" ")).isLetter }

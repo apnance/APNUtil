@@ -106,6 +106,40 @@ class StringTests: XCTestCase {
         
     }
     
+    func testTidy() {
+        
+        var text = "    Tidy Me!    "
+        var actual = text.tidy()
+        var expected = "Tidy Me!"
+        XCTAssert(actual == expected, "Expected: '\(expected)' - Actual: '\(actual)'")
+        
+        text = " Tidy    Me! "
+        actual = text.tidy()
+        expected = "Tidy Me!"
+        XCTAssert(actual == expected, "Expected: '\(expected)' - Actual: '\(actual)'")
+        
+        text = "      Me!    "
+        actual = text.tidy()
+        expected = "Me!"
+        XCTAssert(actual == expected, "Expected: '\(expected)' - Actual: '\(actual)'")
+        
+        text = "Tidy    Me!    "
+        actual = text.tidy()
+        expected = "Tidy Me!"
+        XCTAssert(actual == expected, "Expected: '\(expected)' - Actual: '\(actual)'")
+        
+        text = "     Tidy Me!    "
+        actual = text.tidy()
+        expected = "Tidy Me!"
+        XCTAssert(actual == expected, "Expected: '\(expected)' - Actual: '\(actual)'")
+        
+        text = "Tidy    Me!"
+        actual = text.tidy()
+        expected = "Tidy Me!"
+        XCTAssert(actual == expected, "Expected: '\(expected)' - Actual: '\(actual)'")
+        
+    }
+    
     func testHasAlphaPrefix() {
         
         XCTAssert("a".hasAlphaPrefix)
