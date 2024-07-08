@@ -341,7 +341,7 @@ public extension Array where Element : CustomStringConvertible {
     ///   - conjunction: conjunction `String` to use to concatenate last element of list of 2 or more.
     ///   - wrapper: `String` value to append before and after the `Element`'s description value.
     ///   - defaultOutput: default value to dipslay in the event `self.count` is zero.
-    /// - Returns: <#description#>
+    /// - Returns: a comma separated list of `Element` descriptions wrapped and joined with specified conjunction.
     func asCommaSeperatedString(conjunction: String = "or",
                                 wrapper: String = "'",
                                 defaultOutput: String = "") -> String {
