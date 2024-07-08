@@ -336,14 +336,21 @@ public extension Array where Element : CustomStringConvertible {
     
     
     /// Returns a string representation of `self` as an oxford-comma separated list with "or" conjunction as appropriate.
-    func asCommaSeperatedString(conjunction: String = "or", 
-                                wrapper: String = "'") -> String {
+    /// 
+    /// - Parameters:
+    ///   - conjunction: conjunction `String` to use to concatenate last element of list of 2 or more.
+    ///   - wrapper: `String` value to append before and after the `Element`'s description value.
+    ///   - defaultOutput: default value to dipslay in the event `self.count` is zero.
+    /// - Returns: <#description#>
+    func asCommaSeperatedString(conjunction: String = "or",
+                                wrapper: String = "'",
+                                defaultOutput: String = "") -> String {
         
         let strArray = self.map{$0.description}
         
         switch strArray.count {
                 
-            case 0: return ""
+            case 0: return defaultOutput
                 
             case 1: return "\(wrapper)\(strArray[0])\(wrapper)"
                 
