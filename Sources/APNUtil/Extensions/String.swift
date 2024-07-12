@@ -267,6 +267,28 @@ public extension String {
     
 }
 
+// - MARK: Fontify
+public extension String {
+    
+    /// ASCIIFont definition to use to format fontified output.
+    enum FontifyFont { case small, mini}
+    
+    /// Converts the string to ASCII-art version of itself.
+    /// - Parameter font: ASCIIFont definition to use.
+    /// - Returns: An ASCII-art version of self formatted to specification found in `font`
+    func fontify(_ font: FontifyFont) -> String {
+        
+        switch font {
+                
+            case .small:    return ASCIIFontSmall().fontify(self)
+            case .mini:     return ASCIIFontMini().fontify(self)
+                
+        }
+        
+    }
+    
+}
+
 // - MARK: Obfuscate
 public extension String {
     
