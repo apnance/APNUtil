@@ -10,7 +10,7 @@ import Foundation
 import XCTest
 import APNUtil
 
-struct  Greeble: Managable, CustomStringConvertible, Equatable {
+struct  Greeble: Manageable, CustomStringConvertible, Equatable {
     
     var managedID: Int?
     var name: String
@@ -28,44 +28,51 @@ class ManagedCollection: XCTestCase {
     let managed: APNUtil.ManagedCollection<Greeble> = APNUtil.ManagedCollection.load(file: "GreebleTest",
                                                                                      inSubDir: "")
     
-    var archetypalNames: [String: ManagedID?] = ["Bea" : nil,
-                                                 "Lee" : nil,
-                                                 "Aaron" : nil,
-                                                 "Winston" : nil,
-                                                 "Kitsune" : nil,
-                                                 "Scratch" : nil,
-                                                 "Steve" : nil]
+    var archetypalNameToID: [String: ManagedID?] = ["Bea" : nil,
+                                                    "Lee" : nil,
+                                                    "Aaron" : nil,
+                                                    "Winston" : nil,
+                                                    "Kitsune" : nil,
+                                                    "Scratch" : nil,
+                                                    "Steve" : nil]
     
     override func setUpWithError() throws {
         
-        // Delete Old Entries
-        for entry in managed.values {
-            
-            managed.delete(entry)
-            
-        }
+        // Reset
+        managed.reset()
         
-        for name in archetypalNames.keys.sorted{$0 < $1} {
-            let greeb = Greeble(name: name)
+        XCTAssert(managed.currentEntry == nil)
+        XCTAssert(managed.count == 0)
+        
+        // Re-build
+        let archetypalNames = archetypalNameToID.keys.sorted{ $0 < $1 }
+        
+        for name in archetypalNames {
             
-            archetypalNames[name] = managed.add(greeb,
-                                      allowDuplicates: false,
-                                      shouldArchive: false)
+            var greeb = Greeble(name: name)
+            
+            managed.addEntry(&greeb,
+                             allowDuplicates: false,
+                             shouldArchive: false)
+            
+            XCTAssert(greeb.isManaged)
+            
+            archetypalNameToID[greeb.name] = greeb.managedID
             
         }
         
         managed.save()
         
         
-        for (name, managedID) in archetypalNames {
+        for (name, managedID) in archetypalNameToID {
             
             assert(managedID != nil)
              print("Greeble: \(name) - ID: \(managedID!)")
             
         }
         
-        assert(managed.values.count == archetypalNames.count,
-               "Managed collection size[\(managed.count)] does not match expected[\(archetypalNames.count)]")
+        assert(managed.values.count == archetypalNameToID.count,
+               "Managed collection size[\(managed.count)] does not match expected[\(archetypalNameToID.count)]")
         
     }
     
@@ -87,13 +94,23 @@ class ManagedCollection: XCTestCase {
         
         let greebles = buildGreebles(["Frank", "Zappa", "Howard", "Jones"])
         
-        var expectedCount   = managed.count
-        var actualCount     = archetypalNames.count
+        for newGreeble in greebles {
+            
+            for managedGreeble in managed.values {
+                
+                XCTAssert(managedGreeble.name != newGreeble.name)
+                
+            }
+            
+        }
+        
+        var expectedCount   = archetypalNameToID.count
+        var actualCount     = managed.count
         XCTAssert(expectedCount == actualCount, "managed count error: Expected: \(expectedCount) - Actual: \(actualCount)")
         
         let mIDs: [Int?]    = managed.add(greebles)
         expectedCount       = managed.count
-        actualCount         = archetypalNames.count + greebles.count
+        actualCount         = archetypalNameToID.count + greebles.count
         XCTAssert(expectedCount == actualCount, "managed count error: Expected: \(expectedCount) - Actual: \(actualCount)")
         
         for id in mIDs {
@@ -124,9 +141,111 @@ class ManagedCollection: XCTestCase {
         
     }
     
+    func testAddEntriesNoDupes() {
+        
+        var greebles = buildGreebles(["Frank", "Frank", "Zappa", "Zappa", "Howard", "Jones"])
+        
+        var expectedCount   = archetypalNameToID.count
+        var actualCount     = managed.count
+        XCTAssert(expectedCount == actualCount,
+                  "managed count error: Expected: \(expectedCount) - Actual: \(actualCount)")
+        
+        managed.addEntries(&greebles,
+                           allowDuplicates: false)
+        
+        expectedCount       = archetypalNameToID.count + greebles.uniques
+        actualCount         = managed.count
+        XCTAssert(expectedCount == actualCount,
+                  "managed count error: Expected: \(expectedCount) - Actual: \(actualCount)")
+        
+        for greeble in greebles {
+            
+            XCTAssert(greeble.isManaged, "\(greeble) is not managed.")
+            
+            XCTAssertNotNil(managed.entryFor(greeble.managedID!), "No entry found for managedID \(greeble)")
+            
+        }
+        
+        // Dupes?
+        let archivedNames = managed.values.map{ $0.name }
+        XCTAssert(archivedNames.allUniques)
+        XCTAssert(managed.values.allUniques)
+        
+        
+    }
+    
+    
+    func testAddEntriesAllowDupes() {
+        
+        var greebles = buildGreebles(["Frank", "Frank", "Zappa", "Zappa", "Howard", "Jones"])
+        
+        var expectedCount   = archetypalNameToID.count
+        var actualCount     = managed.count
+        XCTAssert(expectedCount == actualCount,
+                  "managed count error: Expected: \(expectedCount) - Actual: \(actualCount)")
+        
+        managed.addEntries(&greebles,
+                           allowDuplicates: true)
+        
+        expectedCount       = managed.count
+        actualCount         = archetypalNameToID.count + greebles.count
+        XCTAssert(expectedCount == actualCount,
+                  "managed count error: Expected: \(expectedCount) - Actual: \(actualCount)")
+        
+        for greeble in greebles {
+            
+            XCTAssert(greeble.isManaged, "\(greeble) is not managed.")
+            
+            XCTAssertNotNil(managed.entryFor(greeble.managedID!), "No entry found for managedID \(greeble)")
+            
+        }
+        
+    }
+    
+    
+    func testAddEntry() {
+        
+        let greebles = buildGreebles(["Frank", "Zappa", "Howard", "Jones"])
+        
+        let expectedCount   = archetypalNameToID.count
+        let actualCount     = managed.count
+        XCTAssert(expectedCount == actualCount,
+                  "managed count error: Expected: \(expectedCount) - Actual: \(actualCount)")
+        
+        var fritz1 = Greeble(name: "Fritz")
+        managed.addEntry(&fritz1,
+                         shouldArchive: true)
+        
+        XCTAssert(managed.currentEntry == fritz1)
+        XCTAssert(fritz1.isManaged)
+        
+        var fredo = Greeble(name: "Fredo")
+        managed.addEntry(&fredo,
+                         shouldArchive: true)
+        
+        XCTAssert(managed.currentEntry == fredo)
+        XCTAssert(fredo.isManaged)
+        XCTAssert(managed.currentEntry!.managedID! == fredo.managedID)
+        
+        var fritz2 = Greeble(name: fritz1.name)
+        managed.addEntry(&fritz2,
+                    allowDuplicates: false,
+                    shouldArchive: true)
+        
+        XCTAssert(fritz1 == fritz2)
+        XCTAssert(fritz2.isManaged)
+        XCTAssert(managed.currentEntry!.managedID! == fritz2.managedID)
+        XCTAssert(managed.currentEntry!.name == "Fritz")
+        
+        // Verify no dupes.
+        XCTAssert(fritz2.managedID == fritz1.managedID)
+        
+    }
+    
+    
     func testEntryFor(/*_ id: ManagedID*/) {
         
-        for (name, managedID) in archetypalNames {
+        for (name, managedID) in archetypalNameToID {
             
             print("Testing: Name: \(name) - ID: \(managedID!)")
             
@@ -140,18 +259,18 @@ class ManagedCollection: XCTestCase {
     
     func testEntriesFor(/*_ ids: [ManagedID] */) {
         
-        let managedIDs      = archetypalNames.values.map{$0!}
+        let managedIDs      = archetypalNameToID.values.map{$0!}
         
         let managedGreebles = managed.entriesFor(managedIDs)
         
         // Check that we got the right number of managed Greebles
-        XCTAssert(managedGreebles.count == archetypalNames.count,
-                  "Count mismatch: Expected: \(archetypalNames.count) - Actual: \(managedGreebles.count)")
+        XCTAssert(managedGreebles.count == archetypalNameToID.count,
+                  "Count mismatch: Expected: \(archetypalNameToID.count) - Actual: \(managedGreebles.count)")
         
         let retrievedNames  = Set<String>(managedGreebles.map{ $0.name })
         
         // Did we get a Greeble for each name in archetypalNames?
-        for name in archetypalNames.keys {
+        for name in archetypalNameToID.keys {
             
             XCTAssert(retrievedNames.contains(name))
             
@@ -161,7 +280,7 @@ class ManagedCollection: XCTestCase {
     
     public func testSetCurrent(/*_ id: ManagedID*/) {
         
-        for managedID in archetypalNames.values {
+        for managedID in archetypalNameToID.values {
             
             let managedID = managedID!
             
@@ -194,12 +313,61 @@ class ManagedCollection: XCTestCase {
         
     }
     
+    
+    /// Same as `testSetCurrent` using newer `addEntry()` in lieu of `add()`
+    public func testSetCurrentNew(/*_ id: ManagedID*/) {
+        
+        for managedID in archetypalNameToID.values {
+            
+            let managedID = managedID!
+            
+            XCTAssert(managed.setCurrent(managedID), "ManagedCollection had no entry for managedID '\(managedID)'")
+            
+            let currentManagedID = managed.currentEntry!.managedID!
+            
+            XCTAssert(currentManagedID == managedID)
+            
+        }
+        
+        // Fritz
+        var fritz1 = Greeble(name: "Fritz")
+        
+        managed.addEntry(&fritz1,
+                         shouldArchive: true)
+        
+        XCTAssert(managed.currentEntry!.managedID! == fritz1.managedID)
+        
+        managed.addEntry(&fritz1,
+                         shouldArchive: true)
+        
+        // Fredo
+        var fredo = Greeble(name: "Fredo")
+        managed.addEntry(&fredo,
+                         shouldArchive: true)
+        
+        XCTAssert(managed.currentEntry!.managedID! == fredo.managedID)
+        
+        // Fritz, Again!
+        var fritz2 = Greeble(name: "Fritz")
+        
+        managed.addEntry(&fritz2,
+                         allowDuplicates: false,
+                         shouldArchive: true)
+        
+        XCTAssert(managed.currentEntry!.managedID! == fritz2.managedID)
+        
+        XCTAssert(fritz1.managedID == fritz2.managedID)
+        
+        XCTAssert(fritz1 == fritz2)
+        
+    }
+    
     func testDelete(/*_ entry: Entry*/)  {
         
         // Try deleting unmanaged
         XCTAssertFalse(managed.delete(Greeble(name:"Quazibono")))
         
-        XCTAssert(managed.count == archetypalNames.count)
+        XCTAssert(managed.count == archetypalNameToID.count)
         
         for entry in managed.values {
             
@@ -209,18 +377,53 @@ class ManagedCollection: XCTestCase {
         
         XCTAssert(managed.count == 0)
         
-        
-        var george = Greeble(name: "GeorgeJetson")
-        george.managedID = managed.add(george, shouldArchive: true)
+        // George
+        var george1 = Greeble(name: "GeorgeJetson")
+        managed.addEntry(&george1, shouldArchive: true)
         
         XCTAssert(managed.count == 1)
-        managed.delete(george)
+        
+        var george2 = Greeble(name: "GeorgeJetson")
+        
+        XCTAssert(george1 == george2)
+        
+        managed.addEntry(&george2,
+                         allowDuplicates: false,
+                         shouldArchive: true)
+        XCTAssert(managed.count == 1)
+        
+        XCTAssert(george1 == george2)
+        
+        var george3 = Greeble(name: "GeorgeJetson")
+        managed.addEntry(&george3,
+                         allowDuplicates: true,
+                         shouldArchive: true)
+        XCTAssert(managed.count == 2)
+        
+        // Jane
+        var jane = Greeble(name: "Fonda")
+        managed.addEntry(&jane, shouldArchive: true)
+        XCTAssert(managed.count == 3)
+        
+        XCTAssert(george1.managedID == george2.managedID)
+        XCTAssert(george2.managedID != george3.managedID)
+        
+        managed.delete(george1)
+        XCTAssert(managed.count == 2)
+        
+        managed.delete(george2)
+        XCTAssert(managed.count == 2)
+        
+        managed.delete(george3)
+        XCTAssert(managed.count == 1)
+        
+        managed.delete(jane)
         
         XCTAssert(managed.count == 0)
         
     }
     
-    func testDeleteAll() {
+    func testReset() {
         
         var expectedCount   = 7
         var actualCount     = managed.count

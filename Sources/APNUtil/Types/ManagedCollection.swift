@@ -10,7 +10,7 @@ import Foundation
 
 public typealias ManagedID = Int
 
-public protocol Managable: Codable & Hashable {
+public protocol Manageable: Codable & Hashable {
     
     /// ID used by a `ManagedCollection` to for the storage/retrieval of managed `Entry`s.
     /// This can be used by clients of `ManagedCollection` to retrieve managed`Entry`s.
@@ -19,10 +19,16 @@ public protocol Managable: Codable & Hashable {
     
 }
 
+public extension Manageable {
+    
+    var isManaged: Bool { managedID != nil }
+    
+}
+
 /// A class that stores entries in an `[ManagedID:Entry]` `Dictionary` archiving the collection upon
 /// each change.   Adding `Entry`s assigns them an `ManagedID` that may be used for later retrieval.
 /// - important: `Entry`'s `managedID` should be assigned to only by `ManagedCollection`.
-public class ManagedCollection<Entry>: Codable where Entry: Managable {
+public class ManagedCollection<Entry>: Codable where Entry: Manageable {
     
     // MARK: - Properties
     /// `[ManagedID:Entry]` ` Dictionary` responsible for storing/retrieving `Entry`s
@@ -79,6 +85,7 @@ public class ManagedCollection<Entry>: Codable where Entry: Managable {
     /// `ManagedCollection`
     ///
     /// - returns: An array of `ManagedID`s assigned to the added `Entry`s
+    @available(*, deprecated, message: "use addEntries(:)")
     @discardableResult public func add(_ entries: [Entry],
                                        allowDuplicates: Bool = false) -> [ManagedID] {
         
@@ -113,6 +120,7 @@ public class ManagedCollection<Entry>: Codable where Entry: Managable {
     ///
     /// - important: passing an `Entry` with an ID found in `managed` results in an update/overwrite
     /// for that ID.
+    @available(*, deprecated, message: "use addEntry(:)")
     @discardableResult public func add(_ entry: Entry,
                                        allowDuplicates: Bool = false,
                                        shouldArchive: Bool) -> ManagedID {
@@ -130,12 +138,6 @@ public class ManagedCollection<Entry>: Codable where Entry: Managable {
                 for (key, value) in managed {
                     
                     if value == entry { return key /*EXIT*/ }
-                    
-                    if value == entry {
-                        
-                        return key /*EXIT*/
-                        
-                    }
                     
                 }
                 
@@ -174,6 +176,97 @@ public class ManagedCollection<Entry>: Codable where Entry: Managable {
         
     }
     
+    // MARK: - Custom Methods
+    /// Adds/Updates an `Array` of `[Entry]` to `managed`.  `Entry`s  not already
+    /// managed(i.e. `managedID == nil`) are assigned a unique `ManagedID`,
+    /// `Entry`'s already assigned `ManagedID` update/overwrite the `Entry`
+    /// associated with that `ManagedID`.
+    ///
+    /// - parameters:
+    ///     - entries:  inout parameter `Entry` values to add-to/update-in`managed`,
+    ///     the ManagedID value of this inout parameter will be set.
+    ///     - allowDuplicates: `Bool` to suppress/allow the addition of duplicate `Entry`
+    ///     values(i.e. same `Entry` values with different `ManagedIDs`
+    ///
+    /// - important: passing`Entry` values that are already managed results
+    /// in overwriting currently stored value.
+    ///
+    /// - returns: An array of `ManagedID`s assigned to the added `Entry`s
+    public func addEntries(_ entries: inout [Entry],
+                                       allowDuplicates: Bool = false) {
+        
+        for i in 0...entries.lastUsableIndex {
+            
+            addEntry(&entries[i],
+                     allowDuplicates: allowDuplicates,
+                     shouldArchive: false)
+            
+        }
+        
+        save() // Archive Once
+        
+    }
+    
+    /// Adds/Updates an `Entry` to `managed` then calls save() if `shouldArchive` is `true`.
+    ///
+    /// - parameters:
+    ///     - entry: `Entry` value to add-to/update-in`managed`
+    ///     - allowDuplicates: `Bool` to suppress/allow the addition of duplicate `Entry`
+    ///     values(i.e. same `Entry` values with different `ManagedIDs`
+    ///     - shouldArchive: `Bool` to suppress/allow the archival of the `ManagedCollection`
+    ///
+    /// - important: passing an already managed `Entry` with an ID found in `managed` results in an update/overwrite
+    public func addEntry(_ entry: inout Entry,
+                         allowDuplicates: Bool = false,
+                         shouldArchive: Bool) {
+        
+        /// Finds or generates a ManagedID for the provided Entry.
+        func idFor(_ entry: Entry) -> ManagedID {
+            
+            // 1. Is `Entry` already managed? - If yes re-use it's ID.
+            if let id = entry.managedID { return id /*EXIT*/ }
+            
+            // 2. Is there already a matching `Entry` and if so do we allow
+            // duplicates?
+            if !allowDuplicates {
+                
+                for (key, value) in managed {
+                    
+                    if value == entry { return key /*EXIT*/ }
+                    
+                }
+                
+            }
+            
+            // 3. Find and return next unused ID
+            while true {
+                
+                if managed[lastAssignedID] == nil {
+                    
+                    return lastAssignedID /*EXIT*/
+                    
+                }
+                
+                lastAssignedID += 1
+                
+            }
+            
+        }
+        
+        // ID
+        entry.managedID = idFor(entry)
+        
+        // Set as current
+        currentID = entry.managedID
+        
+        // Add/update
+        managed[entry.managedID!] = entry
+        
+        // Save?
+        if shouldArchive { save() }
+        
+    }
+    
     /// Attempts to delete specified `Entry` from `managed`.
     /// - returns: a discaradable `Bool` indicating whether or not the `Entry` was found/deleted.
     @discardableResult public func delete(_ entry: Entry) -> Bool {
@@ -196,7 +289,7 @@ public class ManagedCollection<Entry>: Codable where Entry: Managable {
     /// Reverts to empty starting state ready to be re-used.
     ///
     /// - note: this deletes all entries and resets the id counter.
-    @discardableResult public func reset() {
+    public func reset() {
         
         // Delete
         managed.removeAll()
