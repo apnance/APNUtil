@@ -38,6 +38,29 @@ public extension Array {
         
     }
     
+    /// Returns the first x elements of the array.
+    ///
+    /// Note: if the array count is less than k the entire
+    /// array is returned.  The array is not padded to k.
+    func first(k: Int) -> [Element] {
+        
+        guard count >= 0,
+                k >= 0
+        else { return [] /*EXIT*/ }
+        
+        if k >= count {
+            
+            return self /*EXIT*/
+            
+        } else {
+            
+            let numToDrop = count - k
+            
+            return self.dropLast(numToDrop) /*EXIT*/
+            
+        }
+        
+    }
     
     /// Attempts to return the last `k` `Element`s from `self`.
     /// - Parameter k: number of `Element`s to return from the end of `self`.
@@ -523,7 +546,7 @@ public extension Array where Element: Equatable {
         
         if randoms.count > max {
             
-            return randoms.first(x: max)!
+            return randoms.first(k: max)
             
         }
         
@@ -535,6 +558,7 @@ public extension Array where Element: Equatable {
     ///
     /// Note: if the array count is less than x the
     /// array is returned.  The array is not padded to x.
+    @available(*, deprecated, message: "prefer instead first(k:Int) -> [Element]")
     func first(x: Int) -> [Element]? {
         
         assert(x >= 0)

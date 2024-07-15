@@ -25,7 +25,7 @@ public extension Manageable {
     
 }
 
-/// A class that stores entries in an `[ManagedID:Entry]` `Dictionary` archiving the collection upon
+/// A class that stores entries in a `[ManagedID:Entry]` `Dictionary` archiving the collection upon
 /// each change.   Adding `Entry`s assigns them an `ManagedID` that may be used for later retrieval.
 /// - important: `Entry`'s `managedID` should be assigned to only by `ManagedCollection`.
 public class ManagedCollection<Entry>: Codable where Entry: Manageable {

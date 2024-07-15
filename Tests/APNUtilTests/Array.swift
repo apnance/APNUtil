@@ -38,6 +38,101 @@ class ArrayTests: XCTestCase {
         
     }
     
+    func testFirstK() {
+        
+        var a           = [Int]()
+        var k           = 10
+        var expected    = [Int]()
+        var actual      = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = []
+        k = 0
+        expected = []
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = []
+        k = -1
+        expected = []
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = [1,2]
+        k = -1
+        expected = []
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = [1,2]
+        k = 0
+        expected = []
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = [1,2]
+        k = 1
+        expected = [1]
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = [1,2]
+        k = 2
+        expected = [1,2]
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = [1279,1017,524,-1,-2]
+        k = 3
+        expected = [1279,1017,524]
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = [1279,1017,524,-1,-2]
+        k = 2000
+        expected = [1279,1017,524,-1,-2]
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = [1279,1017,524,-1,-2]
+        k = 0
+        expected = []
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = [1279,1017,524,-1,-2]
+        k = 5
+        expected = a
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = [1279,1017,524,-1,-2]
+        k = a.count
+        expected = a
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = [1279,1017,524,-1,-2]
+        k = a.count + 10
+        expected = a
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = [1279,1017,524,-1,-2]
+        k = a.count - (a.count + 10)
+        expected = []
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        a = [1279,1017,524,-1,-2]
+        k = a.count - 1
+        expected = [1279,1017,524,-1]
+        actual = a.first(k: k)
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+    }
+    
+    
     func testLastK() {
         
         var a           = [Int]()
