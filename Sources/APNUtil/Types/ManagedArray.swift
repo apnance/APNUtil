@@ -5,7 +5,7 @@
 //  Created by Aaron Nance on 7/15/24.
 //
 
-public protocol Archivable: Codable, Comparable  { }
+public protocol Archivable: Codable, Equatable { }
 
 public class ManagedArray<Element: Archivable> {
     

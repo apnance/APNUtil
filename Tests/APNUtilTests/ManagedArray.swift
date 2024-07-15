@@ -20,11 +20,6 @@ struct  Nurny: Archivable, CustomStringConvertible {
         lhs.name == rhs.name
     }
     
-    static func < (lhs: Nurny, rhs: Nurny) -> Bool {
-        lhs.name < rhs.name
-    }
-
-    
 }
 
 final class ManagedArray: XCTestCase {
