@@ -205,8 +205,6 @@ class ManagedCollection: XCTestCase {
     
     func testAddEntry() {
         
-        let greebles = buildGreebles(["Frank", "Zappa", "Howard", "Jones"])
-        
         let expectedCount   = archetypalNameToID.count
         let actualCount     = managed.count
         XCTAssert(expectedCount == actualCount,
