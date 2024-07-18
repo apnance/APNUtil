@@ -14,6 +14,24 @@ import APNUtil
 
 class DateTests: XCTestCase {
  
+    func testClean() {
+        
+        var date = "05/24/2002".simpleDate
+        var actual = date.clean
+        var expected = "05-24-02 00:00:00.000"
+        
+        print("Original: \(date)\nCleaned: \(actual)")
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        date = "12/07/2009".simpleDate
+        actual = date.clean
+        expected = "12-07-09 00:00:00.000"
+        
+        print("Original: \(date)\nCleaned: \(actual)")
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+    }
+    
     func testDaysFromTo() {
         
         let leeDay = "11-17-09".simpleDate

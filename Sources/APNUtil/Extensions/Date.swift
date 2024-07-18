@@ -99,7 +99,7 @@ public extension Date {
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MM-dd-yy HH:mm:ss.SSS"
             
-            return dateFormatter.string(from: Date())
+            return dateFormatter.string(from: self)
             
     }
     
