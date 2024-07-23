@@ -71,7 +71,7 @@ public struct GapFinder {
         let gaps = find(in: toCheck,
                         usingRange: range)
         
-        if gaps.count == 0 { return "" /*EXIT*/ }
+        if gaps.count == 0 { return "[None Found]" /*EXIT*/ }
         
         var output      = ""
         let paddWidth   = paddWidth - 2
@@ -111,6 +111,7 @@ public struct GapFinder {
             lastNum = num
             
             return centered
+            
         }
         
         var needsBottom = false
