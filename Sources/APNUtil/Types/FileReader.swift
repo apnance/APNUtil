@@ -10,7 +10,7 @@ import Foundation
 
 public typealias FileName   = String
 public typealias FileType   = String
-public  typealias Count     = Int
+public typealias Count      = Int
 public typealias Line       = String
 
 public struct FileReader {
