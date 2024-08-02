@@ -10,16 +10,13 @@ import UIKit
 
 /// Creates rounded text that follows the circle inscribed in `self` with optional configurable rounded background.
 @IBDesignable
-class RoundTextView: UIView {
-    
-    /// Container Rect into which the rounded text will be inscribed.
-//    private var rect: CGRect!
+open class RoundTextView: UIView {
     
     // Text
     /// Angle to rotate text from being centered horizontally.
     @IBInspectable var degreesOffset: Double    = 0
     
-    /// The sine qua non of the control, the text to display circularly inscribed in `self`'s bounds.
+    /// The text to be circularly inscribed in `self`'s bounds.
     @IBInspectable var roundedText: String      = "👉Your Text Here👈"
     
     @IBInspectable var fontName: String         = "Verdana"
@@ -36,7 +33,7 @@ class RoundTextView: UIView {
     private var renderAngle: Double { (CGFloat.pi / 2.0) - (degreesOffset * ((CGFloat.pi * 2) / 360.0 )) }
     private lazy var font = UIFont(name: fontName, size: fontSize)!
     
-    override func draw(_ rect: CGRect) {
+    public override func draw(_ rect: CGRect) {
         
         // TODO: Clean Up - delete
         // let containsLowerCase = text.contains(/[yjpq]+/) //.contains("[yqpj]", options: .regularExpression)
