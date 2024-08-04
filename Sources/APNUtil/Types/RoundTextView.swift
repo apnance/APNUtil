@@ -18,6 +18,7 @@ open class RoundTextView: UIView {
     
     /// The text to be circularly inscribed in `self`'s bounds.
     @IBInspectable var roundedText: String      = "👉Your Text Here👈"
+    @IBInspectable var clockwise: Bool          = true
     
     @IBInspectable var fontName: String         = "Verdana"
     @IBInspectable var fontSize: Double         = 24
@@ -64,7 +65,7 @@ open class RoundTextView: UIView {
                                angle: renderAngle,
                                colour: textColor,
                                font: font,
-                               clockwise: true)
+                               clockwise: clockwise)
         
         // Save Context
         context.restoreGState()
