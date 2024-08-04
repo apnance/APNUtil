@@ -16,6 +16,17 @@ open class RoundTextView: UIView {
     /// Angle to rotate text from being centered horizontally.
     @IBInspectable var degreesOffset: Double    = 0
     
+    /// Set true to cause the text to punch out the circular bg.  This is useful
+    /// when specifying the same semi-transparent color for bg and text to
+    /// prevent the area of overlap from appearing more opaque.  That is
+    /// set this to true If you want the text and bg to appear to be one solid
+    /// semi-transparent color with no increased opacity at points of overlap
+    /// between cicrular bg and text.
+    ///
+    /// - note: this doesn't play well if you specify a background color for
+    /// the entire view, the punchout punches out the circular bg color and the RoundTextView's bg color.
+    @IBInspectable var punchOutText: Bool       = false
+    
     /// The text to be circularly inscribed in `self`'s bounds.
     @IBInspectable var roundedText: String      = "👉Your Text Here👈"
     @IBInspectable var clockwise: Bool          = true
@@ -34,10 +45,15 @@ open class RoundTextView: UIView {
     private var renderAngle: Double { (CGFloat.pi / 2.0) - (degreesOffset * ((CGFloat.pi * 2) / 360.0 )) }
     private lazy var font = UIFont(name: fontName, size: fontSize)!
     
-    public override func draw(_ rect: CGRect) {
+    public func set(text: String) {
         
-        // TODO: Clean Up - delete
-        // let containsLowerCase = text.contains(/[yjpq]+/) //.contains("[yqpj]", options: .regularExpression)
+        roundedText = text
+        
+        setNeedsDisplay()
+        
+    }
+    
+    public override func draw(_ rect: CGRect) {
         
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
@@ -169,6 +185,18 @@ open class RoundTextView: UIView {
         let offset = str.size(withAttributes: attributes)
         // Move the origin by half the size of the text
         context.translateBy (x: -offset.width / 2, y: -offset.height / 2) // Move the origin to the centre of the text (negating the y-axis manually)
+        
+        if punchOutText {
+            
+            context.setBlendMode(.clear)
+            
+            // Draw the text
+            str.draw(at: CGPoint(x: 0, y: 0), withAttributes: attributes)
+            
+            context.setBlendMode(.normal)
+            
+        }
+        
         // Draw the text
         str.draw(at: CGPoint(x: 0, y: 0), withAttributes: attributes)
         
