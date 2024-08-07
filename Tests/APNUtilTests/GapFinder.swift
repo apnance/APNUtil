@@ -12,11 +12,11 @@ final class GapFinderTests: XCTestCase {
     
     func testBuggyDescribeGaps() {
         
-        var array       = [1,2,4,5]
-        var range       = 1...5
+        let array       = [1,2,4,5]
+        let range       = 1...5
         
-        var actual      = GapFinder.describeGaps(in: array, usingRange: range)
-        var expected    = """
+        let actual      = GapFinder.describeGaps(in: array, usingRange: range)
+        let expected    = """
                             ┌───┐
                             │ 1 │
                             │ ⇣ │
@@ -176,7 +176,8 @@ final class GapFinderTests: XCTestCase {
         range       = 1...4
         
         actual      = GapFinder.describeGaps(in: array, usingRange: range)
-        expected    = ""
+        expected    = GapFinder.noneFound
+        
         XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array       = [1,4,5]
@@ -205,7 +206,8 @@ final class GapFinderTests: XCTestCase {
         var range       = 1...4
         
         var actual      = GapFinder.describeGaps(in: array, usingRange: range)
-        var expected    = ""
+        var expected    = GapFinder.noneFound
+        
         XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
         
         array       = [1,4,5]

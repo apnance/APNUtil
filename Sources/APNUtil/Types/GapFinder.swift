@@ -9,6 +9,8 @@ import Foundation
 
 public struct GapFinder {
     
+    public static let noneFound = "[None Found]"
+    
     /// Finds and returns a list of all `Gap`s contained in sequence `in`
     /// - Parameters:
     ///   - toCheck: sequence of presumed consecutive `Int`s to be checked for
@@ -71,7 +73,7 @@ public struct GapFinder {
         let gaps = find(in: toCheck,
                         usingRange: range)
         
-        if gaps.count == 0 { return "[None Found]" /*EXIT*/ }
+        if gaps.count == 0 { return GapFinder.noneFound /*EXIT*/ }
         
         var output      = ""
         let paddWidth   = paddWidth - 2
