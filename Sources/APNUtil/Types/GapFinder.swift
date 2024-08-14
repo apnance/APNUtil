@@ -217,9 +217,11 @@ public extension Array where Element : GapFindable {
     ///    //              elements missing(3 here) displayed in the center
     ///    //              between the two arrows.
     /// ```
-    func describeGaps(stride: Int = 1,
+    func describeGaps(stride: Int? = nil,
                       inRange range: ClosedRange<Int>? = nil,
                       compactFormat: Bool = false) -> String {
+        
+        let stride = stride ?? 1 // Default
         
         let (data, range)   = gapParams(inRange: range)
         
