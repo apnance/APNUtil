@@ -1,35 +1,286 @@
 //
 //  GapFinder.swift
-//  Alton
+//  APNUtil
 //
 //  Created by Aaron Nance on 6/26/24.
 //
 
 import Foundation
 
-public struct GapFinder {
+// - MARK: START HERE
+// The gap finding mechanism operates on arrays of GapFindable objects.
+//
+// To take advantage of gap finding:
+//   1. Conform your object to GapFindable
+//   2. Create an array of those GapFindable objects.
+//   3. Call .findGaps or .describeGaps on that array.
+//
+
+
+// - MARK: GapFindable
+/// Protocol that enables an object expressible as an `Integer` to access to
+/// `GapFinder` functionality via an extension of Array<GapFindable>
+///
+/// ````
+///     //Note: extending Int in this fashion is already done below
+///     extension Int: GapFindable { var asInt: Int { self } }
+///
+///     var widgetIDs: [Int] = [0,1,2,5,10]
+///
+///     let gaps: [Gap] = widgetIDs.findGaps(stride: 1)
+///     let gapDescription = widgetIDs.describeGaps(stride: 1,
+///                                                 inRange range: 0...11,
+///                                                 compactFormat: Bool = false)
+///
+///     print(gapDescription)
+///
+/// ````
+///
+public protocol GapFindable { var asInt: Int { get } }
+
+// Add gap finding to [Int]
+extension Int: GapFindable { public var asInt: Int { self } }
+
+
+// - MARK: Gap
+/// Data structure describing consecutive missing numeric values in what should 
+/// be a sequence of consecutive values differing from the previous value by
+/// `stride` amount.
+///
+/// - note: essentially used to describe missing values in arrays of what
+/// should be consecutive sequences of Ints.
+///
+/// e.g. when searched over the range 1..10, striding by 1,
+/// the sequence [1,2,3,5,10] would have 2 `Gap`s: [4], and [6...9]
+public struct Gap: Equatable, CustomStringConvertible {
     
+    /// Standard display text when no gap exists between two non-gap-values..
     public static let noneFound = "[None Found]"
+    
+    /// The smallest missing value in this `Gap`
+    public private(set) var lowerMissingValue: Int
+    
+    /// The largest missing value in this `Gap`
+    public private(set) var upperMissingValue: Int
+    
+    /// Expected difference between two consecutive values.
+    public private(set) var stride: Int
+    
+    /// Number of values missing between two non-consecutive non-gap-values.
+    public var size: Int { ((upperMissingValue - lowerMissingValue) / stride) + 1}
+    
+    /// Creates a `Gap`
+    /// - Parameters:
+    ///   - lowerValue: smallest missing value in `Gap`
+    ///   - upperValue: largest missing value in `Gap`
+    ///   - stride: the expected distance between consecutive `Gap` values.
+    public init(_ lowerValue: Int, _ upperValue: Int, stride: Int) {
+        
+        self.lowerMissingValue = lowerValue
+        self.upperMissingValue   = upperValue
+        self.stride     = stride
+        
+    }
+    
+    public static func ==(lhs: Gap, rhs: Gap) -> Bool {
+        
+        lhs.lowerMissingValue  == rhs.lowerMissingValue
+        &&
+        lhs.upperMissingValue    == rhs.upperMissingValue
+        &&
+        lhs.stride      == rhs.stride
+        
+    }
+    
+    public var description: String {
+        
+        var output = ""
+        
+        func centerPad(_ subject: CustomStringConvertible) -> String {
+            
+            "\(subject.description.centerPadded(toLength: GapFinder.paddWidth))\n"
+            
+        }
+        
+        if size == 1  {
+            
+            output += centerPad(lowerMissingValue)
+            
+        } else {
+            
+            output += centerPad(lowerMissingValue)
+            output += centerPad("⇣")
+            output += centerPad(upperMissingValue)
+            
+        }
+        
+        return output
+        
+    }
+    
+    public var descriptionSimple: String {
+        
+        var output = ""
+        
+        func centerPad(_ subject: CustomStringConvertible) -> String {
+            
+            "[\(subject.description.centerPadded(toLength: GapFinder.paddWidth))]"
+            
+        }
+        
+        if size == 1  {
+            
+            output += centerPad(lowerMissingValue)
+            
+        } else {
+            
+            output += centerPad(lowerMissingValue)
+            output += "← \(size) →".centerPadded(toLength: GapFinder.paddWidth + 4)
+            output += centerPad(upperMissingValue)
+            
+        }
+        
+        return output
+        
+    }
+    
+}
+
+
+// - MARK: Array<GapFindable>
+// Give [GapFindable] access to GapFinder functionality.
+public extension Array where Element : GapFindable {
+    
+    /// Returns a tupple containing an array of Integers created via the `GapFindable.asInt`
+    /// property and provides a default range if none passed as argument.
+    private func gapParams(inRange range: ClosedRange<Int>? = nil) -> (data: [Int],
+                                                                       range: ClosedRange<Int>) {
+        
+        assert(count > 0, "Array cannot be empty")
+        
+        let data = map{ $0.asInt }
+        
+        let range = range ?? data.first!...data.last!
+        
+        return (data, range)
+        
+    }
+    
+    /// Converts the array to an array of `Int` via the `GapFindable Elements`
+    /// `asInt` properties then finds any gaps larger than a single stride between
+    /// consecutive `Int` values.
+    ///
+    /// - returns: Array of [Gap], they array is empty if none are found.
+    ///
+    /// - note: `self` need not be sorted.
+    func findGaps(stride: Int = 1,
+                  inRange range: ClosedRange<Int>? = nil) -> [Gap] {
+        
+        let (data, range) = gapParams(inRange: range)
+        
+        return GapFinder.find(in: data,
+                              stride: stride,
+                              usingRange: range)
+                
+        
+    }
+    
+    /// Creates formatted representations of any gaps found in `self`
+    ///
+    /// ```
+    ///    // -------------------
+    ///    // Sample Output:
+    ///    // -------------------
+    ///    //  array:    [1,2,6]
+    ///    //  range:    1..6
+    ///    //  stride:   1
+    ///    // - - - - - - - - - -
+    ///    //
+    ///    // standard      compact
+    ///    //
+    ///    //   ┌───┐       Gaps:
+    ///    //   │ 1 │       [ 3 ]  ← 3 →  [ 5 ]
+    ///    //   │ ⇣ │
+    ///    //   │ 2 │
+    ///    //   └───┘
+    ///    //     3
+    ///    //     ⇣
+    ///    //     5
+    ///    //   ┌───┐
+    ///    //   │ 6 │
+    ///    //   └───┘
+    ///    //
+    ///    // Note: 
+    ///    // * standard - shows the non-gaps(bordered) and gaps(unbordered)
+    ///    //
+    ///    // * compact  - shows only the missing values with the number of
+    ///    //              elements missing(3 here) displayed in the center
+    ///    //              between the two arrows.
+    /// ```
+    func describeGaps(stride: Int = 1,
+                      inRange range: ClosedRange<Int>? = nil,
+                      compactFormat: Bool = false) -> String {
+        
+        let (data, range)   = gapParams(inRange: range)
+        
+        let gaps            = GapFinder.find(in: data,
+                                             stride: stride,
+                                             usingRange: range)
+        
+        if compactFormat {
+            
+            return GapFinder.compactDescribe(gaps: gaps,
+                                             inRange: range)   /*EXIT*/
+            
+        } else {
+            
+            return GapFinder.describe(gaps: gaps,
+                                      stride: stride,
+                                      inRange: range)   /*EXIT*/
+            
+        }
+        
+    }
+    
+}
+
+
+// - MARK: GapFinder (private)
+/// Private class for finding gaps(non-consecutive values)  in Arrays of `GapFindable`s
+///
+/// - important: This class should not be used directly, instead have your array
+/// `Element` adopt GapFindable, then call the array extension methods to tap into
+/// finder functionality.
+fileprivate struct GapFinder {
     
     /// Finds and returns a list of all `Gap`s contained in sequence `in`
     /// - Parameters:
     ///   - toCheck: sequence of presumed consecutive `Int`s to be checked for
     ///   "gaps" in consecutivity.
+    ///   - stride: the expected difference between consecutive elements.
     ///   - usingRange: the range of `Int` to consider when checking for consecuitivy.
     /// - Returns: An array of `Gap`s
-    public static func find(in toCheck: [Int],
-                            usingRange: ClosedRange<Int>) -> [Gap] {
+    fileprivate static func find(in toCheck: [Int],
+                            stride: Int,
+                            usingRange: ClosedRange<Int> ) -> [Gap] {
         
-        lastUsedIndex    = usingRange.lowerBound - 1
+        lastNonGapValue   = usingRange.lowerBound - stride
         
         var toCheck     = toCheck
-        toCheck.append(usingRange.upperBound + 1)
+        
+        let upperBound  = usingRange.upperBound + stride
+        toCheck.append(upperBound)
+        toCheck.sort()
         
         var gaps        = [Gap]()
         
-        for int in toCheck {
+        for checking in toCheck {
             
-            if let gap = check(index: int) {
+            if checking > upperBound { break /*BREAK*/ }
+            if checking < lastNonGapValue { continue /*CONTINUE*/ }
+                
+            if let gap = check(nonGapValue: checking,
+                               stride: stride) {
                 
                 gaps.append(gap)
                 
@@ -41,23 +292,43 @@ public struct GapFinder {
         
     }
     
-    private static var lastUsedIndex = 0
+    ///The last non-gap-value found in sequence.
+    private static var lastNonGapValue = 0
     
-    fileprivate static var paddWidth: Int { lastUsedIndex.descriptionCharCount + 4 }
+    /// Used for formatting text output.
+    fileprivate static var paddWidth: Int { lastNonGapValue.descriptionCharCount + 4 }
     
-    private static func check(index: Int) -> Gap? {
+    
+    /// Checks for consecutivity between `nonGapValue` and `lastNonGapValue` returning a `Gap` if found.
+    /// - Parameters:
+    ///   - currentNonGapValue: current value to check against last nonGapValue for consecutivity.
+    ///   - stride: expected difference between values of two consecutive non-gap-values.
+    /// - Returns: `Gap` representing the distance in strides between `nonGapValue`
+    /// and the `lastNonGapValue` or nil if they are consecutive.
+    private static func check(nonGapValue currentNonGapValue: Int,
+                              stride: Int) -> Gap? {
         
-        if index - lastUsedIndex > 1 {
+        let strideLength = currentNonGapValue - lastNonGapValue
+        
+        assert(stride >= 0, "")
+        
+        assert(strideLength >= 0,
+               "Expected stride length: \(stride) or 0 - Actual stride length: \(strideLength)")
+        
+        assert(strideLength % stride == 0,
+               "strideLength % stride != 0  (\(strideLength) % \(stride) = \(strideLength % stride))")
+        
+        if strideLength > stride {
             
-            let gap = Gap(lastUsedIndex + 1, index - 1)
+            let gap = Gap(lastNonGapValue + stride, currentNonGapValue - stride, stride: stride)
             
-            lastUsedIndex = index // Update
+            lastNonGapValue = currentNonGapValue // Update
             
             return gap
             
         }
         
-        lastUsedIndex = index // Update
+        lastNonGapValue = currentNonGapValue // Update
         
         return nil
         
@@ -65,15 +336,13 @@ public struct GapFinder {
     
     /// Creates a visual representation of missing elements in sequence.
     /// - note: this version of a `describe()` method,  shows both gaps 
-    /// *and* non-gaps. Gaps are depicted as ranges without borders, existing
-    /// non-gaps are shown as bordered ranges.
-    public static func describeGaps(in toCheck: [Int],
-                                    usingRange range: ClosedRange<Int>) -> String {
+    /// *and* non-gaps. Gaps are depicted as ranges without borders, consecutive
+    /// non-gap-values  are shown as bordered ranges.
+    fileprivate static func describe(gaps: [Gap],
+                                     stride: Int = 1,
+                                     inRange range: ClosedRange<Int>) -> String {
         
-        let gaps = find(in: toCheck,
-                        usingRange: range)
-        
-        if gaps.count == 0 { return GapFinder.noneFound /*EXIT*/ }
+        if gaps.count == 0 { return Gap.noneFound /*EXIT*/ }
         
         var output      = ""
         let paddWidth   = paddWidth - 2
@@ -119,7 +388,7 @@ public struct GapFinder {
         var needsBottom = false
         
         // Edge Case: first 2+ items are present
-        if gaps.first!.startIndex > range.lowerBound + 1 {
+        if gaps.first!.lowerMissingValue > range.lowerBound + stride {
         
             output   += centered(range.lowerBound, isTop: true)
             
@@ -127,8 +396,8 @@ public struct GapFinder {
         
         for gap in gaps {
             
-            let prev = gap.startIndex - 1
-            let next = gap.endIndex + 1
+            let prev = gap.lowerMissingValue - stride
+            let next = gap.upperMissingValue + stride
             
             if prev >= range.lowerBound {
                 
@@ -140,7 +409,7 @@ public struct GapFinder {
             
             output += gap.description
             
-            if next < range.upperBound + 1 {
+            if next < range.upperBound + stride {
                 
                 output += centered(next, isTop: true)
                 
@@ -151,10 +420,10 @@ public struct GapFinder {
         }
         
         // Edge Case: last number
-        let lastPuzzNum = range.upperBound
-        if gaps.last!.endIndex < lastPuzzNum {
+        let lastValue = range.upperBound
+        if gaps.last!.upperMissingValue < lastValue {
         
-            output   += centered(lastPuzzNum, isTop: false)
+            output   += centered(lastValue, isTop: false)
             needsBottom = false
             
         }
@@ -164,19 +433,14 @@ public struct GapFinder {
         return output
     }
     
-    
-    
-    /// Creates a more horizontal `String` representation of all missing elements
-    ///  compared to `describeGaps(in:)`
+    /// Creates a more horizontally compact `String` representation of all missing
+    /// elements compared to `describe(gaps:)`
     /// - note: this version of a `describe()` method, shows only gaps and not
     /// existing non-gap elements.
-    public static func compactDescribeGaps(in toCheck: [Int],
-                                           usingRange range: ClosedRange<Int>) -> String {
+    fileprivate static func compactDescribe(gaps: [Gap],
+                                       inRange range: ClosedRange<Int>) -> String {
         
         var output = ""
-        
-        let gaps = find(in: toCheck,
-                        usingRange: range)
         
         for gap in gaps {
             
@@ -187,92 +451,6 @@ public struct GapFinder {
         if !output.isEmpty {
             
             output = "Gaps:\n\(output)"
-            
-        }
-        
-        return output
-        
-    }
-    
-}
-
-/// Data structure describing missing numeric entries in presumed consecutive sequence of `Int`.
-///
-/// e.g. when searched over the range 1..10, the sequence 1,2,3,5,10 would return 2 `Gap`s:  [4], and [6...9]
-public struct Gap {
-    
-    var startIndex: Int
-    var endIndex: Int
-    
-    public init(_ startIndex: Int, _ endIndex: Int) {
-        
-        self.startIndex = startIndex
-        self.endIndex   = endIndex
-        
-    }
-    
-    public var size: Int { (endIndex - startIndex) + 1}
-    
-}
-
-extension Gap: Equatable {
-    
-    public static func ==(lhs: Gap, rhs: Gap) -> Bool {
-        
-        lhs.startIndex  == rhs.startIndex
-        &&
-        lhs.endIndex    == rhs.endIndex
-    }
-    
-}
-
-extension Gap: CustomStringConvertible {
-    
-    public var description: String {
-        
-        var output = ""
-        
-        func centerPad(_ subject: CustomStringConvertible) -> String {
-            
-            "\(subject.description.centerPadded(toLength: GapFinder.paddWidth))\n"
-            
-        }
-        
-        if size == 1  {
-            
-            output += centerPad(startIndex)
-            
-        } else {
-            
-            output += centerPad(startIndex)
-            output += centerPad("⇣")
-            output += centerPad(endIndex)
-            
-        }
-        
-        return output
-        
-    }
-    
-    var descriptionSimple: String {
-        
-        var output = ""
-        
-        func centerPad(_ subject: CustomStringConvertible) -> String {
-            
-            "[\(subject.description.centerPadded(toLength: GapFinder.paddWidth))]"
-            
-        }
-        
-        if size == 1  {
-            
-            output += centerPad(startIndex)
-            
-        } else {
-            
-            output += centerPad(startIndex)
-            output += "← \(size) →".centerPadded(toLength: GapFinder.paddWidth + 4)
-            output += centerPad(endIndex)
             
         }
         
