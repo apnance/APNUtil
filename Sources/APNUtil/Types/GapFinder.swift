@@ -259,6 +259,8 @@ public extension Array where Element : GapFindable {
                                                     stride: stride,
                                                     inRange: range)   /*EXIT*/
             
+            gapDescription += addendum
+            
             return gapDescription
             
         }
