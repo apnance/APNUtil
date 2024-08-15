@@ -219,7 +219,8 @@ public extension Array where Element : GapFindable {
     /// ```
     func describeGaps(stride: Int? = nil,
                       inRange range: ClosedRange<Int>? = nil,
-                      compactFormat: Bool = false) -> String {
+                      compactFormat: Bool = false,
+                      verboseMode: Bool = false) -> String {
         
         let stride = stride ?? 1 // Default
         
@@ -229,16 +230,36 @@ public extension Array where Element : GapFindable {
                                              stride: stride,
                                              usingRange: range)
         
+        var addendum = ""
+        
+        if verboseMode {
+            
+                addendum = """
+                            ----------------
+                            Range:  \(range)
+                            Stride: \(stride)
+                            Gaps:   \(gaps.count)
+                            ----------------
+                            """
+            
+        }
+        
         if compactFormat {
             
-            return GapFinder.compactDescribe(gaps: gaps,
-                                             inRange: range)   /*EXIT*/
+            var gapDescription = GapFinder.compactDescribe(gaps: gaps,
+                                                           inRange: range)
+            
+            gapDescription += addendum
+            
+            return gapDescription /*EXIT*/
             
         } else {
             
-            return GapFinder.describe(gaps: gaps,
-                                      stride: stride,
-                                      inRange: range)   /*EXIT*/
+            var gapDescription = GapFinder.describe(gaps: gaps,
+                                                    stride: stride,
+                                                    inRange: range)   /*EXIT*/
+            
+            return gapDescription
             
         }
         
