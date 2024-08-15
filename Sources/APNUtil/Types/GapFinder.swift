@@ -234,13 +234,13 @@ public extension Array where Element : GapFindable {
         
         if verboseMode {
             
-                addendum = """
-                            ----------------
-                            Range:  \(range)
-                            Stride: \(stride)
-                            Gaps:   \(gaps.count)
-                            ----------------
-                            """
+            addendum = """
+                        ----------------
+                        Range:  \(range)
+                        Stride: \(stride)
+                        Gaps:   \(gaps.count)
+                        ----------------
+                        """
             
         }
         
@@ -251,17 +251,17 @@ public extension Array where Element : GapFindable {
             
             gapDescription += addendum
             
-            return gapDescription /*EXIT*/
+            return gapDescription   /*EXIT*/
             
         } else {
             
             var gapDescription = GapFinder.describe(gaps: gaps,
                                                     stride: stride,
-                                                    inRange: range)   /*EXIT*/
+                                                    inRange: range)
             
             gapDescription += addendum
             
-            return gapDescription
+            return gapDescription   /*EXIT*/
             
         }
         
