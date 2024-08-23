@@ -233,7 +233,11 @@ public extension String {
 // MARK: - Date
 public extension String {
     
-    // Converts a string in format "MM/dd/yy" to a Date object.
+    /// Converts a string in format "MM/dd/yy" to a Date object.
+    ///
+    /// - important: calling this on an invalid date-string triggers a runtime error.
+    /// Use `simpleDateMaybe` where there is a chance the string might not be
+    /// a valid `String` representation of a `Date`.
     var simpleDate: Date {
         
         let formatter = DateFormatter()
@@ -246,7 +250,8 @@ public extension String {
     }
     
     
-    /// Like simpleDate but returns nil if `Self` doesn't contain a valid String encoding of a date.
+    /// Like `simpleDate` but returns nil if `Self` doesn't contain a valid `String`
+    /// encoding of a `Date`.
     var simpleDateMaybe: Date? {
         
         let formatter = DateFormatter()
