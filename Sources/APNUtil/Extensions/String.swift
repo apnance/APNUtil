@@ -72,6 +72,9 @@ public extension String {
         
     }
     
+    /// !self.isEmpty
+    var isNotEmpty: Bool { !self.isEmpty }
+    
     /// Returns true if `self` is non-empty and begins with letter
     var hasAlphaPrefix: Bool { (first ?? Character(" ")).isLetter }
     

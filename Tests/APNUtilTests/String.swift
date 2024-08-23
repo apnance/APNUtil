@@ -140,6 +140,17 @@ class StringTests: XCTestCase {
         
     }
     
+    func testIsNotEmpty() {
+        
+        XCTAssert(!"".isNotEmpty)
+        XCTAssertFalse("".isNotEmpty)
+        
+        XCTAssert("Stuff".isNotEmpty)
+        XCTAssertFalse(!"Stuff".isNotEmpty)
+        
+    }
+    
+    
     func testHasAlphaPrefix() {
         
         XCTAssert("a".hasAlphaPrefix)
