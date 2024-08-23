@@ -105,4 +105,24 @@ final class Optional: XCTestCase {
         
     }
     
+    func testElementCount() {
+        
+        let nilArray: [String]? = nil
+        
+        XCTAssert(nilArray.elementCount == 0)
+        
+        var startsNilArray: [String]?
+        XCTAssert(startsNilArray.elementCount == 0)
+        
+        startsNilArray = ["Fred"]
+        XCTAssert(startsNilArray.elementCount == 1)
+        
+        startsNilArray?.append("Barney")
+        XCTAssert(startsNilArray.elementCount == 2)
+        
+        startsNilArray?.removeAll()
+        XCTAssert(startsNilArray.elementCount == 0)
+        
+    }
+    
 }

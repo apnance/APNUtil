@@ -34,4 +34,7 @@ public extension [String]? {
         
     }
     
+    /// Returns the number of `Element`s, 0 if `self` is `nil`.
+    var elementCount: Int { self?.count ?? 0 }
+    
 }
