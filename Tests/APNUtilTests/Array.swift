@@ -830,6 +830,25 @@ class ArrayTests: XCTestCase {
         
     }
         
+    // MARK: - Array<String.Subsequence>
+    func testAsStringArray() {
+        
+        var subseq: [String.SubSequence] = "This is a sentence!".split(separator: " ")
+        
+        let string = subseq.asStringArray
+        
+        XCTAssert(string[0] == "This")
+        XCTAssert(string[1] == "is")
+        XCTAssert(string[2] == "a")
+        XCTAssert(string[3] == "sentence!")
+        
+        subseq = []
+        subseq.append(String.SubSequence("zip zap zop"))
+        XCTAssert(subseq.asStringArray[0] == "zip zap zop")
+        
+    }
+    
+    
     // MARK: - Array<CustomStringConvertible>
     func testAsDelimitedString() {
         

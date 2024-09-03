@@ -352,11 +352,18 @@ public extension Array where Element == String {
     
 }
 
+// MARK: - Array<String.SubSequence>
+public extension Array where Element == String.SubSequence {
+    
+    /// Converts `self` from `[String.Subsequence]`-> `[String]`
+    var asStringArray: [String] { map{ String($0) } }
+    
+}
+
 // MARK: - Array<CustomStringConvertible>
 public extension Array where Element : CustomStringConvertible {
     
     func printSimple() { forEach{ print($0) } }
-    
     
     /// Returns a string representation of `self` as an oxford-comma separated list with "or" conjunction as appropriate.
     /// 
