@@ -14,7 +14,7 @@ public class Queue<Item: Equatable> {
     private var first: Linked?          // beginning of Queue
     private var last: Linked?           // end of Queue
     
-    public private (set) var count = 0  // number of elements on Queue
+    public private(set) var count = 0  // number of elements on Queue
     public var isEmpty: Bool { first == nil; }
     
     public init() { assert(check()) }

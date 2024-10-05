@@ -35,7 +35,7 @@ public class MultipeerManager: NSObject {
     private let peerID: MCPeerID!
     private let session: MCSession!
     private var adAssistant:MCAdvertiserAssistant!
-    public private (set) var isHost = false
+    public private(set) var isHost = false
     
     public var connectionState: MultipeerConnectionState {
         
