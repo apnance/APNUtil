@@ -120,6 +120,8 @@ public extension UIColor {
     
     @objc var isNotGray: Bool { return rgba.isNotGray }
     @objc var isNotBlack: Bool { return rgba.isNotBlack}
+    
+    var hexValue: String? { getHex() }
     var rgba: RGBA { return getRGBA() }
     
     // MARK: Initializers
@@ -213,6 +215,25 @@ public extension UIColor {
         let _ = getRed(&rgba.r, green: &rgba.g, blue: &rgba.b, alpha: &rgba.a)
         
         return rgba
+    }
+    
+    func getHex() -> String? {
+        
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        
+        // Extract color components
+        self.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        // Convert to 0-255 scale and format as hex string
+        let r = Int(red * 255)
+        let g = Int(green * 255)
+        let b = Int(blue * 255)
+        
+        return String(format: "#%02X%02X%02X", r, g, b)
+        
     }
     
     func changeComponents(red: CGFloat? = nil,
