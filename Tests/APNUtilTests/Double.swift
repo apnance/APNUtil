@@ -18,6 +18,17 @@ class DoubleTests: XCTestCase {
         
     }
     
+    func testHasDecimal() {
+        
+        let yes = [1.1, -1.1, 1.0000000000001, -1.000000000000001, Double.pi]
+        let no  = [1.0, -1.0, Double.infinity, 1.00000000]
+        
+        for val in yes { XCTAssert(val.hasDecimal,      "\(val) expects a non-zero decimal value but has zero decimal value.") }
+        for val in no { XCTAssertFalse(val.hasDecimal,  "\(val) expects a zero decimal value but has a non-zero value.") }
+        
+        
+    }
+    
     func testRounding() {
                 
         let value = 1.12345678901

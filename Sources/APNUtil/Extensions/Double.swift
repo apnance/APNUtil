@@ -13,6 +13,15 @@ public extension Double {
     /// Converts `self` to Int equivalent.
     var int: Int { Int(self) }
     
+    /// `true` if `self` has a non-zero decimal value, else `false`
+    var hasDecimal: Bool {
+        
+        var integerPart: Double = 0.0
+        let fractionalPart = modf(self, &integerPart)
+        return fractionalPart != 0.0
+        
+    }
+    
     /// Used to compare `self` against other for equality allowing for floating point imprecision via the eFactor.
     func approxEquals(_ other: Double,
                       withErrorFactor eFactor: Double = 3.0) -> Bool {
