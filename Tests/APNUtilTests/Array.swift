@@ -880,6 +880,23 @@ class ArrayTests: XCTestCase {
     }
     
     // MARK: - Array<Int>
+    func testIntAsDelimitedString() {
+        
+        var actual = [1,2,3].asDelimitedString("/")
+        var expected = "1/2/3"
+        XCTAssert(expected == actual, "Expected: \(expected)\nActual: \(actual)")
+        
+        actual = [1,2,3,4].asDelimitedString("%%")
+        expected = "1%%2%%3%%4"
+        XCTAssert(expected == actual, "Expected: \(expected)\nActual: \(actual)")
+        
+        actual = [1,2,3].asDelimitedString("")
+        expected = "123"
+        XCTAssert(expected == actual, "Expected: \(expected)\nActual: \(actual)")
+        
+    }
+    
+    
     func testPercent() {
         let testArray = [1,2,3]
         

@@ -279,6 +279,12 @@ public extension Array where Element == CustomStringConvertible {
 // MARK: - Array<Int>
 public extension Array where Element == Int {
     
+    func asDelimitedString(_ delimiter: String) -> String {
+        
+        (self as [CustomStringConvertible]).asDelimitedString(delimiter)
+        
+    }
+    
     /// Returns a `Double` representing the percent the specified Int is of the sum of all `Ints` in the `Array<Int>`.
     func percent(index i: Int, roundedTo digits: Int = 2) -> Double? {
         
