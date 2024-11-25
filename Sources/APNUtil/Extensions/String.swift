@@ -241,6 +241,7 @@ public extension String {
     /// - important: calling this on an invalid date-string triggers a runtime error.
     /// Use `simpleDateMaybe` where there is a chance the string might not be
     /// a valid `String` representation of a `Date`.
+    /// - note: the `Date` returned is set to the hour of the local time zone.
     var simpleDate: Date {
         
         let formatter = DateFormatter()
@@ -249,7 +250,7 @@ public extension String {
         let date = formatter.date(from: self)
         
         return date!
-
+        
     }
     
     
