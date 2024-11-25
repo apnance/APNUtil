@@ -29,6 +29,18 @@ class DoubleTests: XCTestCase {
         
     }
     
+    func testSmartMantissa() {
+        
+        XCTAssert(12.0.smartMantissa == "12")
+        XCTAssert(12.01.smartMantissa == "12.01")
+        XCTAssert(12.010.smartMantissa == "12.01")
+        XCTAssert(0.0.smartMantissa == "0")
+        
+        XCTAssert((-10.0).smartMantissa == "-10")
+        XCTAssert((-10.01).smartMantissa == "-10.01")
+        
+    }
+    
     func testRounding() {
                 
         let value = 1.12345678901

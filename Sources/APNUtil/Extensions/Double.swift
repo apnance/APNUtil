@@ -84,6 +84,28 @@ public extension Double {
     
 }
 
+// MARK: - Conversion
+public extension Double {
+    
+    /// Outputs a string version of self that has omits the decimal place when the decimal is 0.
+    /// ```
+    /// //e.g.
+    ///
+    /// var double = 12.0
+    ///
+    /// // Compare
+    /// double.description == "12.0"    // As expected
+    /// // v.
+    /// double.asSmartString == "12"    // Note no mantissa
+    ///
+    /// double = 12.1
+    /// double.asSmartString == "12.1"  // And of course.
+    ///
+    /// ```
+    var smartMantissa: String { hasDecimal ? description : Int(self).description }
+    
+}
+
 // MARK: - Time
 public extension Double {
     
