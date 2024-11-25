@@ -8,7 +8,75 @@
 
 import Foundation
 
+extension Calendar {
+    
+    /// Returns a `Calendar` with `timeZone` set to UTC time.
+    static var utc: Calendar {
+        
+        // Create a calendar instance with the UTC time zone
+        var utcCalendar         = Calendar.current
+        utcCalendar.timeZone    = TimeZone(secondsFromGMT: 0)!
+        
+        return utcCalendar
+        
+    }
+    
+}
+
 public extension Date {
+    
+    /// UTC based day value
+    var dayComponentUTC:   Int { Calendar.utc.component(.day, from: self ) }
+    
+    /// UTC based hour value
+    var hourComponentUTC:  Int { Calendar.utc.component(.hour, from: self ) }
+    
+    /// UTC based minute value
+    var minComponentUTC:   Int { Calendar.utc.component(.minute, from: self ) }
+    
+    /// UTC based second value
+    var secComponentUTC:   Int { Calendar.utc.component(.second, from: self ) }
+    
+    /// UTC based time zone value - non-zero numbers indicate a difference from UTC(Greenwhich Mean Time)
+    var timeZoneComponentUTC:   Int { Calendar.utc.component(.timeZone, from: self ) }
+    
+    /// Sets time zone to UTC and updates any hour, minute, and/or second components.
+    func update(hour: Int?  = nil,
+                min: Int?   = nil,
+                sec: Int?   = nil,
+                timeZone: TimeZone? = nil) -> Date? {
+        
+        guard hour.isNotNil || min.isNotNil || sec.isNotNil || timeZone.isNotNil
+        else { return nil /*EXIT*/ }
+        
+        // New UTC-Based Calendar
+        let calendar = Calendar.utc
+        
+        // Date Components
+        var components = calendar.dateComponents([.year,
+                                                  .month,
+                                                  .day,
+                                                  .hour,
+                                                  .minute,
+                                                  .second,
+                                                  .timeZone], from: self)
+        
+        // Change Hour
+        if let hour = hour { components.hour = hour }
+        
+        // Change Min
+        if let min  = min { components.minute = min }
+        
+        // Change Sec
+        if let sec  = sec { components.second = sec }
+        
+        // Change TZ
+        if let timeZone  = timeZone { components.timeZone = timeZone }
+        
+        // Return New Date
+        return calendar.date(from: components)
+        
+    }
     
     /// Returns today's date as `Date`
     static var now: Date { Date() }

@@ -14,6 +14,77 @@ import APNUtil
 
 class DateTests: XCTestCase {
  
+    func testComponentsUTC() {
+        
+        let date        = "12/12/23".simpleDate
+        
+        // Time Zone
+        var expected    = 0
+        var actual      = date.timeZoneComponentUTC
+        XCTAssert(expected == actual,
+                  "Expected: \(expected) - Actual: \(actual)")
+        
+        // Hour
+        expected        = 7 // Difference between Phoenix time and GMT
+        actual          = date.hourComponentUTC
+        XCTAssert(expected == actual,
+                  "Expected: \(expected) - Actual: \(actual)")
+        
+        // Min
+        expected        = 0
+        actual          = date.minComponentUTC
+        XCTAssert(expected == actual,
+                  "Expected: \(expected) - Actual: \(actual)")
+        
+        // Sec
+        expected        = 0
+        actual          = date.secComponentUTC
+        XCTAssert(expected == actual,
+                  "Expected: \(expected) - Actual: \(actual)")
+        
+    }
+    
+    func testUpdate() {
+        
+        var date        = "1/1/21".simpleDate
+        var expected    = 7
+        var actual      = date.hourComponentUTC
+        
+        XCTAssert(expected == actual,
+                  "Expected: \(expected) - Actual: \(actual)")
+        
+        // No Update
+        date    = date.update() ?? date
+        actual  = date.hourComponentUTC
+        XCTAssert(expected == actual,
+                  "Expected: \(expected) - Actual: \(actual)")
+        
+        // Update Hour
+        expected    = 5
+        date        = date.update(hour: expected)!
+        actual      = date.hourComponentUTC
+        XCTAssert(expected == actual,
+                  "Expected: \(expected) - Actual: \(actual)")
+        
+        // Update Min
+        expected    = 6
+        date        = date.update(min:expected)!
+        actual      = date.minComponentUTC
+        XCTAssert(expected == actual,
+                  "Expected: \(expected) - Actual: \(actual)")
+        
+        // Update Sec
+        expected    = 7
+        date        = date.update(sec:expected)!
+        actual      = date.secComponentUTC
+        XCTAssert(expected == actual,
+                  "Expected: \(expected) - Actual: \(actual)")
+        
+        // Check TimeZone is UTC
+        XCTAssert(date.timeZoneComponentUTC == 0, "\(date)'s time zone component is not UTC but is off by \(date.timeZoneComponentUTC)")
+        
+    }
+    
     func testClean() {
         
         var date = "05/24/2002".simpleDate
