@@ -432,4 +432,139 @@ class DictionaryTests: XCTestCase {
         
     }
     
+    func testInsert() {
+        
+        var myDict: [String : [Any]] = ["Names" : ["Winston", "Kit"]]
+        
+        XCTAssert(myDict["Names"] != nil)
+        XCTAssert(myDict["Names"]?.count == 2)
+        
+        // Append to Existing
+        myDict.insert("Scratch", atKey: "Names")
+        XCTAssert(myDict["Names"]?.count == 3)
+        
+        // Insert New
+        XCTAssert(myDict["Ages"]?.count == nil)
+        
+        myDict.insert(5, atKey: "Ages")
+        XCTAssert(myDict["Ages"]?.count == 1)
+        
+        myDict.insert(1, atKey: "Ages")
+        XCTAssert(myDict["Ages"]?.count == 2)
+        
+        myDict.insert(10, atKey: "Ages")
+        XCTAssert(myDict["Ages"]?.count == 3)
+        
+        print(myDict)
+        
+    }
+    
+    func testRemove() {
+        
+        var myDict: [String : [Any]] = [
+            "Names" : ["Winston", "Kit", "Scratch"],
+            "Ages" : [5, 1, 10]]
+        
+        XCTAssert(myDict["Names"]?.count == 3)
+        XCTAssert(myDict["Ages"]?.count == 3)
+        
+        // Remove
+        var nameRemoved = myDict.remove("Scratch", forKey: "Names")
+        
+        // Non-Existing Kye
+        var ageRemoved = myDict.remove(5, forKey: "ZOINKS") ?? [-1]
+        
+        myDict.remove("Scratch", forKey: "Names")
+        XCTAssert(myDict["Names"]?.count == 2)
+        XCTAssert(myDict["Ages"]?.count == 3)
+        XCTAssert(nameRemoved == ["Scratch"])
+        XCTAssert(ageRemoved == [-1])
+        
+        // Remove
+        nameRemoved = myDict.remove("Winston", forKey: "Names") ?? nameRemoved
+        nameRemoved = myDict.remove("Winston", forKey: "Names") ?? nameRemoved
+        
+        ageRemoved = myDict.remove(10, forKey: "Ages") ?? ageRemoved
+        
+        XCTAssert(myDict["Names"]?.count == 1)
+        XCTAssert(myDict["Ages"]?.count == 2)
+        XCTAssert(nameRemoved == ["Winston"])
+        XCTAssert(ageRemoved == [10])
+        
+        // REmove
+        nameRemoved = myDict.remove("Kit", forKey: "Names") ?? nameRemoved
+        myDict.remove("Winston", forKey: "Names")
+        myDict.remove("Scratch", forKey: "Names")
+        
+        ageRemoved = myDict.remove(5, forKey: "Ages") ?? ageRemoved
+        
+        XCTAssert(myDict["Names"]?.count == 0)
+        XCTAssert(myDict["Ages"]?.count == 1)
+        XCTAssert(nameRemoved == ["Kit"])
+        XCTAssert(ageRemoved == [5])
+        
+        ageRemoved = myDict.remove(1, forKey: "Ages") ?? ageRemoved
+        
+        XCTAssert(myDict["Names"]?.count == 0)
+        XCTAssert(myDict["Ages"]?.count == 0)
+        XCTAssert(nameRemoved == ["Kit"])
+        XCTAssert(ageRemoved == [1])
+        
+    }
+    
+    func testInsertAIGenerated() {
+        var myDict: [String: [Any]] = [:]
+        
+        // Test inserting into an empty dictionary
+        myDict.insert("Apple", atKey: "fruits")
+        XCTAssertEqual(myDict["fruits"]?.count, 1)
+        XCTAssertEqual(myDict["fruits"]?.first as? String, "Apple")
+        
+        // Test inserting into an existing key
+        myDict.insert("Banana", atKey: "fruits")
+        XCTAssertEqual(myDict["fruits"]?.count, 2)
+        XCTAssertTrue(myDict["fruits"]?.contains { $0 as? String == "Banana" } ?? false)
+        
+        // Test inserting into a new key
+        myDict.insert(42, atKey: "numbers")
+        XCTAssertEqual(myDict["numbers"]?.count, 1)
+        XCTAssertEqual(myDict["numbers"]?.first as? Int, 42)
+    }
+    
+    func testRemoveAIGenerated() {
+        struct Fruit: Equatable {
+            let name: String
+        }
+        
+        var myDict: [String: [Any]] = [
+            "fruits": [Fruit(name: "Apple"), Fruit(name: "Banana"), Fruit(name: "Banana"), Fruit(name: "Orange")],
+            "numbers": [42, 99, 17]
+        ]
+        
+        // Test removing a value that exists
+        if let removedFruits = myDict.remove(Fruit(name: "Banana"), forKey: "fruits") {
+            XCTAssertEqual(removedFruits.count, 2)
+            XCTAssertFalse(myDict["fruits"]?.contains { $0 as? Fruit == Fruit(name: "Banana") } ?? false)
+        } else {
+            XCTFail("Expected to remove bananas")
+        }
+        
+        // Test removing a value that does not exist
+        let removedNumbers = myDict.remove(100, forKey: "numbers")
+        XCTAssertNil(removedNumbers)
+        
+        // Test removing the last element in an array (key should not be removed)
+        if let removedNumber = myDict.remove(42, forKey: "numbers") {
+            XCTAssertEqual(removedNumber.count, 1)
+            XCTAssertFalse(myDict["numbers"]?.contains { $0 as? Int == 42 } ?? false)
+        } else {
+            XCTFail("Expected to remove 42")
+        }
+        
+        // Verify that the key still exists even if its array is empty
+        XCTAssertNotNil(myDict["numbers"])
+        XCTAssertEqual(myDict["numbers"]?.count, 2) // Original count was 3, removed 1
+    }
+    
+    
 }
