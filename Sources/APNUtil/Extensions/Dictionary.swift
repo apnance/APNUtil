@@ -289,13 +289,20 @@ public extension Dictionary where Value == [Any] {
     ///   - value: The value to insert or to create a new array with.
     ///   - key: The key for which to insert the new value.
     mutating func insert(_ value: Any, atKey key: Key) {
+        
         if var existingArray = self[key] {
-            // If the key exists, insert the new value to the existing array.
+            
+            // Append
             existingArray.append(value)
+            
+            // Update
             self[key] = existingArray
+            
         } else {
-            // If the key does not exist, create a new array with the given value and assign it to the dictionary.
+            
+            // Insert
             self[key] = [value]
+            
         }
     }
     
@@ -308,72 +315,23 @@ public extension Dictionary where Value == [Any] {
     /// - Returns: An array of removed values if any were found and removed, otherwise nil.
     @discardableResult
     mutating func remove<T: Equatable>(_ value: T, forKey key: Key) -> [T]? {
+        
         // Check if the key exists in the dictionary and the associated value is an array of the expected type.
         if var existingArray = self[key] as? [T] {
-            // Remove all instances of the value from the array.
+            
+            // Remove
             let removedValues = existingArray.filter { $0 == value }
             existingArray.removeAll { $0 == value }
-            // Update the dictionary with the modified array.
+            
+            // Update
             self[key] = existingArray as? Value
+            
             return removedValues.isEmpty ? nil : removedValues
+            
         }
-        // Return nil if the key or value does not exist.
+        
+        // Key or Value doesn't exist
         return nil
     }
-    
-    // TODO: Clean Up - delete
-    
-    //    /// Appends a new value to the array for the given `key` if the `key` exists in the `self`.
-    //    /// If the `key` does not exist, creates a new `array` with the given value and assigns it to the
-    //    /// `self` under `key`
-    //    ///
-    //    /// - Parameters:
-    //    ///   - value: The value to append or to create a new array with.
-    //    ///   - atKey: The key for which to append the new value.
-    //    mutating func insert(_ value: Any, atKey key: Key) {
-    //
-    //        if var existing = self[key] {
-    //
-    //            // Append
-    //            existing.append(value)
-    //            self[key] = existing
-    //
-    //        } else {
-    //
-    //            // Create
-    //            self[key] = [value]
-    //
-    //        }
-    //
-    //    }
-    //
-    //    /// Removes a value from the array for the given `key` if the value exists in the array.
-    //    /// Returns the removed value if it was found and removed, otherwise returns `nil`.
-    //    ///
-    //    /// - Parameters:
-    //    ///   - value: The value to remove from the array.
-    //    ///   - forKey: The key for which to remove the value.
-    //    /// - Returns: The removed value if it was found and removed, otherwise nil.
-    //    mutating func remove<T: Equatable>(_ value: T, forKey key: Key) -> T? {
-    //
-    //        // Check if the key exists in the dictionary
-    //        if var existingArray = self[key] as? [T] {
-    //
-    //            // Remove the value from the array
-    //            existingArray.removeAll { $0 == value }
-    //
-    //            // Update the dictionary
-    //            self[key] = existingArray as? Value
-    //
-    //            return value    // EXIT
-    //
-    //        } else {
-    //
-    //            return nil      // EXIT
-    //
-    //        }
-    //
-    //
-    //    }
     
 }
