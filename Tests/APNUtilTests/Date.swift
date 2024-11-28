@@ -16,11 +16,29 @@ class DateTests: XCTestCase {
  
     func testComponentsUTC() {
         
-        let date        = "12/12/23".simpleDate
+        let date        = "11/12/23".simpleDate
         
         // Time Zone
         var expected    = 0
         var actual      = date.timeZoneComponentUTC
+        XCTAssert(expected == actual,
+                  "Expected: \(expected) - Actual: \(actual)")
+        
+        // Year
+        expected        = 2023 // Difference between Phoenix time and GMT
+        actual          = date.yearComponentUTC
+        XCTAssert(expected == actual,
+                  "Expected: \(expected) - Actual: \(actual)")
+        
+        // Month
+        expected        = 11 // Difference between Phoenix time and GMT
+        actual          = date.monthComponentUTC
+        XCTAssert(expected == actual,
+                  "Expected: \(expected) - Actual: \(actual)")
+        
+        // Day
+        expected        = 12 // Difference between Phoenix time and GMT
+        actual          = date.dayComponentUTC
         XCTAssert(expected == actual,
                   "Expected: \(expected) - Actual: \(actual)")
         

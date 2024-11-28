@@ -25,6 +25,12 @@ extension Calendar {
 
 public extension Date {
     
+    /// UTC based Year value
+    var yearComponentUTC:   Int { Calendar.utc.component(.year, from: self ) }
+    
+    /// UTC based day value
+    var monthComponentUTC:   Int { Calendar.utc.component(.month, from: self ) }
+    
     /// UTC based day value
     var dayComponentUTC:   Int { Calendar.utc.component(.day, from: self ) }
     
