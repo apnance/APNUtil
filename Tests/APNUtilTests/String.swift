@@ -551,6 +551,35 @@ class StringTests: XCTestCase {
                 """)
             
         }
+    }
+    
+    func testAsRegularExpression2() {
+        
+        let original =
+        """
+        c,50.16,1974-11-19 07:00:00 +0000
+        c,0.05016,2019-03-21 07:00:00 +0000
+        s,160.16,1974-11-19 07:00:00 +0000
+        s,16.016,1975-05-26 07:00:00 +0000
+        s,1.6016,2011-12-09 07:00:00 +0000
+        s,0.16016,2019-03-21 07:00:00 +0000
+        
+        
+        [Note: above output copied to pasteboard]
+        """
+        
+        let asRegEx = original.asRegularExpression
+        
+        XCTAssert(original =~ asRegEx,
+            """
+            
+            -----
+            Original:
+            \(original)
+            RegEx:
+            \(asRegEx)
+            -----
+            """)
         
     }
     
@@ -558,6 +587,7 @@ class StringTests: XCTestCase {
         
         XCTAssert("adsfsa" =~ ".*")
         XCTAssert("\t\n " =~ "\\s+")
+        XCTAssert("[]" =~ "\\[\\]")
         XCTAssert("This is a bunch of words!" =~ "^[A-Z][^.?!]*[.?!]$")
         XCTAssert("FouR" =~ "....")
         XCTAssertFalse("FIVE" =~ ".....")

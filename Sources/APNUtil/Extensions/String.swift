@@ -307,7 +307,7 @@ public extension String {
         var regex = self
         
         /// Regex Tokens
-        regex = regex.replacingOccurrences(of: "([$^~.+*?{}():!])", with: "\\\\$0", options: [.regularExpression])
+        regex = regex.replacingOccurrences(of: "([$^~.+*?{}():!\\[\\]])", with: "\\\\$0", options: [.regularExpression])
         
         /// Whitespace
         regex = regex.replacingOccurrences(of: "\\s+", with: "\\\\s\\+", options: [.regularExpression])
