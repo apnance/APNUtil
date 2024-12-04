@@ -6,7 +6,7 @@
 //  Copyright © 2018 Nance. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 public extension String.SubSequence {
     
@@ -14,6 +14,7 @@ public extension String.SubSequence {
     
 }
 
+// - MARK: - Tweak
 public extension String {
     
     /// Passes itself to the provided closure returning the return value.
@@ -57,7 +58,6 @@ public extension String {
         String(dropLast(n).dropFirst(n))
         
     }
-
     
     /// - Returns: Returns a copy of `self` with all leading/trailing and duplicate spaces removed.
     ///
@@ -253,13 +253,41 @@ public extension String {
         
     }
     
-    
-    /// Like `simpleDate` but returns nil if `Self` doesn't contain a valid `String`
+    /// Like `simpleDate` but returns nil if `self` doesn't contain a valid `String`
     /// encoding of a `Date`.
     var simpleDateMaybe: Date? {
         
         let formatter = DateFormatter()
         formatter.dateFormat = "MM/dd/yy"
+        
+        let maybeDate = formatter.date(from: self)
+        
+        return maybeDate
+        
+    }
+    
+    /// Converts a string in format "MM/dd/yy" to a `Date` object.
+    ///
+    /// - important: calling this on an invalid date-string triggers a runtime error.
+    /// Use `fullDateMaybe` where there is a chance the string might not be
+    /// a valid `String` representation of a `Date`.
+    var fullDate: Date {
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        
+        let date = formatter.date(from: self)
+        
+        return date!
+        
+    }
+    
+    /// Like `fullDate` but returns nil if `self` doesn't contain a valid `String`
+    /// encoding of a `Date`.
+    var fullDateMaybe: Date? {
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
         
         let maybeDate = formatter.date(from: self)
         
@@ -274,9 +302,24 @@ public extension String {
     
     func toArray() -> [String] { map{ String($0) } }
     
+    /// Replaces whitespace with whitespace wildcards and escapes all characters in string that are Regular Expression tokens.
+    var asRegularExpression: String {
+        var regex = self
+        
+        /// Regex Tokens
+        regex = regex.replacingOccurrences(of: "([$^~.+*?{}():!])", with: "\\\\$0", options: [.regularExpression])
+        
+        /// Whitespace
+        regex = regex.replacingOccurrences(of: "\\s+", with: "\\\\s\\+", options: [.regularExpression])
+        
+        
+        return regex
+        
+    }
+    
 }
 
-// - MARK: Fontify
+// - MARK: - Fontify
 public extension String {
     
     /// ASCIIFont definition to use to format fontified output.
@@ -298,7 +341,7 @@ public extension String {
     
 }
 
-// - MARK: Obfuscate
+// - MARK: - Obfuscate
 public extension String {
     
     func shift(by: Int) -> String {
@@ -355,6 +398,30 @@ public extension String {
         let shiftBy = Int(Character("A").asciiValue!) - Int(key.asciiValue!)
         
         return serious.shift(by: shiftBy)
+        
+    }
+    
+}
+
+// - MARK: - Operators
+infix operator =~ : ComparisonPrecedence
+
+@available(iOS 16.0, *)
+public extension String {
+    
+    /// String comparison operator that returns true if the `String` encoded
+    /// regular expression on the RHS matches the `String` on the LHS.
+    static func =~ (lhs: String, rhs: String) -> Bool {
+        do {
+            
+            return lhs.wholeMatch(of: try Regex(rhs)) != nil
+            
+        } catch {
+            
+            print("Invalid regular expression: \(error.localizedDescription)")
+            return false
+            
+        }
         
     }
     

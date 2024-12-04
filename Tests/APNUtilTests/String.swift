@@ -9,6 +9,7 @@
 import XCTest
 import APNUtil
 
+@available(iOS 16.0, *)
 class StringTests: XCTestCase {
     
     func testSnip() {
@@ -419,6 +420,148 @@ class StringTests: XCTestCase {
             print("\n-----------------------------\n")
             
         }
+    }
+    
+    func testSimpleDate() {
+        
+        let date1 = "12/1/24".simpleDate
+        let date2 = "12.1.24".simpleDate
+        let date3 = "12-1-24".simpleDate
+        
+        XCTAssert(date1 == date2)
+        XCTAssert(date3 == date2)
+        XCTAssert(date3 == date1)
+        
+    }
+    
+    func testSimpleDateMaybe() {
+        
+        let date1 = "12/1/24".simpleDateMaybe
+        let date2 = "12.1.24".simpleDateMaybe
+        let date3 = "12-1-24".simpleDateMaybe
+        
+        let date1a = "12/1/24".simpleDate
+        let date2a = "12.1.24".simpleDate
+        let date3a = "12-1-24".simpleDate
+        
+        let date4 = "12-1-24-24".simpleDateMaybe
+        let date5 = "BLAH!!!".simpleDateMaybe
+        let date6 = "".simpleDateMaybe
+        
+        
+        XCTAssert(date1.isNotNil)
+        XCTAssert(date2.isNotNil)
+        XCTAssert(date3.isNotNil)
+        
+        XCTAssert(date1 == date1a)
+        XCTAssert(date2 == date2a)
+        XCTAssert(date3 == date3a)
+        
+        XCTAssert(date1 == date2)
+        XCTAssert(date3 == date2)
+        XCTAssert(date3 == date1)
+        
+        XCTAssert(date4.isNil)
+        XCTAssert(date5.isNil)
+        XCTAssert(date6.isNil)
+        
+        
+    }
+    
+    func testFullDate() {
+        
+        func testEquality(_ date1: Date, _ date2: Date) {
+            
+            print("""
+                    
+                    Comparing: 
+                    \(date1) 
+                    to 
+                    \(date2)
+                    date1 == date2 ? \(date1 == date2)
+                    
+                    """)
+            
+            XCTAssert(date1.yearComponentUTC      == date2.yearComponentUTC)
+            XCTAssert(date1.monthComponentUTC     == date2.monthComponentUTC)
+            XCTAssert(date1.dayComponentUTC       == date2.dayComponentUTC)
+            
+            XCTAssert(date1.hourComponentUTC      == date2.hourComponentUTC)
+            XCTAssert(date1.minComponentUTC       == date2.minComponentUTC)
+            XCTAssert(date1.secComponentUTC       == date2.secComponentUTC)
+            XCTAssert(date1.timeZoneComponentUTC  == date2.timeZoneComponentUTC)
+        }
+        
+        let now         = Date()
+        let nowString   = now.description
+        let nowFullDate = nowString.fullDate
+        
+        testEquality(now, nowFullDate)
+        
+    }
+    
+    func testFullDateMaybe() {
+        
+        let dateYes = "2024-12-04 01:17:52 +0000".fullDate
+        let dateMaybe = "2024-12-04 01:17:52 +0000".fullDateMaybe
+        let dateNo = "Jabber".fullDateMaybe
+        
+        XCTAssert(dateMaybe.isNotNil)
+        XCTAssert(dateNo.isNil)
+        
+        XCTAssert(dateYes == dateMaybe)
+        
+    }
+    
+    func testAsRegularExpression() {
+        
+        var strings = ["Simple", "", "123123BlahBlah12313_"]
+        
+        for string in strings { XCTAssert( string == string.asRegularExpression) }
+        
+        strings = [
+            "$This is a +* * ? $entence!",
+            "$This is a +**? $entence!" ]
+        
+        for string in strings {
+            
+            let regEx  = string.asRegularExpression
+            XCTAssert(string != regEx)
+            XCTAssert(string =~ regEx,
+                    """
+                    
+                    -----
+                    String:
+                    \(string)
+                    RegEx:
+                    \(regEx)
+                    -----
+                    """)
+            
+            XCTAssertFalse(string =~ string)
+            
+            print("""
+                
+                -----
+                String:
+                \(string)
+                RegEx:
+                \(regEx)
+                -----
+                """)
+            
+        }
+        
+    }
+    
+    func testEqualsRegExpOperator() {
+        
+        XCTAssert("adsfsa" =~ ".*")
+        XCTAssert("\t\n " =~ "\\s+")
+        XCTAssert("This is a bunch of words!" =~ "^[A-Z][^.?!]*[.?!]$")
+        XCTAssert("FouR" =~ "....")
+        XCTAssertFalse("FIVE" =~ ".....")
+        
     }
     
 }
