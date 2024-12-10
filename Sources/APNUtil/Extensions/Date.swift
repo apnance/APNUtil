@@ -119,16 +119,6 @@ public extension Date {
     var isFuture: Bool { daysFrom(earlierDate: Date.now) > 0 }
     
     // MARK: - Conversion to String
-    /// Returns a `String` representation of the `Date` in the form `05-24-73`
-    var simple: String {
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM-dd-yy"
-        
-        return dateFormatter.string(from: self)
-        
-    }
-    
     /// Returns a `String` representation of  they day portion of `self` in form `04`
     var day: String {
         let dateFormatter = DateFormatter()
@@ -137,45 +127,41 @@ public extension Date {
         return dateFormatter.string(from: self)
     }
     
-    /// Returns a `String` representation of the `Date` in the form `05_24_73`
-    var simpleSlash: String {
+    /// Formats `self` using specified format `String` and device `Locale`
+    /// - Parameter using: Format `String`
+    /// - Returns: String formatted version of `self` using device's
+    /// `Locale`
+    func format(_ using: String) -> String {
         
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM/dd/yy"
+        dateFormatter.dateFormat = using
+        
+        // Set the locale to the current locale
+        dateFormatter.locale = Locale.current
         
         return dateFormatter.string(from: self)
         
     }
     
+    /// Returns a string representation of the time for this device's current locale.
+    /// - note: use this in lieu of the default Date().description when capturing
+    /// local date/time is important.
+    var descriptionLocal: String { format("yyyy-MM-dd HH:mm:ss Z") }
+    
+    /// Returns a `String` representation of the `Date` in the form `05-24-73`
+    var simple: String { format("MM-dd-yy") }
+    
     /// Returns a `String` representation of the `Date` in the form `05_24_73`
-    var simpleUnderScore: String {
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM_dd_yy"
-        
-        return dateFormatter.string(from: self)
-        
-    }
+    var simpleSlash: String { format("MM/dd/yy") }
+    
+    /// Returns a `String` representation of the `Date` in the form `05_24_73`
+    var simpleUnderScore: String { format("MM_dd_yy") }
     
     /// - Returns: a `String` representation of the `Date` in the form `05.24.73`
-    var simplePeriod: String {
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MM.dd.yy"
-        
-        return dateFormatter.string(from: self)
-        
-    }
+    var simplePeriod: String { format("MM.dd.yy") }
     
     /// Returns a `String` representation of the `Date` in the form `07-14-24 15:30:05.709`
-    var clean: String {
-        
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "MM-dd-yy HH:mm:ss.SSS"
-            
-            return dateFormatter.string(from: self)
-            
-    }
+    var clean: String { format("MM-dd-yy HH:mm:ss.SSS") }
     
     
     // MARK: - Mathematical Comparisons

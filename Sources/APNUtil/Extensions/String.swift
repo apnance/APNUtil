@@ -236,33 +236,35 @@ public extension String {
 // MARK: - Date
 public extension String {
     
+    
+    /// Returns a `DateFormatter` with `locale` set to device's current `Locale`
+    private var localFormatter: DateFormatter {
+        
+        let dateFormatter = DateFormatter()
+        
+        // Set the locale to the current locale
+        dateFormatter.locale = Locale.current
+        
+        return dateFormatter
+        
+    }
+    
     /// Converts a string in format "MM/dd/yy" to a Date object.
     ///
     /// - important: calling this on an invalid date-string triggers a runtime error.
     /// Use `simpleDateMaybe` where there is a chance the string might not be
     /// a valid `String` representation of a `Date`.
     /// - note: the `Date` returned is set to the hour of the local time zone.
-    var simpleDate: Date {
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/yy"
-        
-        let date = formatter.date(from: self)
-        
-        return date!
-        
-    }
+    var simpleDate: Date { simpleDateMaybe! }
     
     /// Like `simpleDate` but returns nil if `self` doesn't contain a valid `String`
     /// encoding of a `Date`.
     var simpleDateMaybe: Date? {
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "MM/dd/yy"
+        let formatter           = localFormatter
+        formatter.dateFormat    = "MM/dd/yy"
         
-        let maybeDate = formatter.date(from: self)
-        
-        return maybeDate
+        return formatter.date(from: self)
         
     }
     
@@ -271,27 +273,17 @@ public extension String {
     /// - important: calling this on an invalid date-string triggers a runtime error.
     /// Use `fullDateMaybe` where there is a chance the string might not be
     /// a valid `String` representation of a `Date`.
-    var fullDate: Date {
-        
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
-        
-        let date = formatter.date(from: self)
-        
-        return date!
-        
-    }
+    var fullDate: Date { fullDateMaybe! }
     
     /// Like `fullDate` but returns nil if `self` doesn't contain a valid `String`
     /// encoding of a `Date`.
     var fullDateMaybe: Date? {
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss Z"
+        let formatter           = localFormatter
+        formatter.dateFormat    = "yyyy-MM-dd HH:mm:ss Z"
         
-        let maybeDate = formatter.date(from: self)
+        return formatter.date(from: self)
         
-        return maybeDate
         
     }
     

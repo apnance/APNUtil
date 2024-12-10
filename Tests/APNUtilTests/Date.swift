@@ -13,7 +13,27 @@ import Foundation
 import APNUtil
 
 class DateTests: XCTestCase {
- 
+    
+    func testDescriptionLocal() {
+        
+        let utc     = Date().description
+        let local   = Date().descriptionLocal
+        
+        // Check if the current time zone is UTC
+        let isUTC = TimeZone.current.secondsFromGMT() == 0
+        
+        if !isUTC {
+            
+            XCTAssert(utc != local)
+            
+        } else {
+            
+            XCTAssert(utc == local)
+            
+        }
+        
+    }
+    
     func testComponentsUTC() {
         
         let date        = "11/12/23".simpleDate
