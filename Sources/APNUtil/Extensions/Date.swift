@@ -127,7 +127,7 @@ public extension Date {
         return dateFormatter.string(from: self)
     }
     
-    /// Formats `self` using specified format `String` and device `Locale`
+    /// Formats `self` using specified format `String` and device's current `Locale`
     /// - Parameter using: Format `String`
     /// - Returns: String formatted version of `self` using device's
     /// `Locale`
