@@ -422,6 +422,26 @@ class StringTests: XCTestCase {
         }
     }
     
+    
+    func testTimeZoneOffset() {
+        
+        // Create UTC Date
+        let dateUTC = "2024-12-09 22:40:35 +0000".fullDate
+        let datePHX = "2024-12-09 22:40:35 -0700".fullDate
+        
+        let dateUTC2 = Date().description
+        
+        
+        let offsetDateUTC   = dateUTC.description.timeZoneOffset
+        let offsetDateUTC2  = dateUTC2.description.timeZoneOffset
+        let offsetDatePHX   = datePHX.descriptionLocal.timeZoneOffset
+        
+        
+        XCTAssert(offsetDateUTC == offsetDateUTC2,  "\n\(offsetDateUTC)(UTC) == \(offsetDateUTC2)(UTC2)")
+        XCTAssert(offsetDateUTC != offsetDatePHX,   "\n\(offsetDateUTC)(UTC) == \(offsetDatePHX)(PHX)")
+        
+    }
+    
     func testSimpleDate() {
         
         let date1 = "12/1/24".simpleDate

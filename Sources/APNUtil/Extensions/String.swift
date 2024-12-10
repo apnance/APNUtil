@@ -268,7 +268,7 @@ public extension String {
         
     }
     
-    /// Converts a string in format "MM/dd/yy" to a `Date` object.
+    /// Converts a string in format "yyyy-MM-dd HH:mm:ss Z" to a `Date` object.
     ///
     /// - important: calling this on an invalid date-string triggers a runtime error.
     /// Use `fullDateMaybe` where there is a chance the string might not be
@@ -279,11 +279,22 @@ public extension String {
     /// encoding of a `Date`.
     var fullDateMaybe: Date? {
         
-        let formatter           = localFormatter
+        let formatter           = DateFormatter()
         formatter.dateFormat    = "yyyy-MM-dd HH:mm:ss Z"
         
-        return formatter.date(from: self)
+        let maybeDate = formatter.date(from: self)
         
+        return maybeDate
+        
+    }
+    
+    /// Returns the offset from UTC for a date string formatted as "1983-12-01 10:10:10 -0700"
+    /// The return value would be "-0700" for this date `String`.
+    var timeZoneOffset: String {
+        
+        let timeZoneOffset = String(suffix(5))
+        
+        return timeZoneOffset
         
     }
     
