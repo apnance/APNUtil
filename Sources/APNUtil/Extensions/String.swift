@@ -406,6 +406,165 @@ public extension String {
     
 }
 
+// - MARK: - Utilities
+public extension String {
+    
+    /// Returns a string highlighting the first difference between `self` and `other`
+    func diff(with other: String) -> String {
+        
+        if self == other { return "" /*EXIT*/ }
+        
+        let minLength = min(self.count, other.count)
+        
+        for i in 0..<minLength {
+            let index1 = self.index(self.startIndex, offsetBy: i)
+            let index2 = other.index(other.startIndex, offsetBy: i)
+            
+            if self[index1] != other[index2] {
+                
+                
+                let char1 = self[index1]
+                let char2 = other[index2] == "\n" ? "\\n" : String(other[index2])
+                
+                var result = self
+                result.replaceSubrange(index1...index1, with: "[\(char1)|\(char2)]")
+                
+                return result
+            }
+            
+        }
+        
+        // If no differences are found, return string1 with brackets around the
+        // first additional character if string2 is longer
+        if self.count < other.count {
+            
+            var result = self
+            
+            let additionalChar = other[other.index(other.startIndex, offsetBy: self.count)]
+            let differingChar = additionalChar == "\n" ? "\\n" : String(additionalChar)
+            
+            result.append("[\(differingChar)]")
+            
+            return result
+            
+        }
+        
+        return self
+    }
+    
+    //    func diff6(_ string1: String, _ string2: String) -> String {
+    //        let minLength = min(string1.count, string2.count)
+    //
+    //        for i in 0..<minLength {
+    //            let index1 = string1.index(string1.startIndex, offsetBy: i)
+    //            let index2 = string2.index(string2.startIndex, offsetBy: i)
+    //
+    //            if string1[index1] != string2[index2] {
+    //                var result = string1
+    //                let differingChar = string2[index2] == "\n" ? "\\n" : String(string2[index2])
+    //                result.replaceSubrange(index1...index1, with: ">\(differingChar)<")
+    //                return result
+    //            }
+    //        }
+    //
+    //        // If no differences are found, return string1 with brackets around the first additional character if string2 is longer
+    //        if string1.count < string2.count {
+    //            var result = string1
+    //            let additionalChar = string2[string2.index(string2.startIndex, offsetBy: string1.count)]
+    //            let differingChar = additionalChar == "\n" ? "\\n" : String(additionalChar)
+    //            result.append(">\(differingChar)<")
+    //            return result
+    //        }
+    //
+    //        return string1
+    //    }
+    
+    
+    //    func diff5(_ string1: String, _ string2: String) -> String {
+    //        let minLength = min(string1.count, string2.count)
+    //
+    //        for i in 0..<minLength {
+    //            let index1 = string1.index(string1.startIndex, offsetBy: i)
+    //            let index2 = string2.index(string2.startIndex, offsetBy: i)
+    //
+    //            if string1[index1] != string2[index2] {
+    //                var result = string1
+    //                let differingChar = string2[index2] == "\n" ? "\\n" : String(string2[index2])
+    //                result.insert(">", at: index1)
+    //                let insertIndex = result.index(after: index1)
+    //                result.insert(contentsOf: differingChar, at: insertIndex)
+    //                result.insert("<", at: result.index(insertIndex, offsetBy: differingChar.count))
+    //                return result
+    //            }
+    //        }
+    //
+    //        // If no differences are found, return string1 with brackets around the first additional character if string2 is longer
+    //        if string1.count < string2.count {
+    //            var result = string1
+    //            let additionalIndex = string1.endIndex
+    //            let additionalChar = string2[string2.index(string2.startIndex, offsetBy: string1.count)]
+    //            let differingChar = additionalChar == "\n" ? "\\n" : String(additionalChar)
+    //            result.insert(">", at: additionalIndex)
+    //            result.append(differingChar)
+    //            result.append("<")
+    //            return result
+    //        }
+    //
+    //        return string1
+    //    }
+    
+    //    func diff2(_ string1: String, _ string2: String) -> String {
+    //
+    //        let minLength = min(string1.count, string2.count)
+    //
+    //        for i in 0..<minLength {
+    //
+    //            let index1 = string1.index(string1.startIndex, offsetBy: i)
+    //            let index2 = string2.index(string2.startIndex, offsetBy: i)
+    //
+    //            if string1[index1] != string2[index2] {
+    //                var result = string1
+    //                result.insert("*", at: index1)
+    //                return result
+    //            }
+    //
+    //        }
+    //
+    //        // If no differences are found, return string1 with an asterisk appended if string2 is longer
+    //        if string1.count < string2.count {
+    //
+    //            return string1 + "*"
+    //
+    //        }
+    //
+    //        return string1
+    //    }
+    
+    
+    /// Returns an exhaustive array of all character differences between `self` and other.
+    func diffDeep(with other: String) -> [(index: Int, char1: Character, char2: Character)] {
+        
+        let maxLength   = max(self.count, other.count)
+        var differences = [(index: Int, char1: Character, char2: Character)]()
+        
+        for i in 0..<maxLength {
+            
+            let char1: Character = i < self.count ? self[self.index(self.startIndex, offsetBy: i)] : "*"
+            let char2: Character = i < other.count ? other[other.index(other.startIndex, offsetBy: i)] : "*"
+            
+            if char1 != char2 {
+                differences.append((index: i, char1: char1, char2: char2))
+            }
+            
+        }
+        
+        return differences
+        
+    }
+    
+}
+
+
 // - MARK: - Operators
 infix operator =~ : ComparisonPrecedence
 
