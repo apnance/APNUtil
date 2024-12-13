@@ -614,4 +614,148 @@ class StringTests: XCTestCase {
         
     }
     
+    func testDiff() {
+        
+        let string1 = """
+                        Alice was beginning to get very tired of sitting by her 
+                        sister on the bank, and of having nothing to do: once or
+                        twice she had peeped into the book her sister was 
+                        reading, but it had no pictures or conversations in it, 
+                        “and what is the use of a book,” thought Alice, 
+                        “without pictures or conversations?”
+                        """
+        
+        let string2     = string1
+        
+        // Identical Strings
+        check("", String.diff(string1, string2))
+        
+        let string3 = """
+                        Alice was beginning to get very tired of sitting by her 
+                        sister on the bank, and of having nothing to do: once or
+                        twice she had peeped into the book her sister was. 
+                        reading, but it had no pictures or conversations in it, 
+                        “and what is the use of a book,” thought Alice, 
+                        “without pictures or conversations?”
+                        """
+        
+        // Space Replaced by Period
+        check("""
+                Alice was beginning to get very tired of sitting by her 
+                sister on the bank, and of having nothing to do: once or
+                twice she had peeped into the book her sister was[ |.]
+                reading, but it had no pictures or conversations in it, 
+                “and what is the use of a book,” thought Alice, 
+                “without pictures or conversations?”
+                """,
+              String.diff(string1, string3))
+        
+        let string4 = "This is 'Going to be hard to find!'"
+        let string5 = "This is `Going to be hard to find!'"
+        
+        // Different Paren
+        check("This is ['|`]Going to be hard to find!'",
+              String.diff(string4, string5))
+        
+        // RHS Longer
+        check("Loooooong[|er]", String.diff("Loooooong", "Loooooonger"))
+        
+        // LHS Longer
+        check("Loooooong[er|]", String.diff("Loooooonger", "Loooooong"))
+        
+    }
+    
+    func testDiffDeep() {
+        
+        func test(str1: String,
+                  str2: String,
+                  expectedDiffs: [Int: (Character, Character)]) {
+            
+            let diffs = String.diffDeep(str1, str2)
+            let diffKeys = diffs.keys.sorted()
+            
+            let expectedDiffsKeys = expectedDiffs.keys.sorted()
+            
+            XCTAssert(expectedDiffsKeys == diffKeys)
+            
+            for key in diffKeys {
+                
+                let expected    = expectedDiffs[key]
+                let actual      = diffs[key]
+                
+                XCTAssert(expected?.0       == actual?.0
+                          && expected?.1    == actual?.1,
+                          """
+                            
+                            -----
+                            Char \(key)
+                            - - -
+                            Expected: (\(expected?.0.description ?? "nil"),\(expected?.1.description ?? "nil"))
+                            Actual:   (\(actual?.0.description ?? "nil"),\(actual?.1.description ?? "nil"))
+                            -----
+                            """)
+                
+            }
+            
+            if expectedDiffsKeys != diffKeys {
+                
+                
+                print("""
+                
+                -----
+                \(str1)
+                \(str2)
+                - - -
+                """)
+                
+                for key in diffs.keys.sorted() {
+                    
+                    let actual  = diffs[key]
+                    let expected    = expectedDiffs[key]
+                    
+                    print("""
+                            [\(key)] '\(expected?.0.description ?? "nil"),\(expected?.1.description ?? "nil")' \
+                            -> \
+                            '\(actual?.0.description ?? "nil"),\(actual?.1.description ?? "nil")'
+                            """)
+                    
+                }
+                
+                print("-----")
+                
+            }
+            
+        }
+        
+        test(str1: "Aaron", str2: "AaRon", expectedDiffs: [2 : ("r", "R")])
+        
+        let string1 = """
+                        Alice was beginning to get very tired of sitting by her 
+                        sister on the bank, and of having nothing to do: once or
+                        twice she had peeped into the book her sister was 
+                        reading, but it had no pictures or conversations in it, 
+                        “and what is the use of a book,” thought Alice, 
+                        “without pictures or conversations?”
+                        """
+        
+        let string2     = string1
+        
+        test(str1: string1, str2: string2, expectedDiffs: [:])
+        
+        let string3 = """
+                        alice was beginning to get very tired of sitting by her 
+                        sister on the bank, and of having nothing to do: once or
+                        twice she had peeped into the  ook her sister was.
+                        reading, but it had no pictures or conversations in it, 
+                        “and what is the Use of a book,” thought Alice, 
+                        “without pictures or conṽersations?”
+                        """
+        test(str1: string1, str2: string3, expectedDiffs: [0: ("A","a"),
+                                                           144:("b"," "),
+                                                           163:(" ","."),
+                                                           239:("u","U"),
+                                                           295:("v","ṽ")])
+        
+    }
+    
 }
