@@ -105,7 +105,13 @@ public extension UIColor {
         if let aIncr = aIncr { a = min(max(a + aIncr, 0.0), 1.0) }
         
         return UIColor(red: r, green: g, blue: b, alpha: a)
-
+        
+    }
+    
+    /// Creates alternating shades of the `self` (e.g. for use in coloring consecutive rows of text)
+    func altRow(_ n: Int, _ otherColor: UIColor? = nil) -> UIColor {
+        
+        (n % 2 == 0) ? self : (otherColor ?? self.halfAlpha)
         
     }
     
