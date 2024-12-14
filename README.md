@@ -1,3 +1,3 @@
 # APNUtil
 
-A description of this package.
+A collection of generalized utilities.
