@@ -229,13 +229,108 @@ class DateTests: XCTestCase {
         
     }
     
+    /// Checks that d1 and d2 are the same calendar day ignoring time element of `Date` arguments.
+    func sameDay(_ d1: Date, _ d2: Date) -> Bool { d1.simple == d2.simple }
+    
+    func testOffsetBy() {
+        
+        let yesterday   = Date.yesterday
+        let today       = Date.today
+        let tomorrow    = Date.tomorrow
+        
+        let day1        = "5-24-73".simpleDate
+        let day2        = day1.offsetBy(365)!
+        
+        let expected    = "05-24-74"
+        let actual      = day2.simple
+        
+        XCTAssert(expected == actual,
+                    """
+                    
+                    Expected: \(expected)
+                      Actual: \(actual)
+                    """)
+        
+        XCTAssert(sameDay(today.offsetBy(-1)!, yesterday))
+        XCTAssert(sameDay(today.offsetBy(+1)!, tomorrow))
+        
+    }
+    
+    func testYesterday() {
+        
+        let yesterday   = Date.yesterday
+        let today       = Date.today
+        let tomorrow    = Date.tomorrow
+        
+        print("""
+            Yesterday: \(yesterday.simple)
+                Today: \(today.simple)
+             Tomorrow: \(tomorrow.simple)
+            """)
+        
+        XCTAssert(yesterday.isPast)
+        XCTAssertFalse(sameDay(yesterday, today))
+        XCTAssertFalse(sameDay(yesterday, tomorrow))
+        XCTAssert(sameDay(yesterday.next, today))
+        
+    }
+    
+    func testToday() {
+        
+        let yesterday   = Date.yesterday
+        let today       = Date.today
+        let tomorrow    = Date.tomorrow
+        
+        print("""
+            Yesterday: \(yesterday.simple)
+                Today: \(today.simple)
+             Tomorrow: \(tomorrow.simple)
+            """)
+        
+        XCTAssert(today.isToday)
+        XCTAssertFalse(today.isPast)
+        XCTAssertFalse(today.isFuture)
+        
+        XCTAssert(sameDay(Date(), today))
+        XCTAssertFalse(sameDay(today, yesterday))
+        XCTAssertFalse(sameDay(today, tomorrow))
+        
+        XCTAssert(sameDay(today, yesterday.next))
+        XCTAssert(sameDay(today, tomorrow.previous))
+        
+    }
+    
+    func testTomorrow() {
+        
+        let yesterday   = Date.yesterday
+        let today       = Date.today
+        let tomorrow    = Date.tomorrow
+        
+        print("""
+            Yesterday: \(yesterday.simple)
+                Today: \(today.simple)
+             Tomorrow: \(tomorrow.simple)
+            """)
+        
+        XCTAssert(tomorrow.isFuture)
+        XCTAssertFalse(tomorrow.isToday)
+        XCTAssertFalse(tomorrow.isPast)
+        
+        XCTAssertFalse(sameDay(Date(), tomorrow))
+        XCTAssertFalse(sameDay(tomorrow, yesterday))
+        XCTAssertFalse(sameDay(today, tomorrow))
+        
+        XCTAssert(sameDay(tomorrow, today.next))
+        XCTAssert(sameDay(tomorrow.previous, today))
+        
+    }
+    
     func testIsToday() {
-
+        
         XCTAssert(Date.now.isToday)
         XCTAssert(Date().isToday)
         XCTAssertFalse("05.24.73".simpleDate.isToday)
         XCTAssertFalse("05.24.69".simpleDate.isToday)
-
         
         let thisWeek = Date.now.weekStarting()
         for day in thisWeek {

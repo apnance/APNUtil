@@ -23,6 +23,7 @@ extension Calendar {
     
 }
 
+// - MARK: - Adjustments and Inspection
 public extension Date {
     
     /// UTC based Year value
@@ -84,8 +85,30 @@ public extension Date {
         
     }
     
+    /// Returns a new date offset by `n` days from `self`
+    func offsetBy(_ n: Int) -> Date? {
+        let calendar = Calendar.current
+        
+        let hours = n * 24
+        
+        return calendar.date(byAdding: .hour, value: hours, to: self)
+        
+    }
+    
     /// Returns today's date as `Date`
     static var now: Date { Date() }
+    
+    static var yesterday: Date { Date().offsetBy(-1)! }
+    
+    static var today: Date { Date() }
+    
+    static var tomorrow: Date { Date().offsetBy(1)! }
+    
+    /// The day after `self`
+    var next: Date { offsetBy(1)! }
+    
+    /// The day before `self`
+    var previous: Date { offsetBy(-1)! }
     
     /// Returns the number of seconds in 1 day.
     static let secondsInDay = (60.0 * 60.0 * 24.0)
