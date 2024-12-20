@@ -11,7 +11,7 @@ import Foundation
 public struct Stack<Element: Equatable> {
     
     // MARK: - Properties
-    private var data = Array<Element>()
+    private(set) var data = Array<Element>()
     public var isEmpty: Bool { data.isEmpty }
     public var count: Int { data.count }
     
