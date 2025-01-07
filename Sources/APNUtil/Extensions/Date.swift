@@ -89,9 +89,7 @@ public extension Date {
     func offsetBy(_ n: Int) -> Date? {
         let calendar = Calendar.current
         
-        let hours = n * 24
-        
-        return calendar.date(byAdding: .hour, value: hours, to: self)
+        return calendar.date(byAdding: .day, value: n, to: self)
         
     }
     
