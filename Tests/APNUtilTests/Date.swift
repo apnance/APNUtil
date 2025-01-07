@@ -238,18 +238,21 @@ class DateTests: XCTestCase {
         let today       = Date.today
         let tomorrow    = Date.tomorrow
         
+        // Check 365 Days In Future
         let day1        = "5-24-73".simpleDate
         let day2        = day1.offsetBy(365)!
         
-        let expected    = "05-24-74"
-        let actual      = day2.simple
+        var expected    = "05-24-74"
+        var actual      = day2.simple
+        check(expected, actual)
         
-        XCTAssert(expected == actual,
-                    """
-                    
-                    Expected: \(expected)
-                      Actual: \(actual)
-                    """)
+        // Check 365 Days Ago
+        expected = Calendar.current.date(byAdding: .day,
+                                         value: -365,
+                                         to: Date())!.simple
+        actual = Date().offsetBy(-365)!.simple
+        
+        check(expected, actual)
         
         XCTAssert(sameDay(today.offsetBy(-1)!, yesterday))
         XCTAssert(sameDay(today.offsetBy(+1)!, tomorrow))
