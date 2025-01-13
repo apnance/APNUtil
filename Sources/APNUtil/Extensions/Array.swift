@@ -384,13 +384,16 @@ public extension Array where Element : CustomStringConvertible {
         
         let strArray = self.map{$0.description}
         
+        // Empty Conjunction?
+        let conjunction = conjunction.isEmpty ? "" : "\(conjunction) "
+        
         switch strArray.count {
                 
             case 0: return defaultOutput
                 
             case 1: return "\(wrapper)\(strArray[0])\(wrapper)"
                 
-            case 2: return "\(wrapper)\(strArray[0])\(wrapper) \(conjunction) \(wrapper)\(strArray[1])\(wrapper)"
+            case 2: return "\(wrapper)\(strArray[0])\(wrapper) \(conjunction)\(wrapper)\(strArray[1])\(wrapper)"
                 
             default:
                 
@@ -398,7 +401,7 @@ public extension Array where Element : CustomStringConvertible {
                 
                 for (i, string) in strArray.enumerated() {
                     
-                    output += (i != strArray.lastUsableIndex)  ? "\(wrapper)\(string)\(wrapper), " : "\(conjunction) \(wrapper)\(string)\(wrapper)"
+                    output += (i != strArray.lastUsableIndex)  ? "\(wrapper)\(string)\(wrapper), " : "\(conjunction)\(wrapper)\(string)\(wrapper)"
                     
                 }
                 

@@ -849,6 +849,28 @@ class ArrayTests: XCTestCase {
     }
     
     
+    func testAsCommaSeperatedString() {
+        
+        let intArray    = [1,2,3]
+        var expected    = "'1', '2', or '3'"
+        var actual      = intArray.asCommaSeperatedString()
+        XCTAssert( expected == actual, "Expected: \(expected) - Actual: \(actual)")
+        
+        expected    = "'1', '2', & '3'"
+        actual      = intArray.asCommaSeperatedString(conjunction: "&")
+        XCTAssert( expected == actual, "Expected: \(expected) - Actual: \(actual)")
+        
+        expected    = "1, 2, & 3"
+        actual      = intArray.asCommaSeperatedString(conjunction: "&", wrapper: "")
+        XCTAssert( expected == actual, "Expected: \(expected) - Actual: \(actual)")
+        
+        expected    = "1, 2, 3"
+        actual      = intArray.asCommaSeperatedString(conjunction: "", wrapper: "")
+        XCTAssert( expected == actual, "Expected: \(expected) - Actual: \(actual)")
+        
+    }
+    
+    
     // MARK: - Array<CustomStringConvertible>
     func testAsDelimitedString() {
         
