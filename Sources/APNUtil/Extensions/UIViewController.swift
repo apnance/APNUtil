@@ -9,6 +9,7 @@
 import Foundation
 import MessageUI
 
+// - MARK: - Mail Composer
 /// `Struct` encapsulating all required elements of a `MFMailComposeViewController` attachment data.
 /// Used to pre-populate attachments argument of `UIViewController.emailComposer()`
 public struct MailAttachment {
@@ -63,6 +64,51 @@ public extension UIViewController {
             
             Utils.log("MFMailComposeViewController cannot send mail.")
             
+        }
+        
+    }
+    
+}
+
+// - MARK: - General Utility
+public extension UIViewController {
+    
+    // - MARK: Device Orientation (e.g Portrait, Landscape...)
+    // Trigger Reveluation of Supported Interface Orientations(i.e. calling of supportedInterfaceOrientations)
+    func triggerReevaluationOfSupportedInterfaceOrientations() {
+        
+        UIApplication.shared.delegate?.window??.rootViewController = nil
+        UIApplication.shared.delegate?.window??.rootViewController = self
+        
+    }
+        
+    /// Triggers reporting of device orientation.
+    /// - note: A useful starting point for handling device orienation changes
+    func reportDeviceOrientationChanges() {
+        
+        // Notifications
+        NotificationCenter.default.removeObserver(self, name: UIDevice.orientationDidChangeNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(deviceDidRotate),
+                                               name: UIDevice.orientationDidChangeNotification,
+                                               object: nil)
+        
+    }
+    
+    @objc private func deviceDidRotate() {
+        
+        switch UIDevice.current.orientation {
+                
+            case .portrait:             print("Device rotated to Portrait")
+                
+            case .landscapeLeft:        print("Device rotated to Landscape Left")
+                
+            case .landscapeRight:       print("Device rotated to Landscape Right")
+            
+            case .portraitUpsideDown:   print("Device rotated to Portrait Upside Down")
+            
+            default:                    print("Unknown orientation")
+                
         }
         
     }
