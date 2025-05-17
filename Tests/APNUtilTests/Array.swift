@@ -370,6 +370,74 @@ class ArrayTests: XCTestCase {
         
     }
     
+    func testAt() {
+        
+        // Empty [Any] Array
+        XCTAssert([].at(-150)               == nil)
+        XCTAssert([].at(-1)                 == nil)
+        XCTAssert([].at(0)                  == nil)
+        XCTAssert([].at(1)                  == nil)
+        XCTAssert([].at(150)                == nil)
+        
+        // Any Array
+        let anyArray:[Any] = [1, 2, "blah", 2.0]
+        XCTAssert([1, 2, "blah", 2.0].at(-150)              == nil)
+        XCTAssert([1, 2, "blah", 2.0].at(-1)                == nil)
+        XCTAssert(([1, 2, "blah", 2.0].at(0) as! Int)       == 1)
+        XCTAssert(([1, 2, "blah", 2.0].at(1) as! Int)       == 2)
+        XCTAssert(([1, 2, "blah", 2.0].at(2) as! String)    == "blah")
+        XCTAssert(([1, 2, "blah", 2.0].at(3) as! Double)    == 2.0)
+        XCTAssert([1, 2, "blah", 2.0].at(150)               == nil)
+        
+        // Int
+        // Empty Int Array
+        let emptyIntArray = [Int]()
+        XCTAssert(emptyIntArray.at(-150)    == nil)
+        XCTAssert(emptyIntArray.at(-1)      == nil)
+        XCTAssert(emptyIntArray.at(0)       == nil)
+        XCTAssert(emptyIntArray.at(1)       == nil)
+        XCTAssert(emptyIntArray.at(150)     == nil)
+        
+        // Single Int Array
+        XCTAssert([3].at(-150)              == nil)
+        XCTAssert([3].at(-5)                == nil)
+        XCTAssert([3].at(0)                 == 3)
+        XCTAssert([3].at(1)                 == nil)
+        XCTAssert([3].at(2)                 == nil)
+        XCTAssert([3].at(3)                 == nil)
+        XCTAssert([3].at(150)               == nil)
+        
+        // Multi-Element Array
+        XCTAssert([1,2,3].at(-150)          == nil)
+        XCTAssert([1,2,3].at(-5)            == nil)
+        XCTAssert([1,2,3].at(0)             == 1)
+        XCTAssert([1,2,3].at(1)             == 2)
+        XCTAssert([1,2,3].at(2)             == 3)
+        XCTAssert([1,2,3].at(3)             == nil)
+        XCTAssert([1,2,3].at(150)           == nil)
+        
+        // String
+        // Empty String Array
+        let emptyStringArray = [String]()
+        XCTAssert(emptyStringArray.at(-150) == nil)
+        XCTAssert(emptyStringArray.at(-1)   == nil)
+        XCTAssert(emptyStringArray.at(0)    == nil)
+        XCTAssert(emptyStringArray.at(1)    == nil)
+        XCTAssert(emptyStringArray.at(150)  == nil)
+        
+        // Single String Array
+        XCTAssert(["zoink"].at(-1)          == nil)
+        XCTAssert(["zoink"].at(0)           == "zoink")
+        XCTAssert(["zoink"].at(1)           == nil)
+        
+        // Multi-String Array
+        XCTAssert(["zoink", "pink"].at(-1)  == nil)
+        XCTAssert(["zoink", "pink"].at(0)   == "zoink")
+        XCTAssert(["zoink", "pink"].at(1)   == "pink")
+        XCTAssert(["zoink", "pink"].at(2)   == nil)
+        
+    }
+    
     func testElementPreceding() {
         
         let a1 = ["Bea", "Lee", "Aaron", "Pip", "Win"]

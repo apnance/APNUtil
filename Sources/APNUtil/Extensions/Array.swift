@@ -127,6 +127,14 @@ public extension Array {
         
     }
     
+    
+    /// Returns the `Element` at the specified `index`.  If index is out of bounds returns `nil`.
+    func at(_ index: Int) -> Element? {
+        
+        isInBounds(index: index) ? self[index] : nil
+        
+    }
+    
     /// Returns the `Array` `Element` preceding the specfied `index` or `nil` if the
     /// `index` is not within the `Array`'s bounds.
     func elementPreceding(index: Int) -> Element? {
