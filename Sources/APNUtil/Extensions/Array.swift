@@ -127,7 +127,6 @@ public extension Array {
         
     }
     
-    
     /// Returns the `Element` at the specified `index`.  If index is out of bounds returns `nil`.
     func at(_ index: Int) -> Element? {
         
