@@ -8,6 +8,17 @@
 
 import UIKit
 
+// - MARK: DispatchQueue
+
+/// Runs closure on main thread after specified delay in seconds.
+public func async(_ code: @escaping () -> (), after: Double) {
+    
+    let delay = max(after, 0.0)
+    
+    DispatchQueue.main.asyncAfter(deadline: .now() + delay) { code() }
+    
+}
+
 // - MARK: Misc
 /// Triggers a haptic response with default style of .light
 public func haptic(withStyle style: UIImpactFeedbackGenerator.FeedbackStyle = .light) {
