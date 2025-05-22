@@ -9,7 +9,6 @@
 import UIKit
 
 // - MARK: DispatchQueue
-
 /// Runs closure on main thread after specified delay in seconds.
 public func async(_ code: @escaping () -> (), after: Double) {
     
