@@ -259,6 +259,8 @@ public extension Array where Element : GapFindable {
                                                     stride: stride,
                                                     inRange: range)
             
+            gapDescription += verboseMode && gapDescription == Gap.noneFound ? "\n" : ""
+                
             gapDescription += addendum
             
             return gapDescription   /*EXIT*/

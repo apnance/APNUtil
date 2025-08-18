@@ -9,17 +9,33 @@ import XCTest
 import APNUtil
 
 final class GapFinderTests: XCTestCase {
+
+    func echo(_ stride: Int, _ array: [Int], _ range: ClosedRange<Int>) {
+        print("""
+                 -----
+                [array:\(array)\tstride:\(stride)\trange:\(range)]
+                \(array.describeGaps(stride: stride, inRange: range))\
+                 - - -
+                """)
+    }
+    
+    func echo(_ stride: Int, _ array: [Int], _ range: ClosedRange<Int>, _ expected: String, _ actual: String) {
+        
+        print("""
+                ---------
+                [array:\(array)\tstride:\(stride)\trange:\(range)]
+                - - - - -
+                Expected:
+                \(expected)
+                
+                Actual:
+                \(actual)
+                - - - - -
+                """)
+        
+    }
     
     func testFindGapsStrideUnsortedArray() {
-        
-        func echo(_ stride: Int, _ array: [Int], _ range: ClosedRange<Int>) {
-            print("""
-                     -----
-                    [array:\(array)\tstride:\(stride)\trange:\(range)]
-                    \(array.describeGaps(stride: stride, inRange: range))\
-                     - - -
-                    """)
-        }
         
         var stride      = 1
         var array       = [5,4,2,1]
@@ -51,15 +67,6 @@ final class GapFinderTests: XCTestCase {
     }
     
     func testFindGapsStride() {
-        
-        func echo(_ stride: Int, _ array: [Int], _ range: ClosedRange<Int>) {
-            print("""
-                     -----
-                    [array:\(array)\tstride:\(stride)\trange:\(range)]
-                    \(array.describeGaps(stride: stride, inRange: range))\
-                     - - -
-                    """)
-        }
         
         // STRIDE 1
         var stride      = 1
@@ -147,22 +154,6 @@ final class GapFinderTests: XCTestCase {
     }
     
     func testDescribeGapsWithStrideUnsortedArray() {
-        
-        func echo(_ stride: Int, _ array: [Int], _ range: ClosedRange<Int>, _ expected: String, _ actual: String) {
-            
-            print("""
-                    ---------
-                    [array:\(array)\tstride:\(stride)\trange:\(range)]
-                    - - - - -
-                    Expected:
-                    \(expected)
-                    
-                    Actual:
-                    \(actual)
-                    - - - - -
-                    """)
-            
-        }
         
         // STRIDE 1
         // covered extensively below in other describeGapTests
@@ -353,22 +344,6 @@ final class GapFinderTests: XCTestCase {
     }
     
     func testDescribeGapsWithStride() {
-        
-        func echo(_ stride: Int, _ array: [Int], _ range: ClosedRange<Int>, _ expected: String, _ actual: String) {
-            
-            print("""
-                    ---------
-                    [array:\(array)\tstride:\(stride)\trange:\(range)]
-                    - - - - -
-                    Expected:
-                    \(expected)
-                    
-                    Actual:
-                    \(actual)
-                    - - - - -
-                    """)
-            
-        }
         
         // STRIDE 1
         // covered extensively below in other describeGapTests
@@ -599,7 +574,7 @@ final class GapFinderTests: XCTestCase {
                             
                             """
         XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
-                
+        
         array       = [3]
         range       = 1...5
         
@@ -618,10 +593,10 @@ final class GapFinderTests: XCTestCase {
                             """
         
         XCTAssert(expected == actual, "Expected:\n\(expected) - Actual:\n\(actual)")
-                
+        
         array       = [3,4]
         range       = 1...5
-  
+        
         actual      = array.describeGaps(inRange: range)
         expected    = """
                               1  \n\
@@ -732,7 +707,6 @@ final class GapFinderTests: XCTestCase {
                         └───┘\n
                         """
         XCTAssert(expected == actual, "Expected:\n\(expected)\n---\nActual:\n\(actual)")
-        
     }
     
     func testDescribeGaps2() {
@@ -1208,6 +1182,79 @@ final class GapFinderTests: XCTestCase {
                         
                         """
         XCTAssert(expected == actual, "Expected:\n\(expected)\n---\nActual:\n\(actual)")
+        
+    }
+    
+    func testVerboseDescribeGaps() {
+        
+        var array       = [1,2,4,5]
+        var range       = 1...5
+        
+        var actual      = array.describeGaps(inRange: range,
+                                             verboseMode: true)
+        var expected    = """
+                            ┌───┐
+                            │ 1 │
+                            │ ⇣ │
+                            │ 2 │
+                            └───┘
+                              3  
+                            ┌───┐
+                            │ 4 │
+                            │ ⇣ │
+                            │ 5 │
+                            └───┘
+                            ----------------
+                            Range:  1...5
+                            Stride: 1
+                            Gaps:   1
+                            ----------------
+                            """
+        
+        array       = [1,5]
+        range       = -1...10
+        
+        actual      = array.describeGaps(inRange: range,
+                                         verboseMode: true)
+        expected    = """
+                        -1  
+                         ⇣  
+                         0  
+                      ┌────┐
+                      │  1 │
+                      └────┘
+                         2  
+                         ⇣  
+                         4  
+                      ┌────┐
+                      │  5 │
+                      └────┘
+                         6  
+                         ⇣  
+                        10  
+                      ----------------
+                      Range:  -1...10
+                      Stride: 1
+                      Gaps:   3
+                      ----------------
+                      """
+        
+        XCTAssert(expected == actual, "Expected:\n\(expected)<<<\n---\nActual:\n\(actual)<<<")
+        
+        array       = [1,2,3,4,5]
+        range       = 1...5
+        
+        actual      = array.describeGaps(verboseMode: true)
+        expected    =   """
+                        [None Found]
+                        ----------------
+                        Range:  1...5
+                        Stride: 1
+                        Gaps:   0
+                        ----------------
+                        """
+        
+        XCTAssert(expected == actual, "Expected:\n\(expected)<<<\n---\nActual:\n\(actual)<<<")
         
     }
     
