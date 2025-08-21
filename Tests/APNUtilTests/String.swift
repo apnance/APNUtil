@@ -12,6 +12,42 @@ import APNUtil
 @available(iOS 16.0, *)
 class StringTests: XCTestCase {
     
+    func testElementNum() {
+        
+        let emptyArray: [String] = []
+        
+        XCTAssert(emptyArray.elementNum(Int.min) == "")
+        XCTAssert(emptyArray.elementNum(-1) == "")
+        XCTAssert(emptyArray.elementNum(0) == "")
+        XCTAssert(emptyArray.elementNum(1) == "")
+        XCTAssert(emptyArray.elementNum(Int.max) == "")
+        
+        var threeElementArray: [String] = []
+        XCTAssert(threeElementArray.elementNum(Int.min) == "")
+        XCTAssert(threeElementArray.elementNum(-1) == "")
+        XCTAssert(threeElementArray.elementNum(0) == "")
+        XCTAssert(threeElementArray.elementNum(1) == "")
+        XCTAssert(threeElementArray.elementNum(Int.max) == "")
+        
+       threeElementArray = ["Zero", "On3", "2"]
+        
+        XCTAssert(threeElementArray.elementNum(Int.min) == "")
+        XCTAssert(threeElementArray.elementNum(-1) == "")
+        XCTAssert(threeElementArray.elementNum(0) == "Zero")
+        XCTAssert(threeElementArray.elementNum(1) == "On3")
+        XCTAssert(threeElementArray.elementNum(2) == "2")
+        XCTAssert(threeElementArray.elementNum(3) == "")
+        XCTAssert(threeElementArray.elementNum(Int.max) == "")
+        
+        threeElementArray = []
+        XCTAssert(threeElementArray.elementNum(Int.min) == "")
+        XCTAssert(threeElementArray.elementNum(-1) == "")
+        XCTAssert(threeElementArray.elementNum(0) == "")
+        XCTAssert(threeElementArray.elementNum(1) == "")
+        XCTAssert(threeElementArray.elementNum(Int.max) == "")
+        
+    }
+    
     func testSnip() {
         
         var text = ""

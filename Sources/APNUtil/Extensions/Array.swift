@@ -363,6 +363,19 @@ public extension Array where Element == String {
     ///  Returns a copy of the `Array<String>` with all `Elements`lowercased and with all spaces removed.
     func lowerNoSpaces() -> [String] { self.map{ return String.lowerNoSpaces($0) } }
     
+    /// Attempts to retrieve `String` `Element` numbered `i` eliminating the need
+    /// to check if i is a valid index into the the array.
+    ///
+    /// - important: queries work the same when `self` is empty. Any attempt to retrieve
+    /// a non-existing element results in a return value of "".
+    ///
+    /// - returns: the `String` `Element` at index `i` if it exists, an "" otherwise.
+    func elementNum(_ i: Int) -> String {
+        
+        isInBounds(index: i) ? self[i] : ""
+        
+    }
+    
 }
 
 // MARK: - Array<String.SubSequence>
