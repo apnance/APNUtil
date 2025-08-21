@@ -79,6 +79,13 @@ public extension Array {
         return Array(self[startIndex...endIndex])
             
     }
+
+    /// Returns element at index `i` or `nil` if `i` is out of bounds.
+    func elementAt(_ i: Int) -> Element? {
+        
+        ( i >= 0 && i < count ) ? self[i] : nil
+        
+    }
     
     /// Returns the index of the center Element(count / 2) or -1 if array is empty.
     /// - note: if the array contains an even number of Elements the center is calculated to be the node just right of the center.
@@ -222,7 +229,7 @@ public extension Array {
     /// ```swift
     ///     //Ex.
     ///     [1,2,3,4].mirror()      // returns [1,2,2,1]
-    ///     [1,2,3,4,5].mirror()    // returns [1,2,3,4,5]
+    ///     [1,2,3,4,5].mirror()    // returns [1,2,3,2,1]
     ///
     /// ```
     func mirror() -> Array {
