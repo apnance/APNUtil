@@ -480,13 +480,21 @@ class StringTests: XCTestCase {
     
     func testSimpleDate() {
         
-        let date1 = "12/1/24".simpleDate
-        let date2 = "12.1.24".simpleDate
-        let date3 = "12-1-24".simpleDate
+        let date1a = "12/1/24".simpleDate
+        let date2a = "12.1.24".simpleDate
+        let date3a = "12-1-24".simpleDate
         
-        XCTAssert(date1 == date2)
-        XCTAssert(date3 == date2)
-        XCTAssert(date3 == date1)
+        XCTAssert(date1a == date2a)
+        XCTAssert(date3a == date2a)
+        XCTAssert(date3a == date1a)
+        
+        let date1b = "12/01/2024".simpleDate
+        let date2b = "12.1.2024".simpleDate
+        let date3b = "12-1-2024".simpleDate
+        
+        XCTAssert(date1a == date1b)
+        XCTAssert(date2a == date2b)
+        XCTAssert(date3a == date3b)
         
     }
     
