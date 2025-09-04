@@ -411,6 +411,38 @@ class StringTests: XCTestCase {
         
     }
     
+    func testIsSingleDigit() {
+        
+        var singles     = [0,1,2,3,4,5,6,7,8,9]
+        var notSingles  = [10,11,22,33,44,55,66,77,88,99, 1000, 1002, 99999]
+        var strings     = ["a", "A", "z", "Z", "q", "Q", "!", "!@#!$%%!#%", "^$@&"]
+        
+        for single in singles {
+            
+            XCTAssert(single.description.isSingleDigit)
+            
+        }
+        
+        for not in notSingles {
+            
+            XCTAssertFalse(not.description.isSingleDigit)
+            
+        }
+        
+        for not in strings {
+            
+            XCTAssertFalse(not.description.isSingleDigit)
+            
+        }
+        
+        for not in ".<>_\"'!@#$%^&*() _+:'[]\\/" {
+            
+            XCTAssertFalse(not.description.isSingleDigit)
+            
+        }
+        
+    }
+    
     func testObfuscate() {
         
         let iterations  = 1000

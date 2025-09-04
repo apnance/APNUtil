@@ -231,6 +231,15 @@ public extension String {
         
     }
     
+    /// Returns true if `self` is a single digit, else false
+    var isSingleDigit: Bool {
+        
+        return count == 1 &&
+        unicodeScalars.first?.value ?? 0 >= 48 &&
+        unicodeScalars.first?.value ?? 0 <= 57
+        
+    }
+    
 }
 
 // MARK: - Date
