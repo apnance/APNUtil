@@ -102,7 +102,15 @@ public extension Double {
     /// double.asSmartString == "12.1"  // And of course.
     ///
     /// ```
-    var smartMantissa: String { hasDecimal ? description : Int(self).description }
+    var smartMantissa: String {
+        
+        if self.truncatingRemainder(dividingBy: 1) == 0,
+           self >= Double(Int.min),
+           self <= Double(Int.max) {
+            return String(Int(self))
+        } else { return self.description }
+        
+    }
     
 }
 
