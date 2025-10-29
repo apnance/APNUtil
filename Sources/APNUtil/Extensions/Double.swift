@@ -87,28 +87,35 @@ public extension Double {
 // MARK: - Conversion
 public extension Double {
     
-    /// Outputs a string version of self that has omits the decimal place when the decimal is 0.
+    /// Outputs a string version of `self` that omits the decimal place when the decimal is 0 as well as extraneous terminal 0s at the lower end of the decimal.
     /// ```
     /// //e.g.
     ///
     /// var double = 12.0
     ///
     /// // Compare
-    /// double.description == "12.0"    // As expected
+    /// double.smartMantissa == "12.0"  // As expected
     /// // v.
-    /// double.asSmartString == "12"    // Note no mantissa
+    /// double.smartMantissa == "12"    // Note no mantissa
     ///
     /// double = 12.1
-    /// double.asSmartString == "12.1"  // And of course.
+    /// double.smartMantissa == "12.1"  // And of course.
     ///
     /// ```
-    var smartMantissa: String {
+    var smartMantissa : String {
         
-        if self.truncatingRemainder(dividingBy: 1) == 0,
-           self >= Double(Int.min),
-           self <= Double(Int.max) {
-            return String(Int(self))
-        } else { return self.description }
+        let epsilon = 1e-12
+        let rounded = (self / 1).rounded()
+        
+        // Treat as integer if difference is within epsilon
+        if abs(self - rounded) < epsilon,
+           rounded >= Double(Int.min),
+           rounded <= Double(Int.max) {
+            return String(Int(rounded))
+        }
+        
+        // Else return raw description of self
+        return self.description
         
     }
     

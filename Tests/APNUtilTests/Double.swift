@@ -39,6 +39,27 @@ class DoubleTests: XCTestCase {
         XCTAssert((-10.0).smartMantissa == "-10")
         XCTAssert((-10.01).smartMantissa == "-10.01")
         
+        XCTAssert((150000.0000000000000001).smartMantissa   == "150000")
+        XCTAssert((150000.000000000000001).smartMantissa    == "150000")
+        XCTAssert((150000.00000000000001).smartMantissa     == "150000")
+        XCTAssert((150000.0000000000001).smartMantissa      == "150000")
+        XCTAssert((150000.000000000001).smartMantissa       == "150000")
+        XCTAssert((150000.00000000001).smartMantissa        == "150000")
+        XCTAssert((150000.0000000001).smartMantissa         == "150000.0000000001")
+        XCTAssert((150000.000000001).smartMantissa          == "150000.000000001")
+        XCTAssert((150000.00000001).smartMantissa           == "150000.00000001")
+        XCTAssert((150000.0000001).smartMantissa            == "150000.0000001")
+        XCTAssert((150000.000001).smartMantissa             == "150000.000001")
+        XCTAssert((150000.00001).smartMantissa              == "150000.00001")
+        XCTAssert((150000.0001).smartMantissa               == "150000.0001")
+        XCTAssert((150000.001).smartMantissa                == "150000.001")
+        XCTAssert((150000.01).smartMantissa                 == "150000.01")
+        XCTAssert((150000.1).smartMantissa                  == "150000.1")
+        XCTAssert((150000).smartMantissa                    == "150000")
+        XCTAssert((150000.0).smartMantissa                  == "150000")
+        
+        XCTAssert((150000000000000000.0000000000000001).smartMantissa   == "150000000000000000")
+        
     }
     
     func testRounding() {
