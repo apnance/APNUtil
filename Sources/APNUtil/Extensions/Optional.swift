@@ -15,6 +15,13 @@ public extension Optional {
     
 }
 
+public extension Optional where Wrapped: Collection {
+    
+    /// Returns true if self is nil or the collection is empty
+    var isNilOrEmpty: Bool { self?.isEmpty ?? true }
+    
+}
+
 public extension [String]? {
     
     /// Attempts to retrieve `String` `Element` numbered `i` eliminating the

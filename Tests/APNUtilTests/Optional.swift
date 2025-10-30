@@ -44,6 +44,48 @@ final class Optional: XCTestCase {
         
     }
     
+    func testIsNilOrEmpty() {
+
+        struct Zoink { }
+        
+        var optionalStringArray: [String]? =    nil
+        XCTAssert(optionalStringArray.isNilOrEmpty)
+        
+        optionalStringArray = []
+        XCTAssert(optionalStringArray.isNilOrEmpty)
+        
+        optionalStringArray = ["zoink"]
+        XCTAssertFalse(optionalStringArray.isNilOrEmpty)
+        
+        optionalStringArray?.append("boink")
+        XCTAssertFalse(optionalStringArray.isNilOrEmpty)
+        
+        var optionalIntArray: [Int]? =    nil
+        XCTAssert(optionalIntArray.isNilOrEmpty)
+        
+        optionalIntArray = []
+        XCTAssert(optionalIntArray.isNilOrEmpty)
+        
+        optionalIntArray = [1]
+        XCTAssertFalse(optionalIntArray.isNilOrEmpty)
+        
+        optionalIntArray?.append(999)
+        XCTAssertFalse(optionalIntArray.isNilOrEmpty)
+        
+        var optionalZoinkArray: [Zoink]? =    nil
+        XCTAssert(optionalZoinkArray.isNilOrEmpty)
+        
+        optionalZoinkArray = []
+        XCTAssert(optionalZoinkArray.isNilOrEmpty)
+        
+        optionalZoinkArray = [Zoink()]
+        XCTAssertFalse(optionalZoinkArray.isNilOrEmpty)
+        
+        optionalZoinkArray?.append(Zoink())
+        XCTAssertFalse(optionalZoinkArray.isNilOrEmpty)
+        
+    }
+    
     func testIsNotNil() {
 
         // String
