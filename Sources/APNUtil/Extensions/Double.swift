@@ -13,6 +13,9 @@ public extension Double {
     /// Converts `self` to Int equivalent.
     var int: Int { Int(self) }
     
+    /// Returns true if `self` has no decimal digits else false
+    var isInteger : Bool { truncatingRemainder(dividingBy: 1) == 0 }
+    
     /// `true` if `self` has a non-zero decimal value, else `false`
     var hasDecimal: Bool {
         
@@ -78,9 +81,39 @@ public extension Double {
         
     }
     
-    
     /// Returns `CGFloat` representation of self.
     var cgFloat: CGFloat { CGFloat(self) }
+    
+    /// Returns a corrected version of the number by rounding to a specified number of decimal places,
+    /// but only if the difference between the original and rounded value is within a given epsilon threshold.
+    /// This is useful for cleaning up floating-point artifacts in display logic without affecting true calculations.
+    ///
+    /// - Parameters:
+    ///   - decimalPlaces: The number of decimal places to round to (default is 10).
+    ///   - epsilon: The tolerance threshold for considering the rounded value "close enough" to the original (default is 1e-10).
+    /// - Returns: The rounded value if it's within epsilon of the original; otherwise, the original value.
+    ///
+    /// - Author: chatGPT
+    func corrected(decimalPlaces: Int = 10, epsilon: Double = 1e-10) -> Double {
+        
+        // Compute the multiplier to shift the decimal point for rounding
+        let multiplier = pow(10.0, Double(decimalPlaces))
+        
+        // Round the value to the specified number of decimal places
+        let rounded = Foundation.round(self * multiplier) / multiplier
+        
+        // If the difference between original and rounded value is within epsilon, use the rounded value
+        if abs(self - rounded) < epsilon {
+            
+            return rounded   // EXIT: Within epsilon — use cleaned-up rounded value
+            
+        } else {
+            
+            return self      // EXIT: Difference is significant — keep original value
+            
+        }
+        
+    }
     
 }
 
