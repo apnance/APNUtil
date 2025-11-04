@@ -356,6 +356,7 @@ public class Utils {
         
     }
     
+    /// Returns the path to sandboxed `Document` directory. Useful for troubleshooting file CRUD operations.
     public static func getDocumentsDirectory() -> NSString {
         
         let paths = NSSearchPathForDirectoriesInDomains(.documentDirectory,
