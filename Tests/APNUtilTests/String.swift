@@ -443,6 +443,28 @@ class StringTests: XCTestCase {
         
     }
     
+    func testIsValidFontName() {
+        
+        // Pass
+        XCTAssert("Futura".isValidFontName)
+        
+        XCTAssert("Menlo".isValidFontName)
+        XCTAssert("MENLO".isValidFontName)
+        XCTAssert("Menlo-Bold".isValidFontName)
+        
+        XCTAssert("Impact".isValidFontName)
+        XCTAssert("impact".isValidFontName)
+        XCTAssert("ImpaCT".isValidFontName)
+        XCTAssert("IMPACT".isValidFontName)
+        
+        // Fail
+        XCTAssertFalse("".isValidFontName)
+        XCTAssertFalse("ZOINKERE".isValidFontName)
+        XCTAssertFalse("!@#!@#$".isValidFontName)
+        XCTAssertFalse("   Menlo   ".isValidFontName)
+        
+    }
+    
     func testObfuscate() {
         
         let iterations  = 1000
