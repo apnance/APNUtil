@@ -332,10 +332,10 @@ public extension String {
 }
 
 // - MARK: - Font
-extension String {
+public extension String {
     
     /// Returns true if the string is a valid font name
-    public var isValidFontName: Bool { UIFont.isValidFontName(self) }
+    var isValidFontName: Bool { UIFont.isValidFontName(self) }
     
     /// ASCIIFont definition to use to format fontified output.
     enum FontifyFont { case small, mini}
