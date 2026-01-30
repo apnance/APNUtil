@@ -336,12 +336,12 @@ public extension Date {
         
         public struct Days {
             
-            static func toSeconds(_ days: Double) -> Double { (days * Seconds.inDay) }
-            static func toMinutes(_ days: Double) -> Double { (days * Minutes.inDay) }
-            static func toHours(_   days: Double) -> Double { (days * Hours.inDay) }
-            static func toWeeks(_   days: Double) -> Double { days / Days.inWeek }
-            static func toMonths(_  days: Double) -> Double { days / Days.inMonth }
-            static func toYears(_   days: Double) -> Double { days / Days.inYear }
+            public static func toSeconds(_ days: Double) -> Double { (days * Seconds.inDay) }
+            public static func toMinutes(_ days: Double) -> Double { (days * Minutes.inDay) }
+            public static func toHours(_   days: Double) -> Double { (days * Hours.inDay) }
+            public static func toWeeks(_   days: Double) -> Double { days / Days.inWeek }
+            public static func toMonths(_  days: Double) -> Double { days / Days.inMonth }
+            public static func toYears(_   days: Double) -> Double { days / Days.inYear }
             
             public static let unit                 = "d"
             
