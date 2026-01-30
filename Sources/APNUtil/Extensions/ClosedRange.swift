@@ -18,6 +18,9 @@ public extension ClosedRange where Bound == Int {
 
     var sum: Int { reduce(0){ $0 + $1 } }
     
+    /// The difference between `upperbound` and `lowerBound`
+    var span: Bound { self.upperBound - self.lowerBound }
+    
     enum ResolutionType {
         
         case LowerBound
