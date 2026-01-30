@@ -51,6 +51,19 @@ class ClosedRangeTests: XCTestCase {
         
     }
     
+    func testSpan() {
+        
+        XCTAssert((0...0).span          == 0)
+        XCTAssert((1...1).span          == 0)
+        XCTAssert((10...10).span        == 0)
+        XCTAssert((0...10).span         == 10)
+        XCTAssert((1...10).span         == 9)
+        XCTAssert((-100...100).span     == 200)
+        XCTAssert((-3...3).span         == 6)
+        XCTAssert((-2...(-1)).span      == 1)
+        
+    }
+    
     func testRepeat() {
         
         (1...3).repeat{ print("Ho") }
