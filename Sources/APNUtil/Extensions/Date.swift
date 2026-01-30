@@ -290,7 +290,7 @@ public extension Date {
 }
 
 // MARK: - Time Conversion
-extension Date {
+public extension Date {
     
     /// Utilities for converting between different time units.
     struct TimeConversions {
