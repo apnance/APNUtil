@@ -293,48 +293,48 @@ public extension Date {
 public extension Date {
     
     /// Utilities for converting between different time units.
-    struct TimeConversions {
+    public struct TimeConversions {
         
-        struct Seconds {
+        public struct Seconds {
             
-            static let unit                 = "s"
+            public static let unit                 = "s"
             
-            static let inMinute: Double     = 60
-            static let inHour: Double       = inMinute * Minutes.inHour
-            static let inDay: Double        = Seconds.inHour * Hours.inDay
-            static let inWeek: Double       = inDay * Days.inWeek
-            static let inMonth: Double      = inDay * Days.inMonth
-            static let inYear: Double       = inDay * Days.inYear
-            static let inLeapYear: Double   = inDay * Days.inLeapYear
+            public static let inMinute: Double     = 60
+            public static let inHour: Double       = inMinute * Minutes.inHour
+            public static let inDay: Double        = Seconds.inHour * Hours.inDay
+            public static let inWeek: Double       = inDay * Days.inWeek
+            public static let inMonth: Double      = inDay * Days.inMonth
+            public static let inYear: Double       = inDay * Days.inYear
+            public static let inLeapYear: Double   = inDay * Days.inLeapYear
             
         }
         
-        struct Minutes {
+        public struct Minutes {
             
-            static let unit                 = "m"
+            public static let unit                 = "m"
             
-            static let inHour: Double       = 60
-            static let inDay: Double        = Minutes.inHour * Hours.inDay
-            static let inWeek: Double       = inDay * Days.inWeek
-            static let inMonth: Double      = inDay * Days.inMonth
-            static let inYear: Double       = inDay * Days.inYear
-            static let inLeapYear: Double   = inDay * Days.inLeapYear
+            public static let inHour: Double       = 60
+            public static let inDay: Double        = Minutes.inHour * Hours.inDay
+            public static let inWeek: Double       = inDay * Days.inWeek
+            public static let inMonth: Double      = inDay * Days.inMonth
+            public static let inYear: Double       = inDay * Days.inYear
+            public static let inLeapYear: Double   = inDay * Days.inLeapYear
             
         }
         
-        struct Hours {
+        public struct Hours {
             
-            static let unit                 = "h"
+            public static let unit                 = "h"
                     
-            static let inDay: Double        = 24
-            static let inWeek: Double       = Hours.inDay * Days.inWeek
-            static let inMonth: Double      = Hours.inDay * Days.inMonth
-            static let inYear: Double       = Hours.inDay * Days.inYear
-            static let inLeapYear: Double   = Hours.inDay * Days.inLeapYear
+            public static let inDay: Double        = 24
+            public static let inWeek: Double       = Hours.inDay * Days.inWeek
+            public static let inMonth: Double      = Hours.inDay * Days.inMonth
+            public static let inYear: Double       = Hours.inDay * Days.inYear
+            public static let inLeapYear: Double   = Hours.inDay * Days.inLeapYear
             
         }
         
-        struct Days {
+        public struct Days {
             
             static func toSeconds(_ days: Double) -> Double { (days * Seconds.inDay) }
             static func toMinutes(_ days: Double) -> Double { (days * Minutes.inDay) }
@@ -343,34 +343,34 @@ public extension Date {
             static func toMonths(_  days: Double) -> Double { days / Days.inMonth }
             static func toYears(_   days: Double) -> Double { days / Days.inYear }
             
-            static let unit                 = "d"
+            public static let unit                 = "d"
             
-            static let inWeek : Double      = 7.0
-            static let inMonth : Double     = inYear / 12.0
-            static let inYear : Double      = 365.0
-            static let inLeapYear : Double  = inYear + 1.0
+            public static let inWeek : Double      = 7.0
+            public static let inMonth : Double     = inYear / 12.0
+            public static let inYear : Double      = 365.0
+            public static let inLeapYear : Double  = inYear + 1.0
             
         }
         
-        struct Weeks {
+        public struct Weeks {
             
-            static let unit                 = "w"
+            public static let unit                 = "w"
                 
-            static let inYear: Double       = 52.0 + (1.0 / Days.inWeek)
+            public static let inYear: Double       = 52.0 + (1.0 / Days.inWeek)
             
         }
         
-        struct Months {
+        public struct Months {
             
-            static let unit                 = "m"
+            public static let unit                 = "m"
                 
-            static let inYear: Double       = 12.0
+            public static let inYear: Double       = 12.0
             
         }
         
-        struct Years {
+        public struct Years {
             
-            static let unit                 = "y"
+            public static let unit                 = "y"
             
         }
         
