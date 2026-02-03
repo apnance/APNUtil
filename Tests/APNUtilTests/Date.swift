@@ -141,6 +141,24 @@ class DateTests: XCTestCase {
         
     }
     
+    func testCompact() {
+        
+        var date = "05/24/2002".simpleDate
+        var actual = date.compact
+        var expected = "05-24 00:00:00"
+        
+        print("Original: \(date)\nCleaned: \(actual)")
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+        date = "12/07/2009".simpleDate
+        actual = date.compact
+        expected = "12-07 00:00:00"
+        
+        print("Original: \(date)\nCleaned: \(actual)")
+        XCTAssert(actual == expected, "Expected: \(expected) - Actual: \(actual)")
+        
+    }
+    
     func testDaysFromTo() {
         
         let leeDay = "11-17-09".simpleDate
@@ -153,9 +171,9 @@ class DateTests: XCTestCase {
         XCTAssert(beaDay.daysFrom(earlierDate: leeDay) == 20)
         
         XCTAssert(beaDay.daysFrom(earlierDate: beaDayPlus2) == -2)
-
+        
         XCTAssert(beaDayPlus2.daysFrom(earlierDate: beaDay) == 2)
-
+        
         
         XCTAssert(beaDay.daysFrom(earlierDate: beaDay) == 0)
         XCTAssert(leeDay.daysFrom(earlierDate: leeDay) == 0)
@@ -163,7 +181,7 @@ class DateTests: XCTestCase {
     }
     
     func testConsecutives() {
-
+        
         func echo(_ dates: [Date]) {
             
             print("\n---")

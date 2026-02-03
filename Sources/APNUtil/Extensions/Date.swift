@@ -184,6 +184,8 @@ public extension Date {
     /// Returns a `String` representation of the `Date` in the form `07-14-24 15:30:05.709`
     var clean: String { format("MM-dd-yy HH:mm:ss.SSS") }
     
+    /// Returns a `String` representation of the `Date` omitting year and milliseconds in the form `07-14 15:30:05`
+    var compact: String { format("MM-dd HH:mm:ss") }
     
     // MARK: - Mathematical Comparisons
     /// Returns the number of days bewteen `self` and the specified `Date`.
