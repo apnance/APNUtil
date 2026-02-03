@@ -27,6 +27,12 @@ public extension UIColor {
         UIColor(red: 1.000, green: 0.523, blue: 0.001, alpha: 1.00)
     }
     
+    @objc class var hotPurple: UIColor {
+        
+        UIColor(red: 1.0, green: 0.0, blue: 1.0, alpha: 1.0)
+        
+    }
+    
     @objc class var pink: UIColor {
         
         UIColor(red: 0.987, green: 0.347, blue: 1.0, alpha: 1.0)
