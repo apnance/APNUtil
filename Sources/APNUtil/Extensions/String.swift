@@ -421,11 +421,24 @@ public extension String {
 // - MARK: - Utilities
 public extension String {
     
+    /// Convenience method that calls diff passing in `(">>FIRST>>","|","<<SECOND<<")` as the delimeters.
+    /// Useful for diffing visually complicated strings.
+    static func diffLoud(_ lhs: String, _ rhs: String) -> String { diff(lhs, rhs, ("[>>LHS>>","<< | >>","<<RHS<<]")) }
+    
     /// Returns a string highlighting the first difference between `lhs` and `rhs`
     /// Very useful for finding descrepancies in String values whilst unit testing.
-    static func diff(_ lhs: String,_ rhs: String) -> String {
+    /// - Parameters:
+    ///   - lhs: first string for difference comparison.
+    ///   - rhs: second string for difference comparison.
+    ///   - delimiters: optoinal for overriding the `[`,`|`, and `]` strings used
+    ///   to delimit the displayed differance.
+    /// - Returns: String indicating where the first difference bewteen `lhs` and `rhs`
+    /// is found or an empty string if `lhs == rhs`
+    static func diff(_ lhs: String,_ rhs: String, _ delimiters: (String, String, String) = ("[","|","]")) -> String {
         
         if lhs == rhs { return "" /*EXIT*/ }
+        
+        let (dL, dM, dR) = delimiters
         
         let minLength = Swift.min(lhs.count, rhs.count)
         
@@ -440,7 +453,7 @@ public extension String {
                 let char2 = rhs[index2] == "\n" ? "\\n" : String(rhs[index2])
                 
                 var result = lhs
-                result.replaceSubrange(index1...index1, with: "[\(char1)|\(char2)]")
+                result.replaceSubrange(index1...index1, with: "\(dL)\(char1)\(dM)\(char2)\(dR)")
                 
                 return result
             }
@@ -455,7 +468,7 @@ public extension String {
             let index       = rhs.index(rhs.startIndex, offsetBy: lhs.count)
             let extraChars  = String(rhs[index...])
             
-            result.append("[|\(extraChars)]")
+            result.append("\(dL)\(dM)\(extraChars)\(dR)")
             
             return result   // EXIT
             
@@ -467,7 +480,7 @@ public extension String {
             let index       = lhs.index(lhs.startIndex, offsetBy: rhs.count)
             let extraChars  = String(lhs[index...])
             
-            result.append("[\(extraChars)|]")
+            result.append("\(dL)\(extraChars)\(dM)\(dR)")
             
             return result   // EXIT
             
