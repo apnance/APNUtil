@@ -423,7 +423,7 @@ public extension String {
     
     /// Convenience method that calls diff passing in `(">>FIRST>>","|","<<SECOND<<")` as the delimeters.
     /// Useful for diffing visually complicated strings.
-    static func diffLoud(_ lhs: String, _ rhs: String) -> String { diff(lhs, rhs, ("[>>LHS>>","<< | >>","<<RHS<<]")) }
+    static func diffLoud(_ lhs: String, _ rhs: String) -> String { diff(lhs, rhs, ("[ LHS >>>","<<< >>>","<<< RHS ]")) }
     
     /// Returns a string highlighting the first difference between `lhs` and `rhs`
     /// Very useful for finding descrepancies in String values whilst unit testing.
