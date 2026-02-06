@@ -310,9 +310,14 @@ public extension String {
 }
 
 // MARK: - Conversions
+@available(iOS 16.0, *)
 public extension String {
     
     func toArray() -> [String] { map{ String($0) } }
+    
+    /// Splits `self` at spaces returning an [String] of the result
+    /// Converts "a b 123" -> ["a", "b", "123"]
+    func splitToStringArray(separator: String = " ") -> [String] { split(separator: separator).asStringArray }
     
     /// Replaces whitespace with whitespace wildcards and escapes all characters in string that are Regular Expression tokens.
     var asRegularExpression: String {

@@ -29,7 +29,7 @@ class StringTests: XCTestCase {
         XCTAssert(threeElementArray.elementNum(1) == "")
         XCTAssert(threeElementArray.elementNum(Int.max) == "")
         
-       threeElementArray = ["Zero", "On3", "2"]
+        threeElementArray = ["Zero", "On3", "2"]
         
         XCTAssert(threeElementArray.elementNum(Int.min) == "")
         XCTAssert(threeElementArray.elementNum(-1) == "")
@@ -210,7 +210,7 @@ class StringTests: XCTestCase {
     }
     
     func testHasNumericPrefix() {
-
+        
         XCTAssertFalse("a".hasNumericPrefix)
         XCTAssertFalse("A".hasNumericPrefix)
         XCTAssertFalse("z".hasNumericPrefix)
@@ -469,7 +469,7 @@ class StringTests: XCTestCase {
         
         let iterations  = 1000
         let originals   = ["ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789- ._~:/?#[]@!$&'()*+,;=%",
-                           """
+                            """
                             https://stackoverflow.com/questions/1547899/which-characters\
                             -make-a-url-invalid#:~:text=In%20general%20URIs%20as%20defined\
                             %20by%20RFC%203986,where%20in%20the%20URI%20these%20characters\
@@ -480,7 +480,7 @@ class StringTests: XCTestCase {
             
             // Test Shift
             for shiftBy in 0...45 {
-            
+                
                 let shifted     = original.shift(by: shiftBy)
                 let unshifted   = shifted.shift(by: -shiftBy)
                 
@@ -630,6 +630,34 @@ class StringTests: XCTestCase {
         XCTAssert(dateYes == dateMaybe)
         
     }
+    
+    func testSplitToStringArray() {
+        
+        // Test Simple
+        var string = "Word1 Word2 Word3"
+        var split = string.splitToStringArray()
+        
+        XCTAssert(split[0] == "Word1")
+        XCTAssert(split[1] == "Word2")
+        XCTAssert(split[2] == "Word3")
+        
+        // Test Odd Spacing
+        string = "    Word1   Word2  Word3      "
+        split = string.splitToStringArray()
+        
+        XCTAssert(split[0] == "Word1")
+        XCTAssert(split[1] == "Word2")
+        XCTAssert(split[2] == "Word3")
+        
+        // Test Custom Separator
+        string = "    Word1 >  Word2 > Word3      "
+        split = string.splitToStringArray(separator: ">")
+        XCTAssert(split[0] == "    Word1 ")
+        XCTAssert(split[1] == "  Word2 ")
+        XCTAssert(split[2] == " Word3      ")
+        
+    }
+
     
     func testAsRegularExpression() {
         
