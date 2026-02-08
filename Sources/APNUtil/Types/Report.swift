@@ -48,43 +48,6 @@ public struct Report {
         
     }
     
-    // TODO: Clean Up - delete
-//    /// Convenience method that Columnates a single dimensional array into `colCount` columns in top to bottom, left to right order.
-//    public static func columnateSimple(_ data: [String],
-//                                       headers: [String] = [],
-//                                       colCount: Int,
-//                                       dataPadType: String.PaddingType = .left,
-//                                       useAutoWidth: Bool = true,
-//                                       emptyDatumIndicator: String = "-") -> String {
-//        
-//        let rowCount    = data.count / colCount + (data.count % colCount > 0 ? 1 : 0)
-//        let row         = Array.init(repeating: emptyDatumIndicator, count: colCount)
-//        var rows        = Array.init(repeating: row,
-//                                     count: rowCount)
-//        
-//        for i in 0..<data.count {
-//            
-//            let col = i / rowCount
-//            rows[i % rowCount][col] = data[i]
-//            
-//        }
-//        
-//        if useAutoWidth {
-//            
-//            return columnateAutoWidth(rows,
-//                                      headers: headers,
-//                                      dataPadType: dataPadType)
-//            
-//        } else {
-//            
-//            return columnate(rows,
-//                             headers: headers,
-//                             dataPadType: dataPadType)
-//            
-//        }
-//        
-//    }
-    
     /// Formats data left padded columns with headers.  Data is left padded to a width equal to the width of
     /// the header string for its column.
     ///
