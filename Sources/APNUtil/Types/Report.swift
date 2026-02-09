@@ -20,6 +20,25 @@ public struct Report {
                                                                     useAutoWidth: Bool = true,
                                                                     emptyDatumIndicator: T = "-") -> String {
         
+        var headers     = headers
+        let headerCount = headers.count
+        if headerCount > 0 {
+            
+            // Headers expected, are there enough for # of columns?
+            if headerCount > colCount {
+                
+                headers.removeLast(headerCount - colCount)
+                
+            } else if headerCount < colCount {
+                
+                fatalError("Insufficient headers provided(\(headerCount)) for requested number of columns(\(colCount))")
+                
+            }
+            
+        }
+        
+        if data.count == 0 { return "" } // EXIT : Empty data Nothing to Do
+        
         let rowCount    = data.count / colCount + (data.count % colCount > 0 ? 1 : 0)
         let row         = Array.init(repeating: emptyDatumIndicator, count: colCount)
         var rows        = Array.init(repeating: row,
