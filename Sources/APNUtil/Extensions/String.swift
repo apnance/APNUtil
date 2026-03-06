@@ -334,6 +334,13 @@ public extension String {
         
     }
     
+    /// Replaces smart quotes with regular quotes.
+    func normalizedQuotes() -> String {
+        
+        replacingOccurrences(of: "\u{201C}", with: "\"").replacingOccurrences(of: "\u{201D}", with: "\"")
+        
+    }
+    
 }
 
 // - MARK: - Font

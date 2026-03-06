@@ -659,6 +659,34 @@ class StringTests: XCTestCase {
     }
 
     
+    func testNormalizedQuotes() {
+        
+        let left  = "“"  // U+201C
+        let right = "”"  // U+201D
+        let reg     = "\""
+        
+        // Assert they are NOT ASCII quotes
+        XCTAssertNotEqual(left, reg)
+        XCTAssertNotEqual(right, reg)
+        
+        // Assert they ARE smart quotes
+        XCTAssertEqual(left.unicodeScalars.first,  "\u{201C}")
+        XCTAssertEqual(right.unicodeScalars.first, "\u{201D}")
+        
+        XCTAssert("abc123!@#$':][()*&^%$#@!".normalizedQuotes() == "abc123!@#$':][()*&^%$#@!")
+        XCTAssert("\(left)abc123!@#$':][()*&^%$#@!\(right)".normalizedQuotes() == "\(reg)abc123!@#$':][()*&^%$#@!\(reg)")
+        
+        XCTAssertFalse("\(left)\(right)"                == "\(reg)\(reg)")
+        XCTAssertFalse("\(left)"                        == reg)
+        XCTAssertFalse("\(right)"                       == reg)
+        
+        XCTAssert("\(left)\(right)".normalizedQuotes()  == "\(reg)\(reg)")
+        XCTAssert("\(left)".normalizedQuotes()          == reg)
+        XCTAssert("\(right)".normalizedQuotes()         == reg)
+        
+        
+    }
+    
     func testAsRegularExpression() {
         
         var strings = ["Simple", "", "123123BlahBlah12313_"]
