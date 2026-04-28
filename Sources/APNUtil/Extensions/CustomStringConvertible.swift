@@ -12,6 +12,9 @@ extension CustomStringConvertible {
     
     public var descriptionCharCount: Int { description.count }
     
+    /// Utility function for printing description in console via "myobject.prnt()"
+    func prnt() { Swift.print(self.description) }
+    
     func centerPadded(toLength len: Int, withPad pad: Character = " ") -> String {
         
         description.centerPadded(toLength: len, withPad: pad)
