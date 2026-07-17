@@ -12,12 +12,16 @@ import MobileCoreServices
 public protocol Copyable { func copy() -> Copyable }
 
 public extension Array {
-
+    
     static func += (lhs: inout Array, rhs: Array) { lhs = lhs + rhs }
     
     /// Returns !isEmpty
     var isNotEmpty: Bool { !isEmpty }
     
+    /// Returns `ClosedRange<Int>` `0...self.lastUsableIndex`, return nil if `self` is `empty`
+    /// - note: useful in for loops e.g. `for i in myArray.range{ ... }`
+    var range: ClosedRange<Int>? { count > 0 ? 0...self.lastUsableIndex : nil }
+        
     /// Returns the index of the last element in the array or -1
     /// if the array is empty.
     var lastUsableIndex: Int { count - 1 }

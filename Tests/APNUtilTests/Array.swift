@@ -22,6 +22,19 @@ class ArrayTests: XCTestCase {
         
     }
     
+    func testRange() {
+        
+        var a1 = [1, 2, 9999, -1]
+        
+        XCTAssert(a1.range?.lowerBound == 0)
+        XCTAssert(a1.range?.upperBound == 3)
+        XCTAssert(a1.range == 0...3)
+        
+        a1.removeAll()
+        XCTAssertNil(a1.range)
+        
+    }
+    
     func testLastUsableIndex() {
         
         var a1 = [Int]()
