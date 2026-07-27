@@ -442,6 +442,30 @@ public extension Array where Element : CustomStringConvertible {
         
     }
     
+    /// Returns a decription with each element labeled with its index #
+    func numberedElementDescription(_ delim: String = " ") -> String {
+        
+        var elementDescr    = ""
+        var indexNumDescr   = ""
+        
+        for (i, element) in enumerated() {
+            
+            let delim = i == self.lastUsableIndex ? "" : delim
+            
+            let centerPadLen = Swift.max(i.description.count, element.description.count)
+            
+            let currentDescr = element.description.centerPadded(toLength: centerPadLen) + delim
+            elementDescr    += currentDescr
+            
+            let rightPadd = String(repeating: " ", count: delim.count)
+            indexNumDescr   += i.description.centerPadded(toLength: centerPadLen) + rightPadd
+            
+        }
+        
+        return elementDescr + "\n" + indexNumDescr
+        
+    }
+    
 }
 
 

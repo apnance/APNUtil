@@ -393,7 +393,7 @@ class ArrayTests: XCTestCase {
         XCTAssert([].at(150)                == nil)
         
         // Any Array
-        let anyArray:[Any] = [1, 2, "blah", 2.0]
+        let _:[Any] = [1, 2, "blah", 2.0]
         XCTAssert([1, 2, "blah", 2.0].at(-150)              == nil)
         XCTAssert([1, 2, "blah", 2.0].at(-1)                == nil)
         XCTAssert(([1, 2, "blah", 2.0].at(0) as! Int)       == 1)
@@ -948,6 +948,47 @@ class ArrayTests: XCTestCase {
         expected    = "1, 2, 3"
         actual      = intArray.asCommaSeperatedString(conjunction: "", wrapper: "")
         XCTAssert( expected == actual, "Expected: \(expected) - Actual: \(actual)")
+        
+    }
+    
+    func testNumberedElementDescription() {
+        
+        let strings = ["Bea", "Lee", "Me", "Win", "Kit"]
+        var ned = strings.numberedElementDescription(", ")
+        check("""
+                Bea, Lee, Me, Win, Kit
+                 0    1    2   3    4 
+                """, ned)
+        
+        ned = strings.numberedElementDescription(" ")
+        check("""
+                Bea Lee Me Win Kit
+                 0   1   2  3   4 
+                """, ned)
+                  
+        ned = strings.numberedElementDescription("  ")
+        check("""
+              Bea  Lee  Me  Win  Kit
+               0    1    2   3    4 
+              """, ned)
+        
+        ned = ["B", "L", "M", "W", "K"].numberedElementDescription()
+        check("""
+                B L M W K
+                0 1 2 3 4
+                """, ned)
+        
+        ned = ["B", "L", "M", "W", "K", "L", "M", "W", "K", "L", "M", "W", "K"].numberedElementDescription()
+        check("""
+                B L M W K L M W K L  M  W  K
+                0 1 2 3 4 5 6 7 8 9 10 11 12
+                """, ned)
+        
+        ned = ["B", "L", "M", "W", "K", "L", "M", "W", "K", "L", "M", "W", "K"].numberedElementDescription("  ")
+        check("""
+                B  L  M  W  K  L  M  W  K  L   M   W   K
+                0  1  2  3  4  5  6  7  8  9  10  11  12
+                """, ned)
         
     }
     
