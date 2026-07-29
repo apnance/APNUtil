@@ -383,6 +383,36 @@ class ArrayTests: XCTestCase {
         
     }
     
+    /// - author: Gemini
+    func testUpdate() {
+        
+        // Setup
+        var numbers = [10, 20, 30]
+        
+        // Valid middle update
+        numbers.update(1, newValue: 99)
+        XCTAssertEqual(numbers[1], 99, "Should update the element at index 1")
+        XCTAssertEqual(numbers.count, 3, "Array size should remain 3")
+        
+        // Boundary updates (first and last elements)
+        numbers.update(0, newValue: 5)
+        numbers.update(numbers.count - 1, newValue: 50)
+        XCTAssertEqual(numbers.first, 5, "Should safely update the first element at index 0")
+        XCTAssertEqual(numbers.last, 50, "Should safely update the last element at index count-1")
+        
+        // Out-of-bounds updates (negative and index >= count)
+        numbers.update(-1, newValue: 0)
+        numbers.update(numbers.count, newValue: 100)
+        numbers.update(999, newValue: 1000)
+        XCTAssertEqual(numbers, [5, 99, 50], "Out-of-bounds updates should leave the array unchanged")
+        
+        // Empty array behavior
+        var emptyArray: [Int] = []
+        emptyArray.update(0, newValue: 42)
+        XCTAssertTrue(emptyArray.isEmpty, "Updating an empty array should safely do nothing")
+        
+    }
+    
     func testAt() {
         
         // Empty [Any] Array

@@ -138,6 +138,15 @@ public extension Array {
         
     }
     
+    /// Updates `n`th element with `newValue` if it `n` is inbounds, else does nothing.
+    mutating func update(_ n: Int, newValue: Element) {
+        
+        guard isInBounds(index: n) else { return }
+        
+        self[n] = newValue
+        
+    }
+    
     /// Returns the `Element` at the specified `index`.  If index is out of bounds returns `nil`.
     func at(_ index: Int) -> Element? {
         
