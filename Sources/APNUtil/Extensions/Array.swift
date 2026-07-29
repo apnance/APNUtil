@@ -121,7 +121,7 @@ public extension Array {
     /// Returns a `Bool` indicating if the specified index is with the `Array`'s bounds.
     func isInBounds(index: Int) -> Bool {
         
-        count > 0 && index >= 0 && index < count
+        index >= 0 && index < count
         
     }
     
