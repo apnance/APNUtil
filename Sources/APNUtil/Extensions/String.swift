@@ -584,3 +584,61 @@ public extension String {
     }
     
 }
+
+extension String {
+    
+    /// Array of all character inputable via iOS Keypad
+    static let allIOSCharacters: [String] = [
+        // Numbers & Primary Letters
+        "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
+        "a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
+        "k", "l", "m", "n", "o", "p", "q", "r", "s", "t",
+        "u", "v", "w", "x", "y", "z",
+        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J",
+        "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T",
+        "U", "V", "W", "X", "Y", "Z",
+        
+        // Primary Standard Punctuation & Symbols
+        "-", "/", ":", ";", "(", ")", "$", "&", "@", "\"",
+        ".", ",", "?", "!", "'", "[", "]", "{", "}", "#",
+        "%", "^", "*", "+", "=", "_", "\\", "|", "~", "<",
+        ">", "€", "£", "¥", "•", " ",
+        
+        // Long-Press Accents & Diacritics (Lowercase)
+        "à", "á", "â", "ä", "æ", "ã", "å", "ā",
+        "ç", "ć", "č",
+        "è", "é", "ê", "ë", "ē", "ė", "ę",
+        "î", "ï", "í", "ī", "į", "ì",
+        "ł",
+        "ñ", "ń",
+        "ô", "ö", "ò", "ó", "œ", "ø", "ō", "õ",
+        "ß",
+        "ś", "š",
+        "û", "ü", "ù", "ú", "ū",
+        "ÿ",
+        "ž", "ź", "ż",
+        
+        // Long-Press Accents & Diacritics (Uppercase)
+        "À", "Á", "Â", "Ä", "Æ", "Ã", "Å", "Ā",
+        "Ç", "Ć", "Č",
+        "È", "É", "Ê", "Ë", "Ē", "Ė", "Ę",
+        "Î", "Ï", "Í", "Ī", "Į", "Ì",
+        "Ł",
+        "Ñ", "Ń",
+        "Ô", "Ö", "Ò", "Ó", "Œ", "Ø", "Ō", "Õ",
+        "Ś", "Š",
+        "Û", "Ü", "Ù", "Ú", "Ū",
+        "Ÿ",
+        "Ž", "Ź", "Ż",
+        
+        // Long-Press Special Symbols & Alternate Currency
+        "–", "—", "•",                     // Dash variants & bullet
+        "“", "”", "„", "»", "«",           // Quote variants
+        "’", "‘", "`",                     // Apostrophe/grave variants
+        "¿", "¡",                         // Inverted punctuation
+        "¢", "₹", "₱", "₩", "S$", "€", "£", "¥", // Currencies
+        "°", "§", "…",                     // Special symbols
+        "‰"
+    ]
+    
+}
