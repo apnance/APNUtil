@@ -115,6 +115,40 @@ public extension String {
                     withPad pad: Character = " ") -> String { padded(toLength: len,
                                                                      type: .left, withPad: pad) }
     
+    /// Returns a copy of `self` with each line left padded with `count` spaces.  First line
+    /// can optionally have no paddin gif `shouldPadFirstLine` is `false`.
+    ///
+    /// - note: does not add a new line character to the very last line of multiline output.
+    func leftPaddedLines(by count: Int,
+                         shouldPadFirstLine: Bool) -> String {
+        
+        let pad         = String(repeating: " ", count: max(0, count))
+        let lines       = self.split(separator: "\n", omittingEmptySubsequences: false).asStringArray
+        var output      = ""
+        
+        let lastLineIndex = lines.lastUsableIndex
+        
+        for i in 0...lastLineIndex {
+            
+            if i > 0 || shouldPadFirstLine {
+                
+                output += pad
+                
+            }
+            
+            output += lines[i]
+            
+            if i != lastLineIndex {
+                
+                output += "\n"
+                
+            }
+        }
+        
+        return output
+        
+    }
+    
     /// Returns a copy of this string right padded to the specified length.
     ///
     /// - important: Specifying a padding length  less than the length of this string is treated as a negative padding and
@@ -122,7 +156,7 @@ public extension String {
     func rightPadded(toLength len: Int,
                      withPad pad: Character = " ") -> String { padded(toLength: len,
                                                                       type: .right, withPad: pad) }
-
+    
     /// Returns a copy of this string center padded to the specified length.
     ///
     /// - important: Specifying a padding length  less than the length of this string is treated as a negative padding and

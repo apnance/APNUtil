@@ -273,6 +273,157 @@ class StringTests: XCTestCase {
         
     }
     
+    func testLeftPaddedLines() {
+        
+        // Odd # Lines - Odd Padding
+        var multiLine = "line1\nline2\nline3"
+        var multiLinePadded = multiLine.leftPaddedLines(by: 3,
+                                                        shouldPadFirstLine: true)
+        XCTAssert(multiLinePadded == """
+                               line1
+                               line2
+                               line3
+                            """)
+        
+        // Odd # Lines - Zero Padding
+        multiLinePadded = multiLine.leftPaddedLines(by: 0,
+                                                        shouldPadFirstLine: true)
+        XCTAssert(multiLinePadded == """
+                            line1
+                            line2
+                            line3
+                            """)
+        
+        XCTAssert(multiLinePadded ==  multiLine)
+        
+        // Odd # Lines - 1 Padding
+        multiLinePadded = multiLine.leftPaddedLines(by: 1,
+                                                        shouldPadFirstLine: true)
+        XCTAssert(multiLinePadded == """
+                             line1
+                             line2
+                             line3
+                            """)
+        
+        // Odd # Lines - 2 Padding
+        multiLinePadded = multiLine.leftPaddedLines(by: 2,
+                                                        shouldPadFirstLine: true)
+        XCTAssert(multiLinePadded == """
+                              line1
+                              line2
+                              line3
+                            """)
+        
+        // Odd # Lines - 3 Padding - First Line No Padding
+        multiLinePadded = multiLine.leftPaddedLines(by: 3,
+                                                    shouldPadFirstLine: false)
+        
+        XCTAssert(multiLinePadded == """
+                            line1
+                               line2
+                               line3
+                            """)
+        
+        // Odd # Lines - 0 Padding - First Line No Padding
+        multiLinePadded = multiLine.leftPaddedLines(by: 0,
+                                                    shouldPadFirstLine: false)
+        XCTAssert(multiLinePadded == multiLine)
+        
+        multiLinePadded = multiLine.leftPaddedLines(by: 0,
+                                                    shouldPadFirstLine: true)
+        XCTAssert(multiLinePadded == multiLine)
+        
+        // Even # Lines - 0 Padding
+        multiLine = "line1\nline2\nline3\nline4\nline5\nline6"
+        multiLinePadded = multiLine.leftPaddedLines(by: 0,
+                                                    shouldPadFirstLine: true)
+        XCTAssert(multiLinePadded == multiLine)
+        XCTAssert(multiLinePadded == """
+                            line1
+                            line2
+                            line3
+                            line4
+                            line5
+                            line6
+                            """)
+        
+        // Even # Lines - 1 Padding
+        multiLinePadded = multiLine.leftPaddedLines(by: 1,
+                                                    shouldPadFirstLine: true)
+        XCTAssert(multiLinePadded == """
+                             line1
+                             line2
+                             line3
+                             line4
+                             line5
+                             line6
+                            """)
+        
+        // Even # Lines - 4 Padding
+        multiLinePadded = multiLine.leftPaddedLines(by: 4,
+                                                    shouldPadFirstLine: true)
+        XCTAssert(multiLinePadded == """
+                                line1
+                                line2
+                                line3
+                                line4
+                                line5
+                                line6
+                            """)
+        
+        // Even # Lines - 0 Padding  - First Line No Padding
+        multiLinePadded = multiLine.leftPaddedLines(by: 0,
+                                                    shouldPadFirstLine: false)
+        XCTAssert(multiLinePadded == multiLine)
+        XCTAssert(multiLinePadded == """
+                  line1
+                  line2
+                  line3
+                  line4
+                  line5
+                  line6
+                  """)
+        
+        // Even # Lines - 1 Padding  - First Line No Padding
+        multiLinePadded = multiLine.leftPaddedLines(by: 1,
+                                                    shouldPadFirstLine: false)
+        XCTAssert(multiLinePadded == """
+                            line1
+                             line2
+                             line3
+                             line4
+                             line5
+                             line6
+                            """)
+        
+        // Even # Lines - 4 Padding  - First Line No Padding
+        multiLinePadded = multiLine.leftPaddedLines(by: 4,
+                                                    shouldPadFirstLine: false)
+        XCTAssert(multiLinePadded == """
+                            line1
+                                line2
+                                line3
+                                line4
+                                line5
+                                line6
+                            """)
+        
+        // Zero Lines
+        multiLine = ""
+        multiLinePadded = multiLine.leftPaddedLines(by: 0,
+                                                    shouldPadFirstLine: true)
+        XCTAssert(multiLinePadded == multiLine)
+        multiLinePadded = multiLine.leftPaddedLines(by: 0,
+                                                    shouldPadFirstLine: false)
+        XCTAssert(multiLinePadded == multiLine)
+        
+        // Single Line
+        multiLine = ""
+        multiLinePadded = multiLine.leftPaddedLines(by: 0,
+                                                    shouldPadFirstLine: true)
+        XCTAssert(multiLinePadded == multiLine)
+    }
+    
     func testRightPadding() {
         
         // 10
