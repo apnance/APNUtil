@@ -37,3 +37,11 @@ public struct Stack<Element: Equatable> {
     public mutating func popPeek() -> Element? { pop(); return peek() }
     
 }
+
+// MARK: - Element: Equatable
+public extension Stack where Element: Equatable {
+    
+    /// - Returns: true if topmost `Element` on `self` is equal to `element` else returns `false` if not or if `self.isEmpty`
+    func peekFor(_ element: Element) -> Bool { peek() == element }
+    
+}

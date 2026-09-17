@@ -76,5 +76,76 @@ class StackTests: XCTestCase {
         XCTAssert(a1.pop() == i4)
         
     }
-
+    
+    func testPeekFor() {
+        
+        // String
+        var a1 = Stack<String>()
+        XCTAssertFalse(a1.peekFor(s1))
+        XCTAssertFalse(a1.peekFor(s2))
+        XCTAssertFalse(a1.peekFor(s3))
+        XCTAssertFalse(a1.peekFor(""))
+        
+        a1 = APNUtil.Stack(s1,s2,s3)
+        XCTAssertFalse(a1.peekFor(s1))
+        XCTAssertFalse(a1.peekFor(s2))
+        XCTAssert(a1.peekFor(s3))       // true
+        XCTAssertFalse(a1.peekFor(""))
+        
+        a1.pop()
+        XCTAssertFalse(a1.peekFor(s1))
+        XCTAssert(a1.peekFor(s2))       // true
+        XCTAssertFalse(a1.peekFor(s3))
+        XCTAssertFalse(a1.peekFor(""))
+        
+        a1.pop()
+        XCTAssert(a1.peekFor(s1))       // true
+        XCTAssertFalse(a1.peekFor(s2))
+        XCTAssertFalse(a1.peekFor(s3))
+        XCTAssertFalse(a1.peekFor(""))
+        
+        a1.pop()
+        XCTAssertFalse(a1.peekFor(s1))
+        XCTAssertFalse(a1.peekFor(s2))
+        XCTAssertFalse(a1.peekFor(s3))
+        XCTAssertFalse(a1.peekFor(""))
+        
+        // Int
+        var a2 = Stack<Int>()
+        XCTAssertFalse(a2.peekFor(i1))
+        XCTAssertFalse(a2.peekFor(i2))
+        XCTAssertFalse(a2.peekFor(i3))
+        XCTAssertFalse(a2.peekFor(Int.min))
+        XCTAssertFalse(a2.peekFor(Int.max))
+        
+        a2 = APNUtil.Stack(i1,i2,i3)
+        XCTAssertFalse(a2.peekFor(i1))
+        XCTAssertFalse(a2.peekFor(i2))
+        XCTAssert(a2.peekFor(i3))       // true
+        XCTAssertFalse(a2.peekFor(Int.min))
+        XCTAssertFalse(a2.peekFor(Int.max))
+        
+        a2.pop()
+        XCTAssertFalse(a2.peekFor(i1))
+        XCTAssert(a2.peekFor(i2))       // true
+        XCTAssertFalse(a2.peekFor(i3))
+        XCTAssertFalse(a2.peekFor(Int.min))
+        XCTAssertFalse(a2.peekFor(Int.max))
+        
+        a2.pop()
+        XCTAssert(a2.peekFor(i1))       // true
+        XCTAssertFalse(a2.peekFor(i2))
+        XCTAssertFalse(a2.peekFor(i3))
+        XCTAssertFalse(a2.peekFor(Int.min))
+        XCTAssertFalse(a2.peekFor(Int.max))
+        
+        a2.pop()
+        XCTAssertFalse(a2.peekFor(i1))
+        XCTAssertFalse(a2.peekFor(i2))
+        XCTAssertFalse(a2.peekFor(i3))
+        XCTAssertFalse(a2.peekFor(Int.min))
+        XCTAssertFalse(a2.peekFor(Int.max))
+        
+    }
+    
 }
