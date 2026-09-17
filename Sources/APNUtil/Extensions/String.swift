@@ -585,7 +585,7 @@ public extension String {
     
 }
 
-extension String {
+public extension String {
     
     /// Array of all character inputable via iOS Keypad
     static let allIOSCharacters: [String] = [
